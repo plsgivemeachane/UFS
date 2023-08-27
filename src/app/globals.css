@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* :root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 95, 10, 135;
+  --background-end-rgb: 164, 80, 139;
+} */
+
+body {
+  color: rgb(255,255,255);
+  background: #000;
+}
+
+.spacer {
+  aspect-ratio: 960/540;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.bg1 {
+  /* background-image: url("/bg1.svg"); */
+  background-color: #17003a;
+}
+
+.bg2 {
+  background-image: url("/bg2.svg");
+}
+
+.bg3 {
+  background-color: #028dd2;
+}
+
+.bg4 {
+  background-image: url("/bg4.svg");
+}
+
+.bg5 {
+  background-color: #001220;
+}
+
+.bg6 {
+  background-image: url("/bg6.svg");
+}
