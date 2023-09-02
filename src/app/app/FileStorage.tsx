@@ -42,9 +42,9 @@ async function getFileSize(url: string, urls: any = null) : Promise<number> {
 
     if(url == "Multipart") {
         var promises = []
-        for(var u of JSON.parse(urls).cids) {
+        for(var u of urls) {
             promises.push(
-                fetch(`https://${u}.ipfs.dweb.link`, params)
+                fetch(`https://ipfs.particle.network/${u}`, params)
                 .then((response) => {
                     const str = response.headers.get('Content-Range');
                     if (str == null) return 0;
@@ -53,7 +53,7 @@ async function getFileSize(url: string, urls: any = null) : Promise<number> {
                 })
                 .catch((error: any) => {
                     console.error(error);
-                    return 0;
+                    return getFileSize(u, urls);
                 })
             )
         }
@@ -79,6 +79,10 @@ async function getFileSize(url: string, urls: any = null) : Promise<number> {
 export default function FileStorage (probs: any) {
     const file = probs.file;
 
+    if(probs.isFolder) {
+        console.log(file)
+    }
+
     const [data , setData] = useState<any>(0);
     const [url , setURL] = useState<any>("");
     const [count , setCount] = useState<any>(0);
@@ -97,7 +101,18 @@ export default function FileStorage (probs: any) {
     },[file])
 
     return (
-        <div className="border-2 p-4 border-black rounded-xl text-white hover:scale-105 transition-all duration-200 bg-transparent">
+        <div className="p-1 px-4 m-4 rounded-xl text-white hover:bg-gray-950 hover:shadow-lg hover:shadow-violet-400 transition-all duration-300 bg-transparent cursor-pointer"
+            onClick={
+                () => {
+                    if(!probs.isFolder){
+                        console.log(probs)
+                        probs.downloadFile(file)
+                    } else {
+                        probs.setDir(probs.dir+(probs.dir == "/" ? "" : "/")+file)
+                    }
+                }
+            }
+        >
             <div className="flex items-center">
                 { data || probs.isFolder ? (
                         <span className="relative flex h-3 w-3">
@@ -111,9 +126,29 @@ export default function FileStorage (probs: any) {
                         </span>
                     )
                 }
-                {!probs.isFolder ? <p className="truncate ml-4">{file.filename}</p> : <p className="truncate ml-4">{file}</p>}
+                {!probs.isFolder ? 
+                <Link href={"#"}>
+                {/* {!probs.isFolder ? <Link href={file.profile_picture} rel="noreferrer" target="_blank"> */}
+                    {file.filename.indexOf('.png') !== -1 && <Image width={32} height={32} alt={file.filename} src={url} priority={false} className="rounded-md m-4" 
+                        onError={onError}/>}
+                    {file.filename.indexOf('.jpg') !== -1 && <Image width={32} height={32} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                        onError={onError}/>}
+                    {file.filename.indexOf('.jpeg') !== -1 && <Image width={32} height={32} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                        onError={onError}/>}
+                    {(
+                        file.filename.indexOf('.jpeg') == -1 &&
+                        file.filename.indexOf('.jpg') == -1 &&
+                        !probs.isFolder &&
+                        file.filename.indexOf('.png') == -1
+                    )
+                    && 
+                        <Image alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4" />
+                    }
+                </Link> : <Image alt={file} src="/folder.png" priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4"/>}
+                {!probs.isFolder ? <p className="truncate ml-4">{file.filename}</p> : <p className="truncate mr-auto">{file}</p>}
+                {data && !probs.isFolder && <p className="truncate ml-auto">{formatBytes(data)}</p>}
                 {!probs.isFolder &&
-                    <div className="relative p-3 mb-2 ml-auto"
+                    <div className="relative p-3 mb-2 ml-5"
                         onClick={() => probs.onDelete(file)}
                     >
                         <div className="absolute rounded-full bg-white w-6 h-6 top-0 right-0"></div>
@@ -121,32 +156,6 @@ export default function FileStorage (probs: any) {
                     </div>
                 }
             </div>
-            {!probs.isFolder ? 
-            <Link href={"#"} onClick={
-                () => {
-                    console.log(probs)
-                    probs.downloadFile(file)
-                }
-            }>
-            {/* {!probs.isFolder ? <Link href={file.profile_picture} rel="noreferrer" target="_blank"> */}
-                {file.filename.indexOf('.png') !== -1 && <Image width={256} height={256} alt={file.filename} src={url} priority={false} className="rounded-xl" 
-                    onError={onError}/>}
-                {file.filename.indexOf('.jpg') !== -1 && <Image width={256} height={256} alt={file.filename} src={url} priority={false} className="rounded-xl"
-                    onError={onError}/>}
-                {file.filename.indexOf('.jpeg') !== -1 && <Image width={256} height={256} alt={file.filename} src={url} priority={false} className="rounded-xl"
-                    onError={onError}/>}
-                {(
-                    file.filename.indexOf('.jpeg') == -1 &&
-                    file.filename.indexOf('.jpg') == -1 &&
-                    !probs.isFolder &&
-                    file.filename.indexOf('.png') == -1
-                )
-                && 
-                    <Image alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} priority={false} width={256} height={256} className="rounded-xl bg-transparent" />
-                }
-            </Link> : <Image alt={file} src="/folder.png" priority={false} width={256} height={256} className="rounded-xl bg-transparent cursor-pointer" onClick={() => {probs.setDir(probs.dir+(probs.dir == "/" ? "" : "/")+file)}} />}
-            {data && !probs.isFolder && <p className="truncate mt-4">{formatBytes(data)}
-            </p>}
     </div>
     );
 }
