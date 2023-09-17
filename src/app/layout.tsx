@@ -48,10 +48,6 @@ export default function RootLayout({
           <Image width={64} height={64} alt="logo" src="/logo.png" /> 
           <Link href="/" className='ml-auto p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Home</Link>
           <Link href="/app" className='p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>App</Link>
-<<<<<<< HEAD
-=======
-          <Link href={"https://discord.gg/HNF7G2VnxR"} className='p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Discord</Link>
->>>>>>> 41c69d3 (User hashing update)
           {/* <Link href="/login" className='ml-4 p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Login</Link>
           <Link href="/register" className='ml-4 p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Register</Link> */}
         </nav>

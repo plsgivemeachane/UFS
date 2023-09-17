@@ -13,11 +13,6 @@ import { userAgent } from "next/server";
 import { toast } from "react-toastify";
 import { serialize } from "v8";
 import Head from "next/head";
-<<<<<<< HEAD
-=======
-import path from "path";
-import Link from "next/link";
->>>>>>> 41c69d3 (User hashing update)
 const FileStorage = lazy(() => import('./FileStorage'));
 const firebaseConfig = {
   apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
@@ -58,11 +53,7 @@ function writeUserData(userId: string, filename: string, url: string, directory:
       filename : filename,
       profile_picture : "Multipart",
       directory : directory,
-<<<<<<< HEAD
       data : JSON.stringify(data)
-=======
-      data : data
->>>>>>> 41c69d3 (User hashing update)
     });
   }
 }
@@ -109,7 +100,6 @@ class BlobBuilder {
   }
 }
 
-<<<<<<< HEAD
 
 const downloadFile = (cids: string[], filename: string) => {
   return new Promise(async (resolve, reject) => {
@@ -177,8 +167,6 @@ const downloadFile = (cids: string[], filename: string) => {
   });
 };
 
-=======
->>>>>>> 41c69d3 (User hashing update)
 function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return '0 Bytes'
 
@@ -239,10 +227,6 @@ export default function Home() {
   const [directories, setDirectories] = useState<string[]>([]);
   const [createDir , setCreateDir] = useState("");
   const [search , setSearch] = useState("");
-<<<<<<< HEAD
-=======
-  const [isLoaded, setLoaded] = useState(false);
->>>>>>> 41c69d3 (User hashing update)
 
   useEffect(() => {
     // downloadFile(["bafybeib6zily3fariz2ql2tnlneax4nkj5aynj4hwo236onmamroq4hkyu","bafybeibayuuylgewzxubvzzswdxvjqncvuvdrvyiutb4kzp5zjh2xfn72i"], "lt_setup.zip")
@@ -334,15 +318,9 @@ export default function Home() {
         if(file.profile_picture == "Multipart") {
           var promises = []
           // console.log(file)
-<<<<<<< HEAD
           for(var cid of JSON.parse(file.data).cids){
             promises.push(
                 fetch(`https://${cid}.ipfs.dweb.link`, params)
-=======
-          for(var cid of file.data){
-            promises.push(
-                fetch(`https://ipfs.particle.network/${cid}`, params)
->>>>>>> 41c69d3 (User hashing update)
                 .then((response) => {
                     const str = response.headers.get('Content-Range');
                     if (str == null) return 0;
@@ -376,11 +354,6 @@ export default function Home() {
       try {
         const fileSizes = await Promise.all(fetchPromises);
         const totalSize = fileSizes.reduce((acc, fileSize) => acc + fileSize, 0);
-<<<<<<< HEAD
-=======
-        //TODO 
-        setLoaded(true);
->>>>>>> 41c69d3 (User hashing update)
         setTotal(totalSize);
       } catch (error) {
         console.error(error);
@@ -389,7 +362,6 @@ export default function Home() {
   
     fetchFileSizes();
   }, [allFiles]);
-<<<<<<< HEAD
   
   const uploadFile = (file: File) => {
     return new Promise((resolve, reject) => {
@@ -456,286 +428,6 @@ export default function Home() {
         console.log(error);
         reject(error)
       }
-=======
-
-  const uploadFilepls = (formData: FormData) => {
-    return new Promise((resolve, reject) => {
-        // var xhttp = new XMLHttpRequest();
-        // console.log("Upload here")
-  
-        let username = "4189cf8e-a925-4a73-9051-88b4798ec5df"
-        let password = "s5MZ8h57Od6mhQbs0sstuyRMGumQrMEB4FaMNnZY"
-
-        const xhr = new XMLHttpRequest();
-
-        xhr.open("POST", "https://rpc.particle.network/ipfs/upload", true);
-
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 201) {
-              const data = JSON.parse(xhr.responseText);
-              setProgress(100);
-              resolve(data);
-            } else {
-              reject(new Error("Request failed with status: " + xhr.status));
-            }
-          }
-        };
-
-        xhr.upload.onprogress = function(event) {
-          if (event.lengthComputable) {
-            const percentage = (event.loaded / event.total) * 100;
-            // console.log("Upload progress: " + percentage + "%");
-            setProgress(percentage - 1);
-          }
-        };
-
-        xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
-
-        xhr.send(formData);
-  
-        // fetch("https://rpc.particle.network/ipfs/upload", {
-        //     method: "POST",
-        //     body: formData,
-        //     headers: {
-        //         "Authorization": "Basic " + btoa(username + ":" + password)
-        //     }
-        // })
-        // .then(respone => respone.json())
-        // .then(data => {
-        //     resolve(data)
-        // })
-        // .catch ((error: Error) => {
-        //     console.log(error);
-        //     reject(error)
-        // })
-    });
-  }
-
-  async function uploadChunk(chunk: ArrayBuffer, filename: string) {
-    const uploadFormData = new FormData();
-    const buffer = Buffer.from(chunk);
-    const file = new File([buffer], filename);
-    uploadFormData.append('file', file);
-    return await uploadFilepls(uploadFormData) as any;
-  };
-
-  const downloadPart = (blobs: any, index: number, cid: string) => {
-    return fetch(`https://ipfs.particle.network/${cid}`)
-    .then(response => response.blob())
-    .then(blob => {
-      // setProgress((prg / (index)) * 100)
-      // console.log(index)
-      blobs.push([blob, index])
-    })
-  }
-
-  const downloadFile = (cids: string[], filename: string) => {
-    return new Promise(async (resolve, reject) => {
-      const blobs : any = [];
-      // console.log(cids)
-      toast("Downloading...")
-
-      setProgress(0);
-      setIsUploaded(false);
-    
-      // Fetch the files with the corresponding cids
-      // const fetchPromises = cids.map(cid => fetch(`/api?cid=${cid}&filename=${filename}`)
-      //   .then(response => response.blob())
-      //   .then(blob => blobs.push(blob))
-      // );
-  
-      let proms = []
-      let index = 0
-      let prg = 0;
-  
-      for (var cid of cids) {
-        // console.log(cid)
-        if(cid.includes("https://")) {
-          cid = extractCID(cid)
-        }
-        proms.push(
-            downloadPart(blobs, index, cid)
-            .then(() => {
-              prg++;
-              setProgress((prg / cids.length) * 100);
-            })
-        )
-        index += 1
-      }
-  
-      await Promise.all(proms)
-  
-      blobs.sort(compareSecondColumn)
-  
-      var mergedBlobBuilder = new BlobBuilder();
-  
-      for(var b of blobs) {
-        mergedBlobBuilder.addBlob(b[0]);
-      }
-  
-      const mergedBlob = mergedBlobBuilder.getBlob();
-  
-      // Convert the downloaded blobs into ArrayBuffer objects
-      // const arrayBufferPromises = blobs.map(blob => blob.arrayBuffer());
-      // var arrayBuffers: ArrayBuffer[] = []
-      // console.log(blobs)
-      // for(var blob of blobs) {
-      //   var arrayBuffer = await blob.arrayBuffer()
-      //   arrayBuffers.push(arrayBuffer);
-      // }
-  
-      // const mergedArrayBuffer = ;
-      // Create a Blob from the merged ArrayBuffer
-      // const mergedBlob = new Blob([mergedArrayBuffer], { type: 'application/zip' });
-      // Create a download link for the merged Blob
-      const file = new File([mergedBlob], filename);
-      const url = URL.createObjectURL(file);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a); 
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      setIsUploaded(true);
-      setProgress(100);
-      toast.success("Downloading successfull")
-      resolve("OK");
-    });
-  };
-  
-  const uploadFile = (file: File) => {
-    return new Promise(async (resolve, reject) => {
-      if(!file || !user) return
-      setIsUploaded(false);
-      toast(`Uploading ${file.name}... (Don't close browser)`);
-      const fileArrayBuffer = await file.arrayBuffer();
-
-      const CHUNK_SIZE = 80 * 1024 * 1024;
-      let start = 0;
-      let end = CHUNK_SIZE;
-      let cids: any = [];
-      // let prog = 0;
-      let part = 0;
-
-      // var work = function ( chunk: any, filename: any, index: number){
-      //     // while(1) {
-      //     return uploadChunk(chunk, filename)
-      //         .then((data: any) => {
-      //             if(!data) work(chunk, filename, index) as any;
-      //             toast.success("Upload part " + index + " done successfully")
-      //             prog += 1
-      //             setProgress((prog / (part + 1)) * 100)
-      //             cids.push([data.cid, index]);
-      //         })
-      //         .catch((error: any) => {
-      //             work(chunk, filename, index) as any
-      //         })
-      //     // }
-      // }
-
-      // var promises = []
-      let id = 0
-
-      part = fileArrayBuffer.byteLength / CHUNK_SIZE;
-
-      while (start < fileArrayBuffer.byteLength) {
-        try {
-            // console.log("Uploading chunk from " + start + " to " + end);
-            toast("Uploading part " + (id + 1) + " from " + (Math.ceil(part) + 1))
-            const chunk = fileArrayBuffer.slice(start, end);
-            const cid = (await uploadChunk(chunk, file.name)).cid;
-            // promises.push(work(chunk, file.name, id));
-            // console.log(cid);
-            // setProgress((id / (part + 1)) * 100)
-            cids.push(cid);
-            id += 1
-            start = end;
-            end += CHUNK_SIZE
-        } catch (e) {
-            console.log(e);
-        }
-      } 
-
-      // console.log("All chunks uploading..");
-      // await Promise.all(promises);
-      // console.log("All chunks uploaded");
-      console.log(cids);
-
-      if(cids.length == 1) {
-        writeUserData(user, file.name, `https://${cids[0]}.ipfs.dweb.link`, directory);
-      } else {
-        writeUserData(user, file.name, `https://${cids[0]}.ipfs.dweb.link`, directory, cids);
-      }
-      setProgress(100);
-      setIsUploaded(true);
-      resolve("OK")
-
-
-      // try {
-      //   // const formData = new FormData();
-      //   // formData.append('file', file);
-
-      //   var xhttp = new XMLHttpRequest();
-
-      //   xhttp.upload.addEventListener('progress', function(e) {
-      //     // upload progress as percentage
-      //     let percent_completed = (e.loaded / e.total)*100;
-      //     // console.log(percent_completed);
-      //     setProgress(percent_completed);
-      //     setIsUploaded(false);
-      //   });
-
-      //   xhttp.onreadystatechange = function() {
-      //     if (this.readyState == 4 && (this.status == 200 || this.status == 201)) {
-      //       // Handle the response here
-      //       if(!user) return;
-      //       var data: any = JSON.parse(this.responseText);
-      //       // console.log(data.cids)
-      //       if(data.cids.length == 1) {
-      //         writeUserData(user, file.name, `https://${data.cids[0]}.ipfs.dweb.link`, directory);
-      //       } else {
-      //         writeUserData(user, file.name, `https://${data.cids[0]}.ipfs.dweb.link`, directory, data);
-      //       }
-      //       // console.log(data);
-      //       // writeUserData(user, file.name, "https://ipfs.io/ipfs/" + data.cid + "/" + file.name);
-      //       //Fallback server!
-      //       // if(this.status == 200)
-      //       //   writeUserData(user, file.name, "https://ipfs.particle.network/" + data.value.cid);
-      //       // else
-      //       //   writeUserData(user, file.name, "https://ipfs.particle.network/" + data.cid );
-      //       // writeUserData(user, file.name, `https://${data.cid}.ipfs.dweb.link`, directory);
-      //       setIsUploaded(true);
-      //       resolve(data);
-      //     }
-      //   };
-
-      //   // const formdata = new FormData();
-      //   // formdata.append('file', file);
-
-      //   xhttp.open("POST", "/v1up", true);
-      //   // xhttp.setRequestHeader("Authorization", 'Basic ' + btoa(username + ":" + password));
-      //   const formdata = new FormData();
-      //   formdata.append('file', file);
-      //   xhttp.send(formdata);
-
-      //   // const res = await fetch('https://api.nft.storage/upload', {
-      //   //   method: 'POST',
-      //   //   headers: {
-      //   //     'Accept': 'application/json',
-      //   //     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDkxMGZlYjc0NjgwM2Y1ODdDQzBERDQwMDQ1ZEZCOGRkODQ0Mjk3Y0YiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY5MjQ4ODEzODE2MSwibmFtZSI6IlRlc3QifQ.RImLY0ZoBBtgWgCHUUaNboEtSBkxV_LLiBgBCJGfLYE'
-      //   //   },
-      //   //   body: file
-      //   // })
-
-      //   // const data = await res.json();  
-      //   // console.log(data)
-      // } catch (error: any) {
-      //   console.log(error);
-      //   reject(error)
-      // }
->>>>>>> 41c69d3 (User hashing update)
       // Your file upload logic here
       // Call resolve() when the upload is successful
       // Call reject() if there's an error
@@ -802,11 +494,7 @@ export default function Home() {
     if(file.profile_picture != "Multipart"){
       downloadFile([file.profile_picture], file.filename)
     } else {
-<<<<<<< HEAD
       downloadFile(JSON.parse(file.data).cids, file.filename)
-=======
-      downloadFile(file.data as any, file.filename)
->>>>>>> 41c69d3 (User hashing update)
     }
   };
 
@@ -824,40 +512,12 @@ export default function Home() {
       <Head>
           <title>UFS App</title>
       </Head>
-<<<<<<< HEAD
       <div className="flbex justify-center flex-col items-center bg-slate-100 mx-auto w-auto max-w-md p-2 rounded-full my-4 text-black">
-=======
-      {(!isUploaded || !isLoaded) && <div className="fixed top-0 left-0 w-full h-full flex flex-col justify-center items-center z-[999] backdrop-blur-md">
-        <h1 className="text-3xl animate-pulse">Loading...</h1>
-        <p>Please wait a minutes...</p>
-        {!(progress == 100) && (
-          <div className="w-full rounded-full h-6 bg-gray-700 mt-4 mb-4">
-            <div className="bg-violet-500 shadow-xl shadow-violet-500 h-6 text-md font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition-all duration-300" style={{ width: `${progress}%` }}>{Math.ceil(progress)}%</div>
-          </div>
-        )}
-        {!isUploaded && (
-          <div className="text-center">
-            <div role="status">
-                <svg aria-hidden="true" className="inline w-16 h-16 mr-2 mb-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                </svg>
-                <span className="sr-only">Loading...</span>
-            </div>
-          </div>
-        )}
-      </div>}
-      <div className="flbex justify-center flex-col items-center bg-slate-700 mx-auto w-auto max-w-md p-2 rounded-full my-4 text-black">
->>>>>>> 41c69d3 (User hashing update)
         <div className="flex flex-row">
           <Image width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${user}`} 
             className="ml-4 w-14 rounded-full mr-4"
           />
-<<<<<<< HEAD
           <h1 className="text-xl text-center">Wellcome back {user}</h1>
-=======
-          <h1 className="text-xl text-white text-center">Wellcome back {user}</h1>
->>>>>>> 41c69d3 (User hashing update)
           <Image width={128} height={128} alt="switch" src={`/switch.png`} 
             className="ml-4 w-14 rounded-full mr-4 hover:scale-95 transition-all duration-300 cursor-pointer"
             onClick={() => {
@@ -865,15 +525,9 @@ export default function Home() {
             }}
           />
         </div>
-<<<<<<< HEAD
         <h2 className="text-2xl text-center">Total Usage : {formatBytes(total)}</h2>
       </div>
       <div className="flex gap-4 w-auto bg-slate-500 ml-auto mr-auto p-4">
-=======
-        <h2 className="text-2xl text-white text-center">Total Usage : {formatBytes(total)}</h2>
-      </div>
-      <div className="flex gap-4 w-auto bg-violet-400 ml-auto mr-auto p-4">
->>>>>>> 41c69d3 (User hashing update)
         <h1 className="text-2xl text-white font-mono">{directory}</h1>
         <input 
           type="string"
@@ -885,15 +539,8 @@ export default function Home() {
           className="p-1 px-4 w-[8rem] lg:w-[32rem] rounded-full focus:border-0 text-lg transition-all duration-300"
         />
         <button onClick={() => {
-<<<<<<< HEAD
           setDirectory(directory+(directory == "/" ? "" : "/")+createDir)
           setCreateDir("")
-=======
-          if(createDir != ""){
-            setDirectory(directory+(directory == "/" ? "" : "/")+createDir)
-            setCreateDir("")
-          }
->>>>>>> 41c69d3 (User hashing update)
         }}
         className="hover:scale-95 transition-all duration-200 hover:bg-slate-400 pl-2 p-2 rounded-full"
         >Create Folder
@@ -910,12 +557,7 @@ export default function Home() {
         }}
       />
       </div>
-<<<<<<< HEAD
       <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 mb-12 bg-slate-400 p-8">
-=======
-      {/* grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]  */}
-      <div className="gap-4 mb-12 bg-black m-4 rounded-xl p-4 shadow-slate-500 shadow-inner">
->>>>>>> 41c69d3 (User hashing update)
       {directory != "/" && <FileStorage
           file={".."} isFolder={true} setDir={(sth: any) => {
           let dir = directory.split("/")
@@ -925,11 +567,7 @@ export default function Home() {
           let path = dir.join("/")
           setDirectory("/"+path)
         }} dir={directory}/>}
-<<<<<<< HEAD
         <Suspense fallback={<div>Loading...</div>}>
-=======
-        <Suspense fallback={<div className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[998] backdrop-blur-md transition-all duration-300"></div>}>
->>>>>>> 41c69d3 (User hashing update)
         {
           directories.map((dir, index) => (
             <FileStorage file={dir} key={index} isFolder={true} setDir={setDirectory} dir={directory} downloadFile={onDownloadFile}/>
@@ -940,7 +578,6 @@ export default function Home() {
           ))}
         </Suspense>
       </div>
-<<<<<<< HEAD
       {!(progress == 100) && (
         <div className="w-full rounded-full h-4 bg-gray-700 mt-4 mb-4">
           <div className="bg-blue-600 h-4 rounded-full" style={{ width: `${progress}%` }}></div>
@@ -957,13 +594,6 @@ export default function Home() {
           </div>
       </div>
       )}
-=======
-      {/* {(progress == 100) && !isUploaded &&
-        <div className="w-full rounded-full h-4 bg-gray-700 mt-4 mb-4">
-          <div className="bg-blue-600 h-4 rounded-full transition-all duration-200" style={{ width: `${progress}%` }}></div>
-        </div>
-      } */}
->>>>>>> 41c69d3 (User hashing update)
       <button
         className="absolute top-24 right-0 bg-white text-white hover:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         type="button"
@@ -980,11 +610,7 @@ export default function Home() {
                           <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                       </svg>
                       <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-<<<<<<< HEAD
                       <p className="text-xs text-gray-500 dark:text-gray-400">(MAX. 100MB)</p>
-=======
-                      {/* <p className="text-xs text-gray-500 dark:text-gray-400">(MAX. 100MB)</p> */}
->>>>>>> 41c69d3 (User hashing update)
                   </div>
                   <input id="dropzone-file" type="file" className="hidden" multiple onChange={(e) => {
                     setFiless(e.target.files);
@@ -996,10 +622,6 @@ export default function Home() {
                   setShowModal(false);
                 }}
               >Close</button>
-<<<<<<< HEAD
-=======
-              <Link href={"https://discord.gg/HNF7G2VnxR"} className="text-sm text-black">Have a problems.Contact us at discord </Link>
->>>>>>> 41c69d3 (User hashing update)
             </div>
           </div>
         </form>
