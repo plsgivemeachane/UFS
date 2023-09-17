@@ -9,7 +9,6 @@ import Image from "next/image";
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue, set, remove } from "firebase/database";
-import { userAgent } from "next/server";
 import { toast } from "react-toastify";
 import { serialize } from "v8";
 import Head from "next/head";
