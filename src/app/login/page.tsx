@@ -2,10 +2,13 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue, set, DataSnapshot } from "firebase/database";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
+// const { sha } = require("sha256quanvn")
+import { sha } from 'sha256quanvn';
 
 const firebaseConfig = {
     apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
@@ -25,6 +28,8 @@ export default function Login() {
     const router = useRouter();
 
     useEffect(() => {
+        // console.log(sha("LOL"));
+        // console.log("LOL");
         onValue(ref(db, 'users'), async (snapshot) => {
             setSnapshot(snapshot);
         })
@@ -43,13 +48,14 @@ export default function Login() {
         if(!email.value.includes(".")) return;
         if(password.value.length < 6) return;
         if (snapshot.val() && snapshot.val()[email.value.replace("@", "").replace(".","")]) {
-            if(snapshot.val()[email.value.replace("@", "").replace(".","")].password == password.value){
+            if(snapshot.val()[email.value.replace("@", "").replace(".","")].password == sha(password.value) || snapshot.val()[email.value.replace("@", "").replace(".","")].password == password.value){
                 localStorage.setItem("email", email.value.replace("@", "").replace(".",""))
                 toast.success("Logged in...");
                 router.push("/app")
                 return;
             }
         }
+        
         toast.error("Wrong email or password");
     }
 
@@ -59,13 +65,13 @@ export default function Login() {
                 <Head>
                     <title>UFS Login</title>
                 </Head>
-                <section className="gradient-form h-full bg-neutral-200 dark:bg-neutral-700">
+                <section className="gradient-form h-full bg-neutral-700">
                     <div className="container h-full p-10">
                         <div
-                        className="g-6 flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
+                        className="g-6 flex h-full flex-wrap items-center justify-center text-neutral-200">
                         <div className="w-full">
                             <div
-                            className="block rounded-lg bg-white shadow-lg dark:bg-neutral-800">
+                            className="block rounded-lg bg-neutral-800">
                             <div className="g-0 lg:flex lg:flex-wrap">
                                 <div className="px-4 md:px-0 lg:w-6/12">
                                 <div className="md:mx-6 md:p-12">
@@ -84,12 +90,12 @@ export default function Login() {
                                     <div className="relative mb-4 rounded-md bg-cyan-500" data-te-input-wrapper-init>
                                         <input
                                         type="text"
-                                        className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                        className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                                         id="Email"
                                         placeholder="Email" />
                                         <label
                                             htmlFor="Email"
-                                        className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary peer-focus:bg-cyan-500 rounded-xl pl-4 pr-4 invisible peer-focus:visible"
+                                        className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none text-neutral-200 peer-focus:text-primary peer-focus:bg-cyan-500 rounded-xl pl-4 pr-4 invisible peer-focus:visible"
                                         >Email
                                         </label>
                                     </div>
@@ -97,12 +103,12 @@ export default function Login() {
                                     <div className="relative mb-4 rounded-md bg-cyan-600" data-te-input-wrapper-init>
                                         <input
                                         type="password"
-                                        className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                        className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                                         id="Password"
                                         placeholder="Password" />
                                         <label
                                             htmlFor="Password"
-                                        className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary peer-focus:bg-cyan-600 rounded-xl pl-4 pr-4 invisible peer-focus:visible"
+                                        className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none text-neutral-200 peer-focus:text-primary peer-focus:bg-cyan-600 rounded-xl pl-4 pr-4 invisible peer-focus:visible"
                                         >Password
                                         </label>
                                     </div>
@@ -125,7 +131,7 @@ export default function Login() {
                                         <p className="mb-0 mr-2">Don&apos;t have an account?</p>
                                         <button
                                         type="button"
-                                        className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10 bg-violet-800"
+                                        className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 hover:bg-neutral-100 hover:bg-opacity-10 bg-violet-800"
                                         data-te-ripple-init
                                         data-te-ripple-color="light"
                                         onClick={() => router.push('/register')}
@@ -150,6 +156,9 @@ export default function Login() {
                                     <p className="text-sm">
                                         Our platform leverages the decentralized nature of blockchain, distributing data across a network of nodes. This not only ensures your data&apos;s security but also eliminates single points of failure, making your information virtually impervious to breaches and downtime. Your data remains under your control, with blockchain&apos;s immutable ledger providing an unassailable foundation for trust and integrity.
                                     </p>
+                                    <br />
+                                    <br /> 
+                                    <Link href={"https://discord.gg/HNF7G2VnxR"} >Meet us at discord</Link>
                                 </div>
                                 </div>
                             </div>

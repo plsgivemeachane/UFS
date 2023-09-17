@@ -20,9 +20,9 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
-import { enc } from 'crypto-js';
 import Head from "next/head";
 import Link from "next/link";
+
 
 export default function Register() {
     const [snapshot, setSnapshot] = useState<DataSnapshot>();
