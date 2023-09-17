@@ -39,11 +39,25 @@ export default function Register() {
         if(!snapshot) return;
         const email = document.getElementById("Email") as HTMLInputElement;
         const password = document.getElementById("Password") as HTMLInputElement;
-        if(!email.value || !password.value) return;
-        if(email.value == "" || password.value == "") return;
-        if(!email.value.includes("@")) return;
-        if(!email.value.includes(".")) return;
-        if(password.value.length < 6) return;
+        if(!email.value || !password.value) 
+        {
+            toast.warn("No email or password was found");
+            return;
+        }
+
+        if(email.value == "" || password.value == "") {
+            toast.warn("No email or password was found");
+            return;
+        }
+
+        if(!email.value.includes("@") || !email.value.includes(".")) {
+            toast.warn("Invalid email");
+            return;
+        }
+        if(password.value.length < 6)  {
+            toast.warn("Password to short");
+            return;
+        }
 
         // Check if user exists
         if (snapshot.val() && snapshot.val()[email.value.replace("@", "").replace(".","")]) {

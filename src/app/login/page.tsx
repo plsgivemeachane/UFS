@@ -42,11 +42,25 @@ export default function Login() {
         const password = document.getElementById("Password") as HTMLInputElement;
         //console.log(snapshot.val());
         // Check if user exists
-        if(!email.value || !password.value) return;
-        if(email.value == "" || password.value == "") return;
-        if(!email.value.includes("@")) return;
-        if(!email.value.includes(".")) return;
-        if(password.value.length < 6) return;
+        if(!email.value || !password.value) 
+        {
+            toast.warn("No email or password was found");
+            return;
+        }
+
+        if(email.value == "" || password.value == "") {
+            toast.warn("No email or password was found");
+            return;
+        }
+
+        if(!email.value.includes("@") || !email.value.includes(".")) {
+            toast.warn("Invalid email");
+            return;
+        }
+        if(password.value.length < 6)  {
+            toast.warn("Password to short");
+            return;
+        }
         if (snapshot.val() && snapshot.val()[email.value.replace("@", "").replace(".","")]) {
             if(snapshot.val()[email.value.replace("@", "").replace(".","")].password == sha(password.value) || snapshot.val()[email.value.replace("@", "").replace(".","")].password == password.value){
                 localStorage.setItem("email", email.value.replace("@", "").replace(".",""))
