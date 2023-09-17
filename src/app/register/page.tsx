@@ -20,20 +20,9 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
-import AES from 'crypto-js/aes';
 import { enc } from 'crypto-js';
 import Head from "next/head";
 import Link from "next/link";
-const encryptData = (str: string) => {
-    const ciphertext = AES.encrypt(str, 'secretPassphrase');
-    return encodeURIComponent(ciphertext.toString());
-};
-
-const decryptData = (encryptedStr : string) => {
-    const decodedStr = decodeURIComponent(encryptedStr);
-    return AES.decrypt(decodedStr, 'secretPassphrase').toString(enc.Utf8);
-};
-
 
 export default function Register() {
     const [snapshot, setSnapshot] = useState<DataSnapshot>();
