@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
+<<<<<<< HEAD
+=======
+import Link from "next/link";
+>>>>>>> 41c69d3 (User hashing update)
 
 export default function HomePage() {
     const router = useRouter();
@@ -19,6 +23,7 @@ export default function HomePage() {
     })
 
     return (
+<<<<<<< HEAD
         <div className="font-serif">
             {/* Section 1 */}
             <div className="flex justify-around items-center bg1 spacer flex-col lg:flex-row" data-aos="fade-down">
@@ -37,6 +42,30 @@ export default function HomePage() {
                     width={512}
                     height={512}
                     className="rounded-xl"
+=======
+        <div className="font-sans">
+            {/* Section 1 */}
+            <div className="flex justify-around items-center bg1 spacer flex-col lg:flex-row perspective-1000" data-aos="fade-down">
+                <div className="flex flex-col items-center p-4 rounded-xl bg-black m-16 shadow-xl shadow-black">
+                    <h1 className="text-5xl font-bold">Welcome to UFS</h1>
+                    <h1 className="text-4xl font-bold mt-4">Ultimate File Storage</h1>
+                    <p className="text-xl font-bold mt-8">🌐 UFS is a decentralized File Storage follow by IPFS technology with stand for interplanetary file system</p>
+                    <p className="text-lg mt-8">At UFS, with the power of IPFS, we&apos;re revolutionizing the way you store and manage your files. Say goodbye to limited storage quotas and hello to a truly decentralized and free-to-use file storage solution.</p>
+                    <p className="text-md mt-8">UFS powered by IPFS with stand for interplanetary file system is a decentralized file storage follow a p2p network and peer to peer hypermedia.With cryptographically hashed pinning service, content addressing and stored on IPFS</p>
+                    {/* <p className="text-md mt-4">UFS brings you a decentralized and free-to-use file storage solution</p> */}
+                    <button className="mt-8 text-3xl hover:text-gray-700"
+                        onClick={() => router.push("/register")}
+                    >Get Started</button>
+                    <br/>
+                    <Link href={"https://discord.gg/HNF7G2VnxR"} >Meet us at discord</Link>
+                </div>
+                <Image 
+                    src="/windowimage1.png"
+                    alt="logo"
+                    width={512}
+                    height={512}
+                    className="rounded-xl mr-16 lg:rotate-y-[-25deg] transform-style-3d border-2 shadow-xl shadow-white"
+>>>>>>> 41c69d3 (User hashing update)
                 />
             </div>
             {/* <div className="bg2 spacer"></div> */}
@@ -49,8 +78,13 @@ export default function HomePage() {
                         <img className="w-full" src="/decen.png" alt="Decentralized" />
                         <div className="px-6 py-4">
                             <div className="font-bold text-xl mb-2">🚀 Decentralized Advantage</div>
+<<<<<<< HEAD
                             <p className="text-gray-700 text-base" data-aos="fade-up">
                                 Our innovative decentralized architecture ensures that your files are stored securely across a distributed network. No more single points of failure or data loss risks.
+=======
+                            <p className="text-gray-300 text-base" data-aos="fade-up">
+                                Our innovative decentralized architecture ensures that your files are stored securely across a distributed network of IPFS. No more failure or data loss risks.
+>>>>>>> 41c69d3 (User hashing update)
                             </p>
                         </div>
                         {/* <div className="px-6 pt-4 pb-2">
@@ -64,8 +98,13 @@ export default function HomePage() {
                         <img className="w-full mt-24" src="/storage.png" alt="Unlimited Storage" />
                         <div className="px-6 py-4">
                             <div className="font-bold text-xl mb-2">💾 Unlimited Storage</div>
+<<<<<<< HEAD
                             <p className="text-gray-700 text-base" data-aos="fade-up">
                             Experience the freedom of never worrying about storage quotas again. UFS offers limitless storage space, so you can save and organize your files without constraints.
+=======
+                            <p className="text-gray-300 text-base" data-aos="fade-up">
+                                Experience the freedom of never worrying about storage quotas again. UFS offers limitless storage space, so you can save and organize your files without constraints.
+>>>>>>> 41c69d3 (User hashing update)
                             </p>
                         </div>
                         {/* <div className="px-6 pt-4 pb-2">
@@ -79,8 +118,13 @@ export default function HomePage() {
                         <img className="w-full mt-32" src="/securiti.png" alt="Enhanced Security" />
                         <div className="px-6 py-4">
                             <div className="font-bold text-xl mb-2">🔒 Enhanced Security</div>
+<<<<<<< HEAD
                             <p className="text-gray-700 text-base" data-aos="fade-up">
                                 Your data is security is our top priority. UFS employs advanced encryption and redundancy measures to keep your files safe from unauthorized access and data breaches.
+=======
+                            <p className="text-gray-300 text-base" data-aos="fade-up">
+                                Because of our decentralized architecture and the power of IPFS, Your data is security is our top priority.With cryptographically hashed pinning service. UFS employs advanced encryption and redundancy measures to keep your files safe from unauthorized access and data breaches.
+>>>>>>> 41c69d3 (User hashing update)
                             </p>
                         </div>
                     </div>
@@ -99,7 +143,11 @@ export default function HomePage() {
                 <div className="px-6 py-4 mb-8">
                     <div className="font-bold text-xl mb-2">📱 Cross-Platform Access</div>
                     <p className="text-gray-200 text-base" data-aos="fade-up">
+<<<<<<< HEAD
                         Access your files from anywhere, anytime, using any device. UFS supports seamless integration across desktop, web, and mobile platforms.
+=======
+                        Access your files from anywhere, anytime, using any device. UFS is compatible with all major operating systems and supports seamless integration across desktop, web, and mobile platforms.
+>>>>>>> 41c69d3 (User hashing update)
                     </p>
                 </div>
                 <div className="px-6 py-4 mb-8">
@@ -111,7 +159,11 @@ export default function HomePage() {
                 <div className="px-6 py-4 mb-8">
                     <div className="font-bold text-xl mb-2">🔄 Automatic Synchronization</div>
                     <p className="text-gray-200 text-base" data-aos="fade-up">
+<<<<<<< HEAD
                         Keep your files up to date across all your devices with our automatic synchronization feature.
+=======
+                        UFS using real-time synchronization to ensure that your files are always up to date. Keep your files up to date across all your devices with our automatic synchronization feature.
+>>>>>>> 41c69d3 (User hashing update)
                     </p>
                 </div>
             </div>
@@ -148,6 +200,10 @@ export default function HomePage() {
                 <button className="mt-16 text-3xl hover:text-gray-700 bg3 p-4 px-16 rounded-lg"
                     onClick={() => router.push("/register")}
                 >Get Started</button>
+<<<<<<< HEAD
+=======
+                <Link href={"https://discord.gg/HNF7G2VnxR"} >Meet us at discord</Link>
+>>>>>>> 41c69d3 (User hashing update)
             </div>
         </div>
     )

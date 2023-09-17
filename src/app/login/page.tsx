@@ -50,7 +50,6 @@ export default function Login() {
                 return;
             }
         }
-
         toast.error("Wrong email or password");
     }
 
