@@ -1,6 +1,6 @@
 {
   "name": "ultimate-file-storage",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "private": true,
   "scripts": {
     "dev": "npx next dev",
