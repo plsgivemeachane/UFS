@@ -27,13 +27,6 @@ const config: Config = {
       }
     },
   },
-<<<<<<< HEAD
   plugins: [],
-=======
-  plugins: [
-    require('tailwindcss-3d'),
-    // ...
-  ],
->>>>>>> 41c69d3 (User hashing update)
 }
 export default config
