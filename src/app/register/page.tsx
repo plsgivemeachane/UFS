@@ -17,8 +17,6 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
-import { enc } from 'crypto-js';
 import Head from "next/head";
 
 
