@@ -19,6 +19,12 @@ const Footer = () => {
                 >
                     Facebook
                 </Link>
+                <Link
+                    href="https://discord.gg/HNF7G2VnxR"
+                    className="text-blue-500 hover:underline transition duration-300"
+                >
+                    Discord
+                </Link>
             </div>
             </div>
             <div className="mb-2">
