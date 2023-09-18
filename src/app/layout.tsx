@@ -54,7 +54,7 @@ export default function RootLayout({
         </nav>
         {children}
         <Footer></Footer>
-        <ToastContainer autoClose={3000}/>
+        <ToastContainer autoClose={1000}/>
       </body>
     </html>
   )

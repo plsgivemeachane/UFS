@@ -15,6 +15,7 @@ import { serialize } from "v8";
 import Head from "next/head";
 import path from "path";
 import Link from "next/link";
+import { Metadata } from "next";
 const FileStorage = lazy(() => import('./FileStorage'));
 const firebaseConfig = {
   apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
@@ -302,24 +303,32 @@ export default function Home() {
   }, [allFiles]);
 
   const uploadFilepls = (formData: FormData) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         // var xhttp = new XMLHttpRequest();
         // console.log("Upload here")
   
-        let username = "4189cf8e-a925-4a73-9051-88b4798ec5df"
-        let password = "s5MZ8h57Od6mhQbs0sstuyRMGumQrMEB4FaMNnZY"
+        // Getting server password and username
+
+        const res = await fetch("https://serverselector.lequan3.repl.co/get")
+        const json = await res.json();
+        // console.log(json)
+        let username = json[0]
+        let password = json[1]
+        toast("Using server " + username.split("-")[0])
 
         const xhr = new XMLHttpRequest();
 
         xhr.open("POST", "https://rpc.particle.network/ipfs/upload", true);
 
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = async function() {
           if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 201) {
               const data = JSON.parse(xhr.responseText);
+              await fetch("https://serverselector.lequan3.repl.co/done/" + username);
               setProgress(100);
               resolve(data);
             } else {
+              await fetch("https://serverselector.lequan3.repl.co/done/" + username);
               reject(new Error("Request failed with status: " + xhr.status));
             }
           }
@@ -659,9 +668,6 @@ export default function Home() {
 
   return (
     <div>
-      <Head>
-          <title>UFS App</title>
-      </Head>
       {(!isUploaded || !isLoaded) && <div className="fixed top-0 left-0 w-full h-full flex flex-col justify-center items-center z-[999] backdrop-blur-md">
         <h1 className="text-3xl animate-pulse">Loading...</h1>
         <p>Please wait a minutes...</p>
