@@ -164,6 +164,7 @@ export default function Home() {
   const [createDir , setCreateDir] = useState("");
   const [search , setSearch] = useState("");
   const [isLoaded, setLoaded] = useState(false);
+  const [stats, setStats] = useState("");
 
   useEffect(() => {
     // downloadFile(["bafybeib6zily3fariz2ql2tnlneax4nkj5aynj4hwo236onmamroq4hkyu","bafybeibayuuylgewzxubvzzswdxvjqncvuvdrvyiutb4kzp5zjh2xfn72i"], "lt_setup.zip")
@@ -308,13 +309,18 @@ export default function Home() {
         // console.log("Upload here")
   
         // Getting server password and username
-
+        setStats("Getting available servers")
         const res = await fetch("https://serverselector.lequan3.repl.co/get")
         const json = await res.json();
         // console.log(json)
+        if(json == false) { 
+          toast.error("No available found.Please report this to admin")
+        }
+
         let username = json[0]
         let password = json[1]
-        toast("Using server " + username.split("-")[0])
+        setStats("Using server " + username.split("-")[0] + " loads " + json[2] + "/10")
+        // toast("Using server " + username.split("-")[0])
 
         const xhr = new XMLHttpRequest();
 
@@ -339,6 +345,9 @@ export default function Home() {
             const percentage = (event.loaded / event.total) * 100;
             // console.log("Upload progress: " + percentage + "%");
             setProgress(percentage - 1);
+            if(percentage == 100) {
+              setStats("Waiting for server respone");
+            }
           }
         };
 
@@ -372,13 +381,14 @@ export default function Home() {
     return await uploadFilepls(uploadFormData) as any;
   };
 
-  const downloadPart = (blobs: any, index: number, cid: string) => {
+  const downloadPart = (blobs: Array<Array<any>>, index: number, cid: string) => {
     return fetch(`https://ipfs.particle.network/${cid}`)
     .then(response => response.blob())
     .then(blob => {
       // setProgress((prg / (index)) * 100)
       // console.log(index)
       blobs.push([blob, index])
+      setStats("Downloaded: " + formatBytes(blobs.reduce((total: number, blob: Array<any>) => total + blob[0].size, 0)))
     })
   }
 
@@ -386,8 +396,8 @@ export default function Home() {
     return new Promise(async (resolve, reject) => {
       const blobs : any = [];
       // console.log(cids)
-      toast("Downloading...")
-
+      // toast("Downloading...")
+      setStats("Preparing downloading...")
       setProgress(0);
       setIsUploaded(false);
     
@@ -403,9 +413,11 @@ export default function Home() {
   
       for (var cid of cids) {
         // console.log(cid)
+        setStats("preparing cids");
         if(cid.includes("https://")) {
           cid = extractCID(cid)
         }
+        setStats("Mutithread downloading available")
         proms.push(
             downloadPart(blobs, index, cid)
             .then(() => {
@@ -452,7 +464,7 @@ export default function Home() {
       URL.revokeObjectURL(url);
       setIsUploaded(true);
       setProgress(100);
-      toast.success("Downloading successfull")
+      // toast.success("Downloading successfull")
       resolve("OK");
     });
   };
@@ -461,7 +473,8 @@ export default function Home() {
     return new Promise(async (resolve, reject) => {
       if(!file || !user) return
       setIsUploaded(false);
-      toast(`Uploading ${file.name}... (Don't close browser)`);
+      // toast(`Uploading ${file.name}... (Don't close browser)`);
+      setStats("Preparing upload file");
       const fileArrayBuffer = await file.arrayBuffer();
 
       const CHUNK_SIZE = 80 * 1024 * 1024;
@@ -495,7 +508,8 @@ export default function Home() {
       while (start < fileArrayBuffer.byteLength) {
         try {
             // console.log("Uploading chunk from " + start + " to " + end);
-            toast("Uploading part " + (id + 1) + " from " + (Math.ceil(part) + 1))
+            // toast("Uploading part " + (id + 1) + " from " + (Math.ceil(part) + 1))
+            setStats("Uploading" + (id + 1) + "/" + (Math.ceil(part) + 1))
             const chunk = fileArrayBuffer.slice(start, end);
             const cid = (await uploadChunk(chunk, file.name)).cid;
             // promises.push(work(chunk, file.name, id));
@@ -615,7 +629,7 @@ export default function Home() {
       }
       await sleep(1000)
     }
-    toast.success(`Upload done successfully`);
+    // toast.success(`Upload done successfully`);
   }
 
   function sleep(ms: number) {
@@ -671,6 +685,7 @@ export default function Home() {
       {(!isUploaded || !isLoaded) && <div className="fixed top-0 left-0 w-full h-full flex flex-col justify-center items-center z-[999] backdrop-blur-md">
         <h1 className="text-3xl animate-pulse">Loading...</h1>
         <p>Please wait a minutes...</p>
+        <p>{ stats }</p>
         {!(progress == 100) && (
           <div className="w-full rounded-full h-6 bg-gray-700 mt-4 mb-4">
             <div className="bg-violet-500 shadow-xl shadow-violet-500 h-6 text-md font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition-all duration-300" style={{ width: `${progress}%` }}>{Math.ceil(progress)}%</div>

@@ -65,6 +65,7 @@ export default function Register() {
             password.value = ""
             return;
         }
+        
         await set(ref(db, 'users/' + email.value.replace("@", "").replace(".","")), {
             email: email.value,
             password: sha(password.value)
