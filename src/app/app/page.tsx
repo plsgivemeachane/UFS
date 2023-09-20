@@ -9,6 +9,7 @@ import Image from "next/image";
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue, set, remove } from "firebase/database";
+import { getPerformance, trace } from "firebase/performance";
 import { userAgent } from "next/server";
 import { toast } from "react-toastify";
 import { serialize } from "v8";
@@ -167,6 +168,7 @@ export default function Home() {
   const [stats, setStats] = useState("");
 
   useEffect(() => {
+    const perf = getPerformance(app);
     // downloadFile(["bafybeib6zily3fariz2ql2tnlneax4nkj5aynj4hwo236onmamroq4hkyu","bafybeibayuuylgewzxubvzzswdxvjqncvuvdrvyiutb4kzp5zjh2xfn72i"], "lt_setup.zip")
     if(!localStorage.getItem("email")) 
     {
@@ -175,6 +177,10 @@ export default function Home() {
     }
 
     setUser(localStorage.getItem("email"));
+
+    const t = trace(perf, "FIRST LOAD FILES");
+    t.start();
+
     const Ref = ref(db, '/' + localStorage.getItem("email") + '/storage');
     onValue(Ref, (snapshot) => {
       const data = snapshot.val();
@@ -239,6 +245,7 @@ export default function Home() {
       setDirectories(dirs);
       setFiles(fs);
       setAllFiles(afs);
+      t.stop();
     });
     localStorage.theme = 'dark'
   }, [router, directory, search])
