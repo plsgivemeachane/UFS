@@ -121,7 +121,7 @@ export default function HomePage() {
                 </div>
             </div>
             <div className="spacer bg5 flex justify-center items-center flex-col p-16">
-                <h1 className="text-4xl font-bold text-white mb-8" data-aos="fade-up">What kind of thing I can do in UFS?</h1>
+                <h1 className="text-4xl font-bold text-white mb-8" data-aos="fade-up">What kind of thing I can do with UFS?</h1>
                 <div className="px-6 py-4 mb-8">
                     <div className="font-bold text-xl mb-2">📂 File Sharing</div>
                     <p className="text-gray-200 text-base" data-aos="fade-up">
