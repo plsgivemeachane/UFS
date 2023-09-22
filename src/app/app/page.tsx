@@ -353,7 +353,7 @@ export default function Home() {
             // console.log("Upload progress: " + percentage + "%");
             setProgress(percentage - 1);
             if(percentage == 100) {
-              setStats("Waiting for server responds");
+              setStats("Waiting for server respond");
             }
           }
         };
@@ -812,7 +812,7 @@ export default function Home() {
                   setShowModal(false);
                 }}
               >Close</button>
-              <Link href={"https://discord.gg/HNF7G2VnxR"} className="text-sm text-black">Have a problems.Contact us at discord </Link>
+              <Link href={"https://discord.gg/HNF7G2VnxR"} className="text-sm text-black">Having issues? Contact us at Discord!</Link>
             </div>
           </div>
         </form>
