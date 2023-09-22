@@ -353,7 +353,7 @@ export default function Home() {
             // console.log("Upload progress: " + percentage + "%");
             setProgress(percentage - 1);
             if(percentage == 100) {
-              setStats("Waiting for server respond");
+              setStats("Waiting for server responds");
             }
           }
         };
