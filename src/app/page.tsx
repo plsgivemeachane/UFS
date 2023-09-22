@@ -27,10 +27,10 @@ export default function HomePage() {
                     <h1 className="text-5xl font-bold">Welcome to UFS</h1>
                     <h1 className="text-4xl font-bold mt-4">Ultimate File Storage</h1>
                     <p className="text-xl font-bold mt-8">🌐 UFS is a decentralized File Storage follow by IPFS technology with stand for interplanetary file system</p>
-                    <p className="text-lg mt-8">At UFS, with the power of IPFS, we&apos;re revolutionizing the way you store and manage your files. Say goodbye to limited storage quotas and hello to a truly decentralized and free-to-use file storage solution.</p>
-                    <p className="text-md mt-8">UFS powered by IPFS with stand for interplanetary file system is a decentralized file storage follow a p2p network and peer to peer hypermedia.With cryptographically hashed pinning service, content addressing and stored on IPFS</p>
+                    <p className="text-lg mt-8">At UFS, with the power of IPFS, we&apos;re revolutionizing the way you store and manage your files. Say goodbye to limited storage quotas and get a truly decentralized and free-to-use file storage solution.</p>
+                    <p className="text-md mt-8">UFS powered by IPFS with stand for interplanetary file system is a decentralized file storage follow a p2p network and peer to peer hypermedia along with cryptographically hashed pinning service and content addressing stored on IPFS.</p>
                     {/* <p className="text-md mt-4">UFS brings you a decentralized and free-to-use file storage solution</p> */}
-                    <button className="mt-8 text-3xl hover:text-gray-700"
+                    <button className="mt-8 text-3xl hover:text-gray-700 bg-violet-400 p-4 rounded-xl"
                         onClick={() => router.push("/register")}
                     >Get Started</button>
                     <br/>
@@ -47,7 +47,7 @@ export default function HomePage() {
             {/* <div className="bg2 spacer"></div> */}
             {/* Section 2 */}
             <div className="bg2 spacer flex justify-center items-center flex-col">
-                <h1 className="text-4xl font-bold" data-aos="fade-up">Why Choose UFS?</h1>
+                <h1 className="text-4xl font-bold" data-aos="fade-up">Why should I choose UFS?</h1>
                 <div className="flex flex-col lg:flex-row gap-16 mb-16 mt-8">
                     <div className="max-w-sm rounded overflow-hidden shadow-lg bg-black" data-aos="fade-down">
                         {/* <h1 className="text-center mt-4 text-xl font-bold text-white">Decentralized Advantage</h1> */}
@@ -85,7 +85,7 @@ export default function HomePage() {
                         <div className="px-6 py-4">
                             <div className="font-bold text-xl mb-2">🔒 Enhanced Security</div>
                             <p className="text-gray-300 text-base" data-aos="fade-up">
-                                Because of our decentralized architecture and the power of IPFS, Your data is security is our top priority.With cryptographically hashed pinning service. UFS employs advanced encryption and redundancy measures to keep your files safe from unauthorized access and data breaches.
+                                Because of our decentralized architecture and the power of IPFS, Your data is security is our top priority. With cryptographically hashed pinning service. UFS employs advanced encryption and redundancy measures to keep your files safe from unauthorized access and data breaches.
                             </p>
                         </div>
                     </div>
@@ -93,8 +93,8 @@ export default function HomePage() {
             </div>
             {/* Section 3 */}
             {/* <div className="spacer bg4"></div> */}
-            <div className="spacer bg4 flex justify-center items-center flex-col p-16">
-                <h1 className="text-4xl font-bold text-white mb-8" data-aos="fade-up">Features at a Glance</h1>
+            <div className="spacer bg4 flex justify-center flex-col p-16">
+                <h1 className="text-4xl font-bold text-white mb-8 text-center" data-aos="fade-up">Features at a Glance</h1>
                 <div className="px-6 py-4 mb-8">
                     <div className="font-bold text-xl mb-2">📂 Effortless File Management</div>
                     <p className="text-gray-200 text-base" data-aos="fade-up">
@@ -121,7 +121,7 @@ export default function HomePage() {
                 </div>
             </div>
             <div className="spacer bg5 flex justify-center items-center flex-col p-16">
-                <h1 className="text-4xl font-bold text-white mb-8" data-aos="fade-up">What type of thing you can do in UFS?</h1>
+                <h1 className="text-4xl font-bold text-white mb-8" data-aos="fade-up">What kind of thing I can do in UFS?</h1>
                 <div className="px-6 py-4 mb-8">
                     <div className="font-bold text-xl mb-2">📂 File Sharing</div>
                     <p className="text-gray-200 text-base" data-aos="fade-up">
