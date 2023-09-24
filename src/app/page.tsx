@@ -7,8 +7,6 @@ import "aos/dist/aos.css";
 import { useEffect } from "react";
 import Link from "next/link";
 import Paypal from "./paypal";
-import SubscribeForm from "./SubscribeForm";
-
 export default function HomePage() {
     const router = useRouter();
 
