@@ -33,7 +33,7 @@ export default function HomePage() {
                     <div className="relative mt-8">
                         <div className="absolute inset-0 bg-pink-400 rounded-xl blur-xl opacity-70"></div>
                         <div className="relative bg-black rounded-3xl">
-                            <button className="text-3xl hover:bg-pink-400 p-4 rounded-3xl border-2 border-pink-400"
+                            <button className="text-3xl hover:bg-pink-400 p-4 rounded-3xl border-2 border-pink-400 transition-all duration-200"
                                 onClick={() => router.push("/register")}
                             >Get Started</button>
                         </div> 
@@ -229,7 +229,7 @@ export default function HomePage() {
                     <div className="absolute inset-0 bg-pink-400 rounded-xl blur-2xl"></div>
                     <div className="relative bg-black rounded-3xl p-8 flex flex-col items-center">
                         <h1 className="text-xl lg:text-4xl font-bold text-white">Ready to experience the future of file storage?</h1>
-                        <button className="bg-pink-400 mt-16 text-3xl hover:text-gray-700 p-4 px-16 rounded-lg"
+                        <button className="bg-pink-400 mt-16 text-3xl hover:text-gray-700 p-4 px-16 rounded-lg transition-all duration-200"
                             onClick={() => router.push("/register")}
                         >Get Started</button>
                         <Link href={"https://discord.gg/HNF7G2VnxR"} className="mt-8">Meet us at discord</Link>
