@@ -44,7 +44,7 @@ export default function RootLayout({
       </Head> 
       <body className={inter.className}>
         <GoogleAnalytics GA_TRACKING_ID={'G-7P8TWM1SVE'} />
-        <nav className='flex top-0 w-full left-0 bg-slate-950 text-white p-4'>
+        <nav className='flex top-0 w-full left-0 bg-black text-white p-4'>
           <Image width={64} height={64} alt="logo" src="/logo.png" /> 
           <Link href="/" className='ml-auto p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Home</Link>
           <Link href="/app" className='p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>App</Link>
