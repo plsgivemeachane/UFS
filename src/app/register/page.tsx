@@ -86,9 +86,6 @@ export default function Register() {
     return (
         <>
             <div>
-                <Head>
-                    <title>UFS Register</title>
-                </Head>
                 <section className="gradient-form h-full bg-neutral-700">
                     <div className="container h-full p-10">
                         <div

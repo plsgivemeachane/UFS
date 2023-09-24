@@ -82,9 +82,6 @@ export default function Login() {
     return (
         <>
             <div>
-                <Head>
-                    <title>UFS Login</title>
-                </Head>
                 <section className="gradient-form h-full bg-neutral-700">
                     <div className="container h-full p-10">
                         <div
