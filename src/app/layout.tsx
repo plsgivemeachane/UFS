@@ -39,9 +39,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      <Head>
-        <meta name="monetag" content="94130c9ed76730d47116c3e4f05c1e34" />
-      </Head>
       <body className={inter.className}>
         <GoogleAnalytics GA_TRACKING_ID={'G-7P8TWM1SVE'} />
         <nav className='flex top-0 w-full left-0 bg-black text-white p-4'>
