@@ -22,13 +22,13 @@ export default function HomePage() {
     return (
         <div className="font-sans">
             {/* Section 1 */}
-            <div className="flex justify-around bg-black spacer flex-col lg:flex-row" data-aos="fade-down">
+            <div className="flex justify-around bg-black items-center spacer flex-col lg:flex-row" data-aos="fade-down">
                 <div className="flex flex-col items-center p-4 rounded-xl bg-black shadow-black justify-center">
                     <h1 className="text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 font-sans">Welcome to UFS</h1>
                     <h1 className="text-4xl font-extrabold mt-4">Ultimate File Storage</h1>
-                    <p className="text-xl font-bold mt-8 text-slate-500">🌐 UFS is a decentralized File Storage follow by IPFS technology with stand for interplanetary file system</p>
-                    <p className="text-lg mt-8 text-slate-500">At UFS, with the power of IPFS, we&apos;re revolutionizing the way you store and manage your files. Say goodbye to limited storage quotas and get a truly decentralized and free-to-use file storage solution.</p>
-                    <p className="text-md mt-8 text-slate-500">UFS powered by IPFS with stand for interplanetary file system is a decentralized file storage follow a p2p network and peer to peer hypermedia along with cryptographically hashed pinning service and content addressing stored on IPFS.</p>
+                    <p className="text-xl font-bold mt-8 text-slate-500">🌐 UFS is a decentralized File Storage follow by IPFS technology. Provide you a unlimited storage for FREE</p>
+                    {/* <p className="text-lg mt-8 text-slate-500">At UFS, with the power of IPFS, we&apos;re revolutionizing the way you store and manage your files. Say goodbye to limited storage quotas and get a truly decentralized and free-to-use file storage solution.</p>
+                    <p className="text-md mt-8 text-slate-500">UFS powered by IPFS with stand for interplanetary file system is a decentralized file storage follow a p2p network and peer to peer hypermedia along with cryptographically hashed pinning service and content addressing stored on IPFS.</p> */}
                     {/* <p className="text-md mt-4">UFS brings you a decentralized and free-to-use file storage solution</p> */}
                     <div className="relative mt-8">
                         <div className="absolute inset-0 bg-pink-400 rounded-xl blur-xl opacity-70"></div>
