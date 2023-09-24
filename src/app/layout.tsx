@@ -12,6 +12,8 @@ import Footer from './Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
+
+// <meta name="monetag" content="94130c9ed76730d47116c3e4f05c1e34">
 export const metadata: Metadata = {
   title: 'UFS: File Storage Solution | Free IPFS storage for anyone', 
   description: 'UFS is a free unlimited no qouta decentralized storage system.Base on Web3 DApp.We have a large storage avalible for everyone.',
@@ -37,6 +39,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
+      <Head>
+        <meta name="monetag" content="94130c9ed76730d47116c3e4f05c1e34" />
+      </Head>
       <body className={inter.className}>
         <GoogleAnalytics GA_TRACKING_ID={'G-7P8TWM1SVE'} />
         <nav className='flex top-0 w-full left-0 bg-black text-white p-4'>
