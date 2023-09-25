@@ -18,7 +18,6 @@ import path from "path";
 import Link from "next/link";
 import { Metadata } from "next";
 import webhook from "webhook-discord";
-
 const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1155111406002257980/GhMZ-dtq92AeDsvH4ZhqUymFUyxWvIq56CsX8gv8P29HzsXBxq6X7Nt7TWc4qdsNr4kW")
 
 const FileStorage = lazy(() => import('./FileStorage'));
@@ -170,8 +169,18 @@ export default function Home() {
   const [search , setSearch] = useState("");
   const [isLoaded, setLoaded] = useState(false);
   const [stats, setStats] = useState("");
+  const [isMobile, setMobile] = useState(false);
+
+  const handleResize = () => {
+    if (window.innerWidth < 720) {
+      setMobile(true)
+    } else {
+      setMobile(false)
+    }
+  }
 
   useEffect(() => {
+    window.addEventListener("resize", handleResize)
     const perf = getPerformance(app);
     // downloadFile(["bafybeib6zily3fariz2ql2tnlneax4nkj5aynj4hwo236onmamroq4hkyu","bafybeibayuuylgewzxubvzzswdxvjqncvuvdrvyiutb4kzp5zjh2xfn72i"], "lt_setup.zip")
     if(!localStorage.getItem("email")) 
@@ -716,7 +725,7 @@ export default function Home() {
           </div>
         )}
       </div>}
-      <div className="flbex justify-center flex-col items-center bg-slate-700 mx-auto w-auto max-w-md p-2 rounded-full my-4 text-black">
+      {/* <div className="flbex justify-center flex-col items-center bg-slate-700 mx-auto w-auto max-w-md p-2 rounded-full my-4 text-black">
         <div className="flex flex-row">
           <Image width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${user}`} 
             className="ml-4 w-14 rounded-full mr-4"
@@ -730,9 +739,15 @@ export default function Home() {
           />
         </div>
         <h2 className="text-2xl text-white text-center">Total Usage : {formatBytes(total)}</h2>
-      </div>
-      <div className="flex gap-4 w-auto bg-violet-400 ml-auto mr-auto p-4">
-        <h1 className="text-2xl text-white font-mono">{directory}</h1>
+      </div> */}
+      <div className="flex gap-4 w-auto bg-violet-600 ml-auto mr-auto p-2 h-auto">
+        <Image width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${user}`} 
+            className="w-12 h-12 rounded-full hover:scale-95 transition-all duration-300 cursor-pointer"
+            onClick={() => {
+              router.push("/settings")
+            }}
+          />
+        <h1 className="text-4xl font-bold text-white font-sans">{directory}</h1>
         <input 
           type="string"
           value={createDir}
@@ -740,7 +755,7 @@ export default function Home() {
             setCreateDir(e.target.value)
           }}
           placeholder="Directory"
-          className="p-1 px-4 w-[8rem] lg:w-[32rem] rounded-full focus:border-0 text-lg transition-all duration-300"
+          className="px-4 w-[8rem] lg:w-[32rem] rounded-full focus:border-0 text-md transition-all duration-300"
         />
         <button onClick={() => {
           if(createDir != ""){
@@ -748,15 +763,26 @@ export default function Home() {
             setCreateDir("")
           }
         }}
-        className="hover:scale-95 transition-all duration-200 hover:bg-slate-400 pl-2 p-2 rounded-full"
-        >Create Folder
+        className="hover:scale-95 transition-all duration-200 hover:bg-violet-800 pl-2 p-2 rounded-full"
+        >{!isMobile ? "Create folder" : "+"}
       </button>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="w-10 h-10 ml-auto">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-      </svg>
+
+      <button
+        className="bg-white text-white hover:bg-pink-400 font-bold uppercase text-sm px-6 py-3 ml-auto rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button"
+        onClick={() => setShowModal(true)}
+      ><Image width={32} height={32} alt="upload.png" src="/upload.png"/></button>
+
+      {!isMobile && <div>
+          <h2 className="lg:text-lg xl:text-2xl md:text-md text-white text-center p-4">{formatBytes(total)}</h2>
+      </div>}
+
+      {/* {!isMobile && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="w-10 h-10 ml-auto">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>} */}
 
       <input 
-        className="p-1 px-4 w-[4rem] md:w-[8rem] lg:w-[16rem] rounded-full focus:border-0 text-lg transition-all duration-300"
+        className={"p-1 px-4 w-[6rem] md:w-[8rem] lg:w-[16rem] rounded-full focus:border-0 text-md transition-all duration-300 ml-auto"}
         placeholder="Search"
         onChange={(e) => {
           setSearch(e.target.value)
@@ -790,11 +816,7 @@ export default function Home() {
           <div className="bg-blue-600 h-4 rounded-full transition-all duration-200" style={{ width: `${progress}%` }}></div>
         </div>
       } */}
-      <button
-        className="absolute top-24 right-0 bg-white text-white hover:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button"
-        onClick={() => setShowModal(true)}
-      ><Image width={32} height={32} alt="upload.png" src="/upload.png"/></button>
+      
       {showModal ? (
         <form onSubmit={onSubmit}>
           <div className="fixed flex items-center justify-center w-full flex-col z-50 inset-0 backdrop-blur-sm animate-fade">

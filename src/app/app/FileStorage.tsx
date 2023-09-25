@@ -101,7 +101,7 @@ export default function FileStorage (probs: any) {
     },[file])
 
     return (
-        <div className="p-1 px-4 m-4 rounded-xl text-white hover:bg-gray-950 hover:shadow-lg hover:shadow-violet-400 transition-all duration-300 bg-transparent cursor-pointer"
+        <div className="p-1 px-4 m-4 rounded-xl text-white hover:shadow-lg border-2 hover:border-white border-transparent transition-all bg-transparent cursor-pointer"
             onClick={
                 () => {
                     if(!probs.isFolder){
@@ -152,7 +152,7 @@ export default function FileStorage (probs: any) {
                         onClick={() => probs.onDelete(file)}
                     >
                         <div className="absolute rounded-full bg-white w-6 h-6 top-0 right-0"></div>
-                        <svg className="h-6 w-6 absolute top-0 right-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        <svg className="h-6 w-6 absolute top-0 right-0 hover:scale-150 transition-all" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </div>
                 }
             </div>

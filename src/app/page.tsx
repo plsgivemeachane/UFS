@@ -31,7 +31,7 @@ export default function HomePage() {
                     <p className="text-md mt-8 text-slate-500">UFS powered by IPFS with stand for interplanetary file system is a decentralized file storage follow a p2p network and peer to peer hypermedia along with cryptographically hashed pinning service and content addressing stored on IPFS.</p> */}
                     {/* <p className="text-md mt-4">UFS brings you a decentralized and free-to-use file storage solution</p> */}
                     <div className="relative mt-8">
-                        <div className="absolute inset-0 bg-pink-400 rounded-xl blur-xl opacity-70"></div>
+                        <div className="absolute inset-0 bg-pink-400 rounded-xl blur-md opacity-70"></div>
                         <div className="relative bg-black rounded-3xl">
                             <button className="text-3xl hover:bg-pink-400 p-4 rounded-3xl border-2 border-pink-400 transition-all duration-200"
                                 onClick={() => router.push("/register")}
@@ -179,7 +179,7 @@ export default function HomePage() {
                         <span className="text-4xl">📂</span>
                         <div className="font-bold text-2xl mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-500 font-sans">File Sharing</div>
                         <p className="text-gray-400 text-base" data-aos="fade-up">
-                        UFS serves as an ideal platform for static web hosting. Users can effortlessly deploy their websites, applications, and content by storing HTML, CSS, JavaScript, and media files on the decentralized network. The distributed nature of UFS ensures rapid loading times and high availability, making it an attractive solution for hosting personal blogs, portfolios, and small business websites.
+                            Share your files with friends, family, or colleagues.
                         </p>
                     </div>
                 </div>
@@ -205,7 +205,7 @@ export default function HomePage() {
                         <span className="text-4xl">📃</span>
                         <div className="font-bold text-2xl mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-violet-500 font-sans">Static Web Hosting</div>
                         <p className="text-gray-400 text-base" data-aos="fade-up">
-                        UFS serves as an ideal platform for static web hosting. Users can effortlessly deploy their websites, applications, and content by storing HTML, CSS, JavaScript, and media files on the decentralized network. The distributed nature of UFS ensures rapid loading times and high availability, making it an attractive solution for hosting personal blogs, portfolios, and small business websites.
+                            UFS serves as an ideal platform for static web hosting. Users can effortlessly deploy their websites, applications, and content by storing HTML, CSS, JavaScript, and media files on the decentralized network. The distributed nature of UFS ensures rapid loading times and high availability, making it an attractive solution for hosting personal blogs, portfolios, and small business websites.
                         </p>
                     </div>
                 </div>
