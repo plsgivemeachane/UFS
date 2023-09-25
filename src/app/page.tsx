@@ -24,16 +24,16 @@ export default function HomePage() {
             {/* Section 1 */}
             <div className="flex justify-around bg-black items-center spacer flex-col lg:flex-row" data-aos="fade-down">
                 <div className="flex flex-col items-center p-4 rounded-xl bg-black shadow-black justify-center">
-                    <h1 className="text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 font-sans">Welcome to UFS</h1>
-                    <h1 className="text-4xl font-extrabold mt-4">Ultimate File Storage</h1>
-                    <p className="text-xl font-bold mt-8 text-slate-500">🌐 UFS is a decentralized File Storage follow by IPFS technology. Provide you a unlimited storage for FREE</p>
+                    <h1 className="lg:text-8xl sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 font-sans">Welcome to UFS</h1>
+                    <h1 className="md:text-4xl sm:text-sm font-extrabold mt-4">Ultimate File Storage</h1>
+                    <p className="md:text-xl sm:text-sm font-bold mt-8 text-slate-500">🌐 UFS is a decentralized File Storage follow by IPFS technology. Provide you a unlimited storage for FREE</p>
                     {/* <p className="text-lg mt-8 text-slate-500">At UFS, with the power of IPFS, we&apos;re revolutionizing the way you store and manage your files. Say goodbye to limited storage quotas and get a truly decentralized and free-to-use file storage solution.</p>
                     <p className="text-md mt-8 text-slate-500">UFS powered by IPFS with stand for interplanetary file system is a decentralized file storage follow a p2p network and peer to peer hypermedia along with cryptographically hashed pinning service and content addressing stored on IPFS.</p> */}
                     {/* <p className="text-md mt-4">UFS brings you a decentralized and free-to-use file storage solution</p> */}
                     <div className="relative mt-8">
                         <div className="absolute inset-0 bg-pink-400 rounded-xl blur-md opacity-70"></div>
                         <div className="relative bg-black rounded-3xl">
-                            <button className="text-3xl hover:bg-pink-400 p-4 rounded-3xl border-2 border-pink-400 transition-all duration-200"
+                            <button className="md:text-3xl sm:text-sm hover:bg-pink-400 p-4 rounded-3xl border-2 border-pink-400 transition-all duration-200"
                                 onClick={() => router.push("/register")}
                             >Get Started</button>
                         </div> 
@@ -52,7 +52,7 @@ export default function HomePage() {
             {/* <div className="bg2 spacer"></div> */}
             {/* Section 2 */}
             <div className="bg-black flex justify-center items-center flex-col">
-                <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-yellow-600 to-blue-500 font-sans" data-aos="fade-up">Why should you choose UFS?</h1>
+                <h1 className="md:text-6xl sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-yellow-600 to-blue-500 font-sans" data-aos="fade-up">Why should you choose UFS?</h1>
                 <div className="flex flex-col lg:flex-row gap-16 mb-16 mt-8">
                     <div className="relative mt-8">
                         <div className="absolute inset-0 bg-pink-500 rounded-xl blur-xl opacity-70"></div>
@@ -107,10 +107,10 @@ export default function HomePage() {
             </div>
             {/* Section 3 */}
             {/* <div className="spacer bg4"></div> */}
-            <div className="bg-black spacer flex justify-center flex-col p-16">
-            <h1 className=" mb-8 text-center text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500 font-sans" data-aos="fade-up">Features of UFS</h1>
+            <div className="bg-black spacer flex justify-center flex-col md:p-16">
+            <h1 className="mb-8 text-center md:text-6xl sm:text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500 font-sans" data-aos="fade-up">Features of UFS</h1>
                 {/* <div className="absolute"> */}
-                <div className="ml-2 w-1 h-full rounded-full bg-gray-700 absolute"></div>
+                <div className="md:ml-2 sm:invisible w-1 h-full rounded-full bg-gray-700 absolute"></div>
                 {/* </div> */}
                 <div>
                     <div className="flex items-center">
@@ -165,8 +165,8 @@ export default function HomePage() {
                     </div>
                 </div>
             </div>
-            <div className="bg-black flex spacer justify-center flex-col p-16">
-            <h1 className=" mb-16 text-center text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-500 font-sans" data-aos="fade-up">What kind of thing you can do with UFS?</h1>
+            <div className="bg-black flex spacer justify-center flex-col md:p-16">
+            <h1 className=" mb-16 text-center md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-500 font-sans" data-aos="fade-up">What kind of thing you can do with UFS?</h1>
                 {/* <div className="absolute"> */}
                 <div className="ml-2 w-1 h-full rounded-full bg-gray-700 absolute"></div>
                 {/* </div> */}
@@ -226,7 +226,7 @@ export default function HomePage() {
             {/* Section 4 */}
             <div className="spacer bg-black flex justify-center items-center flex-col" data-aos="fade-up">
                 <div className="relative">
-                    <div className="absolute inset-0 bg-pink-400 rounded-xl blur-2xl"></div>
+                    <div className="absolute inset-0 bg-pink-400 rounded-xl blur-md"></div>
                     <div className="relative bg-black rounded-3xl p-8 flex flex-col items-center">
                         <h1 className="text-xl lg:text-4xl font-bold text-white">Ready to experience the future of file storage?</h1>
                         <button className="bg-pink-400 mt-16 text-3xl hover:text-gray-700 p-4 px-16 rounded-lg transition-all duration-200"

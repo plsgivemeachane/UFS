@@ -740,14 +740,14 @@ export default function Home() {
         </div>
         <h2 className="text-2xl text-white text-center">Total Usage : {formatBytes(total)}</h2>
       </div> */}
-      <div className="flex gap-4 w-auto bg-violet-600 ml-auto mr-auto p-2 h-auto">
+      <div className="flex gap-4 w-auto bg-violet-600 ml-auto mr-auto md:p-2 h-full md:scale-100">
         <Image width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${user}`} 
-            className="w-12 h-12 rounded-full hover:scale-95 transition-all duration-300 cursor-pointer"
+            className="md:w-12 md:h-12 w-8 h-8 rounded-full hover:scale-95 transition-all duration-300 cursor-pointer"
             onClick={() => {
               router.push("/settings")
             }}
           />
-        <h1 className="text-4xl font-bold text-white font-sans">{directory}</h1>
+        <h1 className="md:text-4xl sm:text-sm font-bold text-white font-sans">{directory}</h1>
         <input 
           type="string"
           value={createDir}
@@ -755,7 +755,7 @@ export default function Home() {
             setCreateDir(e.target.value)
           }}
           placeholder="Directory"
-          className="px-4 w-[8rem] lg:w-[32rem] rounded-full focus:border-0 text-md transition-all duration-300"
+          className="md:px-4 px-2 w-[8rem] lg:w-[32rem] rounded-xl focus:border-0 text-md transition-all duration-300"
         />
         <button onClick={() => {
           if(createDir != ""){
@@ -768,7 +768,7 @@ export default function Home() {
       </button>
 
       <button
-        className="bg-white text-white hover:bg-pink-400 font-bold uppercase text-sm px-6 py-3 ml-auto rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        className="bg-white text-white hover:bg-pink-400 px-6 py-3 ml-auto md:rounded hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
         type="button"
         onClick={() => setShowModal(true)}
       ><Image width={32} height={32} alt="upload.png" src="/upload.png"/></button>
@@ -780,17 +780,18 @@ export default function Home() {
       {/* {!isMobile && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="w-10 h-10 ml-auto">
           <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
         </svg>} */}
-
-      <input 
-        className={"p-1 px-4 w-[6rem] md:w-[8rem] lg:w-[16rem] rounded-full focus:border-0 text-md transition-all duration-300 ml-auto"}
-        placeholder="Search"
-        onChange={(e) => {
-          setSearch(e.target.value)
-        }}
-      />
+      {!isMobile &&
+        <input 
+          className={"p-1 px-4 w-[6rem] md:w-[8rem] lg:w-[16rem] rounded-full focus:border-0 text-md transition-all duration-300 ml-auto"}
+          placeholder="Search"
+          onChange={(e) => {
+            setSearch(e.target.value)
+          }}
+        />
+      } 
       </div>
       {/* grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]  */}
-      <div className="gap-4 mb-12 bg-black m-4 rounded-xl p-4 shadow-slate-500 shadow-inner">
+      <div className="md:gap-4 mb-12 bg-black md:m-4 rounded-xl p-4 md:shadow-slate-500 shadow-inner">
       {directory != "/" && <FileStorage
           file={".."} isFolder={true} setDir={(sth: any) => {
           let dir = directory.split("/")
