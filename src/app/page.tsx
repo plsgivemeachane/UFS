@@ -52,11 +52,11 @@ export default function HomePage() {
             {/* <div className="bg2 spacer"></div> */}
             {/* Section 2 */}
             <div className="bg-black flex justify-center items-center flex-col">
-                <h1 className="md:text-6xl sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-yellow-600 to-blue-500 font-sans" data-aos="fade-up">Why should you choose UFS?</h1>
+                <h1 className="md:text-6xl sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500 font-sans" data-aos="fade-up">Why should you choose UFS?</h1>
                 <div className="flex flex-col lg:flex-row gap-16 mb-16 mt-8">
                     <div className="relative mt-8">
                         <div className="absolute inset-0 bg-pink-500 rounded-xl blur-xl opacity-70"></div>
-                        <div className="relative max-w-sm rounded overflow-hidden shadow-lg bg-black border-2 border-pink-500 h-full" data-aos="fade-down">
+                        <div className="relative max-w-sm rounded overflow-hidden shadow-lg bg-black border-2 border-pink-500 h-full">
                             {/* <h1 className="text-center mt-4 text-xl font-bold text-white">Decentralized Advantage</h1> */}
                             <img className="w-full" src="/decen.png" alt="Decentralized" />
                             <div className="px-6 py-4">
@@ -74,7 +74,7 @@ export default function HomePage() {
                     </div>
                     <div className="relative mt-8">
                         <div className="absolute inset-0 bg-yellow-500 rounded-xl blur-xl opacity-70"></div>
-                        <div className="relative max-w-sm rounded overflow-hidden shadow-lg bg-black border-2 border-yellow-500 h-full" data-aos="fade-down">
+                        <div className="relative max-w-sm rounded overflow-hidden shadow-lg bg-black border-2 border-yellow-500 h-full">
                             {/* <h1 className="text-center mt-4 text-xl font-bold text-white">Decentralized Advantage</h1> */}
                             <img className="w-full mt-24" src="/storage.png" alt="Unlimited Storage" />
                             <div className="px-6 py-4">
@@ -92,7 +92,7 @@ export default function HomePage() {
                     </div>
                     <div className="relative mt-8">
                         <div className="absolute inset-0 bg-blue-500 rounded-xl blur-xl opacity-70"></div>
-                        <div className="relative max-w-sm rounded overflow-hidden shadow-lg bg-black border-2 border-blue-500 h-full" data-aos="fade-down">
+                        <div className="relative max-w-sm rounded overflow-hidden shadow-lg bg-black border-2 border-blue-500 h-full">
                             {/* <h1 className="text-center mt-4 text-xl font-bold text-white">Decentralized Advantage</h1> */}
                             <img className="w-full mt-32" src="/securiti.png" alt="Enhanced Security" />
                             <div className="px-6 py-4">
@@ -226,7 +226,7 @@ export default function HomePage() {
             {/* Section 4 */}
             <div className="spacer bg-black flex justify-center items-center flex-col" data-aos="fade-up">
                 <div className="relative">
-                    <div className="absolute inset-0 bg-pink-400 rounded-xl blur-md"></div>
+                    <div className="absolute inset-0 bg-pink-400 rounded-xl blur-md opacity-50"></div>
                     <div className="relative bg-black rounded-3xl p-8 flex flex-col items-center">
                         <h1 className="text-xl lg:text-4xl font-bold text-white">Ready to experience the future of file storage?</h1>
                         <button className="bg-pink-400 mt-16 text-3xl hover:text-gray-700 p-4 px-16 rounded-lg transition-all duration-200"

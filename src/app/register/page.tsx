@@ -20,7 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1155111406002257980/GhMZ-dtq92AeDsvH4ZhqUymFUyxWvIq56CsX8gv8P29HzsXBxq6X7Nt7TWc4qdsNr4kW")
+// const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1155111406002257980/GhMZ-dtq92AeDsvH4ZhqUymFUyxWvIq56CsX8gv8P29HzsXBxq6X7Nt7TWc4qdsNr4kW")
 
 
 import Head from "next/head";
@@ -35,7 +35,7 @@ export default function Register() {
         onValue(ref(db, 'users'), async (snapshot) => {
             setSnapshot(snapshot);
         })
-        Hook.info("UFS","A user has visit register page");
+        // Hook.info("UFS","A user has visit register page");
         localStorage.theme = 'dark'
     },[])
 
@@ -77,7 +77,7 @@ export default function Register() {
         localStorage.setItem("email", email.value.replace("@", "").replace(".",""))
         toast.success("Logged in...");
         // Send webhook messasge... 
-        Hook.success("UFS","A user has registered");
+        // Hook.success("UFS","A user has registered");
 
 
         router.push("/app")

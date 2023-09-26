@@ -8,7 +8,7 @@ import Image from "next/image";
 
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue, set, remove } from "firebase/database";
+import { getDatabase, ref, update, onValue, set, remove } from "firebase/database";
 import { getPerformance, trace } from "firebase/performance";
 import { userAgent } from "next/server";
 import { toast } from "react-toastify";
@@ -18,7 +18,7 @@ import path from "path";
 import Link from "next/link";
 import { Metadata } from "next";
 import webhook from "webhook-discord";
-const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1155111406002257980/GhMZ-dtq92AeDsvH4ZhqUymFUyxWvIq56CsX8gv8P29HzsXBxq6X7Nt7TWc4qdsNr4kW")
+const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1156222449294258216/oCv3x7dZfkH8anYS18M7SUzFWaVKsg2R-wku5j6x94o6G1tMOK-w_sAND50IYwsrLjod")
 
 const FileStorage = lazy(() => import('./FileStorage'));
 const firebaseConfig = {
@@ -63,6 +63,12 @@ function writeUserData(userId: string, filename: string, url: string, directory:
       data : data
     });
   }
+}
+
+function writeTotalUsage(userId: string, total: number) {
+  update(ref(db, "users/" + userId), {
+    total_usage : total
+  });
 }
 
 function concatenateArrayBuffers(arrayBuffers: ArrayBuffer[]) {
@@ -181,6 +187,7 @@ export default function Home() {
 
   useEffect(() => {
     window.addEventListener("resize", handleResize)
+    handleResize();
     const perf = getPerformance(app);
     // downloadFile(["bafybeib6zily3fariz2ql2tnlneax4nkj5aynj4hwo236onmamroq4hkyu","bafybeibayuuylgewzxubvzzswdxvjqncvuvdrvyiutb4kzp5zjh2xfn72i"], "lt_setup.zip")
     if(!localStorage.getItem("email")) 
@@ -315,6 +322,7 @@ export default function Home() {
         //TODO 
         setLoaded(true);
         setTotal(totalSize);
+        writeTotalUsage(localStorage.getItem("email") as string, totalSize);
       } catch (error) {
         console.error(error);
       }
@@ -740,7 +748,7 @@ export default function Home() {
         </div>
         <h2 className="text-2xl text-white text-center">Total Usage : {formatBytes(total)}</h2>
       </div> */}
-      <div className="flex gap-4 w-auto bg-violet-600 ml-auto mr-auto md:p-2 h-full md:scale-100">
+      <div className="flex gap-8 w-auto bg-neutral-800 ml-auto mr-auto md:p-2 h-full md:scale-100 md:rounded-xl items-center">
         <Image width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${user}`} 
             className="md:w-12 md:h-12 w-8 h-8 rounded-full hover:scale-95 transition-all duration-300 cursor-pointer"
             onClick={() => {
@@ -755,7 +763,7 @@ export default function Home() {
             setCreateDir(e.target.value)
           }}
           placeholder="Directory"
-          className="md:px-4 px-2 w-[8rem] lg:w-[32rem] rounded-xl focus:border-0 text-md transition-all duration-300"
+          className="md:px-4 px-2 w-[8rem] lg:w-[32rem] rounded-xl focus:border-0 text-md transition-all duration-300 bg-neutral-200 outline-none text-black p-2"
         />
         <button onClick={() => {
           if(createDir != ""){
@@ -763,7 +771,7 @@ export default function Home() {
             setCreateDir("")
           }
         }}
-        className="hover:scale-95 transition-all duration-200 hover:bg-violet-800 pl-2 p-2 rounded-full"
+        className="hover:scale-95 transition-all duration-200 pl-2 p-2 rounded"
         >{!isMobile ? "Create folder" : "+"}
       </button>
 
@@ -782,7 +790,7 @@ export default function Home() {
         </svg>} */}
       {!isMobile &&
         <input 
-          className={"p-1 px-4 w-[6rem] md:w-[8rem] lg:w-[16rem] rounded-full focus:border-0 text-md transition-all duration-300 ml-auto"}
+          className={"p-1 px-4 w-[6rem] md:w-[8rem] lg:w-[16rem] rounded-md focus:border-0 text-md transition-all duration-300 ml-auto bg-neutral-200 text-black p-2"}
           placeholder="Search"
           onChange={(e) => {
             setSearch(e.target.value)
