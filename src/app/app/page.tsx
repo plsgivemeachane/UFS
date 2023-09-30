@@ -338,7 +338,7 @@ export default function Home() {
   
         // Getting server password and username
         setStats("Getting available servers")
-        const res = await fetch("https://serverselector.lequan3.repl.co/get")
+        const res = await fetch("https://shiny-gloves-ox.cyclic.cloud/get")
         const json = await res.json();
         // console.log(json)
         if(json == false) { 
