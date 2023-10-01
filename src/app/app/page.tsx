@@ -168,6 +168,7 @@ export default function Home() {
   const router = useRouter();
   const [progress , setProgress] = useState(100);
   const [user, setUser] = useState<string | null>("");
+  const [username, setUsername] = useState<string | null>("");
   const [isUploaded, setIsUploaded] = useState(true);
   const [directory, setDirectory] = useState<string>("/");
   const [directories, setDirectories] = useState<string[]>([]);
@@ -197,6 +198,12 @@ export default function Home() {
     }
 
     setUser(localStorage.getItem("email"));
+    setUsername(localStorage.getItem("email"));
+
+    onValue(ref(db, '/users/' + localStorage.getItem("email")), (snapshot) => {
+      if(!snapshot.exists() || !snapshot.val().username) return;
+      setUsername(snapshot.val().username);
+    })
 
     const t = trace(perf, "FIRST LOAD FILES");
     t.start();
@@ -749,7 +756,7 @@ export default function Home() {
         <h2 className="text-2xl text-white text-center">Total Usage : {formatBytes(total)}</h2>
       </div> */}
       <div className="flex gap-8 w-auto bg-neutral-800 ml-auto mr-auto md:p-2 h-full md:scale-100 md:rounded-xl items-center">
-        <Image width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${user}`} 
+        <Image width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${username}`} 
             className="md:w-12 md:h-12 w-8 h-8 rounded-full hover:scale-95 transition-all duration-300 cursor-pointer"
             onClick={() => {
               router.push("/settings")
@@ -849,7 +856,7 @@ export default function Home() {
                   setShowModal(false);
                 }}
               >Close</button>
-              <Link href={"https://discord.gg/HNF7G2VnxR"} className="text-sm text-black">Having issues? Contact us at Discord!</Link>
+              <Link href={"https://discord.gg/HNF7G2VnxR"} className="text-sm text-blue-500">Having issues? Contact us at Discord!</Link>
             </div>
           </div>
         </form>
