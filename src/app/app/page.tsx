@@ -339,7 +339,7 @@ export default function Home() {
         // Getting server password and username
         setStats("Getting available servers")
         const res = await fetch("https://shiny-gloves-ox.cyclic.cloud/get")
-        const json = await res.json();
+        const json = await res.json();  
         // console.log(json)
         if(json == false) { 
           toast.error("No available found.Please report this to admin")
@@ -360,11 +360,11 @@ export default function Home() {
           if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 201) {
               const data = JSON.parse(xhr.responseText);
-              await fetch("https://serverselector.lequan3.repl.co/done/" + username);
+              await fetch("https://shiny-gloves-ox.cyclic.cloud/done/" + username);
               setProgress(100);
               resolve(data);
             } else {
-              await fetch("https://serverselector.lequan3.repl.co/done/" + username);
+              await fetch("https://shiny-gloves-ox.cyclic.cloud/done/" + username);
               reject(new Error("Request failed with status: " + xhr.status));
             }
           }
