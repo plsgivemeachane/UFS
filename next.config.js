@@ -6,7 +6,7 @@ module.exports = {
     async redirects() {
         return [
           {
-            source: '/cloudinfinite.vercel.app/app',
+            source: 'https://cloudinfinite.vercel.app/app',
             destination: 'https://ufsdrive.com',
             permanent: true,
           },
