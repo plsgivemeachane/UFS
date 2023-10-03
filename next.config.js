@@ -3,15 +3,6 @@
 module.exports = {
     reactStrictMode: true,
     swcMinify: false,
-    async redirects() {
-        return [
-          {
-            source: '/app',
-            destination: 'https://ufsdrive.com',
-            permanent: true,
-          },
-        ]
-    },
     images: {
         remotePatterns: [
             {
