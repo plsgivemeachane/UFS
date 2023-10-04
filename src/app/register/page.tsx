@@ -64,17 +64,17 @@ export default function Register() {
         }
 
         // Check if user exists
-        if (snapshot.val() && snapshot.val()[email.value.replace("@", "").replace(".","")]) {
+        if (snapshot.val() && snapshot.val()[email.value.replace(/@/g, "").replace(/\./g,"")]) {
             toast.warn("User already exists");
             password.value = ""
             return;
         }
         
-        await set(ref(db, 'users/' + email.value.replace("@", "").replace(".","")), {
+        await set(ref(db, 'users/' + email.value.replace(/@/g, "").replace(/\./g,"")), {
             email: email.value,
             password: sha(password.value)
         })
-        localStorage.setItem("email", email.value.replace("@", "").replace(".",""))
+        localStorage.setItem("email", email.value.replace(/@/g, "").replace(/\./g,""))
         toast.success("Logged in...");
         // Send webhook messasge... 
         // Hook.success("UFS","A user has registered");

@@ -66,9 +66,9 @@ export default function Login() {
             toast.warn("Password to short");
             return;
         }
-        if (snapshot.val() && snapshot.val()[email.value.replace("@", "").replace(".","")]) {
-            if(snapshot.val()[email.value.replace("@", "").replace(".","")].password == sha(password.value) || snapshot.val()[email.value.replace("@", "").replace(".","")].password == password.value){
-                localStorage.setItem("email", email.value.replace("@", "").replace(".",""))
+        if (snapshot.val() && snapshot.val()[email.value.replace(/@/g, "").replace(/\./g,"")]) {
+            if(snapshot.val()[email.value.replace(/@/g, "").replace(/\./g,"")].password == sha(password.value) || snapshot.val()[email.value.replace(/@/g, "").replace(/\./g,"")].password == password.value){
+                localStorage.setItem("email", email.value.replace(/@/g, "").replace(/\./g,""))
                 toast.success("Logged in...");
                 // Hook.info("UFS","A user has logged in");
                 router.push("/app")
