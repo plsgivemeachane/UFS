@@ -24,7 +24,7 @@ export default function HomePage() {
             {/* Section 1 */}
             <div className="flex justify-around bg-black items-center spacer flex-col lg:flex-row" data-aos="fade-down">
                 <div className="flex flex-col items-center p-4 rounded-xl bg-black shadow-black justify-center">
-                    <h1 className="lg:text-8xl sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 font-sans">Decentralized, Free, Forever</h1>
+                    <h1 className="lg:text-8xl sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 font-sans">Storage.Free.Forever</h1>
                     <h1 className="md:text-4xl sm:text-sm font-extrabold mt-4">Ultimate File Storage</h1>
                     <p className="md:text-xl sm:text-sm font-bold mt-8 text-slate-500">🌐 UFS is a decentralized File Storage follow by IPFS technology. Provide you a unlimited storage for FREE</p>
                     {/* <p className="text-lg mt-8 text-slate-500">At UFS, with the power of IPFS, we&apos;re revolutionizing the way you store and manage your files. Say goodbye to limited storage quotas and get a truly decentralized and free-to-use file storage solution.</p>
