@@ -18,7 +18,7 @@ import path from "path";
 import Link from "next/link";
 import { Metadata } from "next";
 import webhook from "webhook-discord";
-const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1156222449294258216/oCv3x7dZfkH8anYS18M7SUzFWaVKsg2R-wku5j6x94o6G1tMOK-w_sAND50IYwsrLjod")
+// const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1156222449294258216/oCv3x7dZfkH8anYS18M7SUzFWaVKsg2R-wku5j6x94o6G1tMOK-w_sAND50IYwsrLjod")
 
 const FileStorage = lazy(() => import('./FileStorage'));
 const firebaseConfig = {
@@ -350,12 +350,12 @@ export default function Home() {
         // console.log(json)
         if(json == false) { 
           toast.error("No available found.Please report this to admin")
-          Hook.err("UFS", "Server OVERLOADED");
+          // Hook.err("UFS", "Server OVERLOADED");
         }
 
         let username = json[0]
         let password = json[1]
-        if(json[2] > 5) Hook.info("UFS" ,"Serverload > 30%");
+        // if(json[2] > 5) Hook.info("UFS" ,"Serverload > 30%");
         setStats("Using server " + username.split("-")[0] + " loads " + json[2] + "/10")
         // toast("Using server " + username.split("-")[0])
 

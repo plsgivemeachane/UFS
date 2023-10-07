@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head'
 import GoogleAnalytics from './GoogleAnalytics'
 import Footer from './Footer'
+import Script from 'next/script'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -41,6 +42,10 @@ export default function RootLayout({
     <html lang="vi">
       <body className={inter.className}>
         <GoogleAnalytics GA_TRACKING_ID={'G-7P8TWM1SVE'} />
+        <Script
+          src={`https://challenges.cloudflare.com/turnstile/v0/api.js`}
+          strategy="afterInteractive"
+        />
         <nav className='flex top-0 w-full left-0 bg-black text-white p-4'>
           <Image width={64} height={64} alt="logo" src="/logo.png" /> 
           <Link href="/" className='ml-auto p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Home</Link>
