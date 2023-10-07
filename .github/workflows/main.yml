@@ -24,6 +24,5 @@ jobs:
         with:
           webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
-          color: '16711680'
           username: 'GitHub Actions Bot'
           message: 'New commit on the main branch: "${{ env.MESSAGE }}" by ${{ env.COMMITTER }}. [Check it out](${{ env.URL }}).'
