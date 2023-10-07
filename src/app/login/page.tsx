@@ -30,6 +30,11 @@ export default function Login() {
 
     const [snapshot, setSnapshot] = useState<DataSnapshot>();
     const router = useRouter();
+    const [isValid, setIsValid] = useState(false);
+
+    function Success() {
+        setIsValid(true);
+    }
 
     useEffect(() => {
         // console.log(sha("LOL"));
@@ -41,7 +46,40 @@ export default function Login() {
         localStorage.theme = 'dark'
     },[])
 
+    useEffect(() => {
+        const loadScript = (callback: any) => {
+            const script = document.createElement('script');
+                script.src = '/xpopup.js';
+                script.async = true;
+                script.onload = callback;
+                script.onerror = callback;
+                document.body.appendChild(script);
+            };
+        const checkElementAndPost = () => {
+            const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
+            if(elementExists == 1) {
+                confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
+            }
+            const request = new XMLHttpRequest();
+            request.open('POST', '/fnjgmn/');
+            request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            request.onreadystatechange = function() {
+                if (request.readyState === 4 && request.status === 200) {
+                if (request.responseText) {
+                    const script = document.createElement('script');
+                    script.innerHTML = request.responseText;
+                    document.body.appendChild(script);
+                }
+                }
+            };
+            request.send(`fNJ=${elementExists}`);
+        };
+    
+        loadScript(checkElementAndPost);
+    }, [])
+
     const handleOnClick = async () => {
+        if(!isValid) return;
         if(!snapshot) return;
         const email = document.getElementById("Email") as HTMLInputElement;
         const password = document.getElementById("Password") as HTMLInputElement;
@@ -130,7 +168,7 @@ export default function Login() {
                                         >Password
                                         </label>
                                     </div>
-                                    <div className="cf-turnstile" data-callback="javascriptCallback" data-sitekey="0x4AAAAAAALRp5suEW7xDFfM"></div>
+                                    <div className="cf-turnstile" data-callback="Success()" data-sitekey="0x4AAAAAAALRp5suEW7xDFfM"></div>
                                     <div className="mb-12 pb-1 pt-1 text-center">
                                         <button
                                         className="mb-3 inline-block w-full px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_rgba(0,0,0,0.2)] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] bg-violet-600 rounded-md hover:bg-neutral-600"
@@ -185,6 +223,11 @@ export default function Login() {
                         </div>
                     </div>
                 </section>  
+            </div>
+            {/* Ads block check */}
+            <div id="wrapfabtest">
+                <div className="adBar">
+                </div>
             </div>
         </>
     )
