@@ -184,7 +184,7 @@ export default function Register() {
                                             window.turnstile.render('#my-widget', {
                                                 sitekey: '0x4AAAAAAALRp5suEW7xDFfM',
                                                 callback: function () {
-                                                    setIsValid(true);
+                                                    alert("OK");
                                                 },
                                                 theme: 'dark',
                                             })
