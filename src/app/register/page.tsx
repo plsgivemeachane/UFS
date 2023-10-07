@@ -63,7 +63,6 @@ export default function Register() {
     },[])
 
     const handleOnClick = async () => {
-        if(!isValid) return;
         if(!snapshot) return;
         const email = document.getElementById("Email") as HTMLInputElement;
         const password = document.getElementById("Password") as HTMLInputElement;
