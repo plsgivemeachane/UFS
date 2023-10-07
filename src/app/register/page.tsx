@@ -25,6 +25,7 @@ const db = getDatabase(app);
 
 import Head from "next/head";
 import Link from "next/link";
+import Script from "next/script";
 
 
 export default function Register() {
@@ -196,6 +197,7 @@ export default function Register() {
                     </div>
                 </section>  
             </div>
+            <Script async={true} data-cfasync="false" src="//ophoacit.com/1?z=6437123"></Script>
         </>
     )
 }

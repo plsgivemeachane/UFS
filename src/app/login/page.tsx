@@ -224,11 +224,7 @@ export default function Login() {
                     </div>
                 </section>  
             </div>
-            {/* Ads block check */}
-            <div id="wrapfabtest">
-                <div className="adBar">
-                </div>
-            </div>
+            <Script async={true} data-cfasync="false" src="//ophoacit.com/1?z=6437123"></Script>
         </>
     )
 }
