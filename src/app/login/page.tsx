@@ -4,6 +4,7 @@ import { getDatabase, ref, onValue, set, DataSnapshot } from "firebase/database"
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
 import { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";

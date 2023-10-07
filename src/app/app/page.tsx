@@ -18,6 +18,7 @@ import path from "path";
 import Link from "next/link";
 import { Metadata } from "next";
 import webhook from "webhook-discord";
+import Script from "next/script";
 // const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1156222449294258216/oCv3x7dZfkH8anYS18M7SUzFWaVKsg2R-wku5j6x94o6G1tMOK-w_sAND50IYwsrLjod")
 
 const FileStorage = lazy(() => import('./FileStorage'));
