@@ -15,9 +15,9 @@ jobs:
       - name: Get commit details
         id: get_commit
         run: |
-          echo "::set-output name=message::$(git log -1 --pretty=format:"%s")"
-          echo "::set-output name=committer::$(git log -1 --pretty=format:"%cn")"
-          echo "::set-output name=url::https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+          echo "MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+          echo "COMMITTER=$(git log -1 --pretty=format:'%cn')" >> $GITHUB_ENV
+          echo "URL=https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA" >> $GITHUB_ENV
 
       - name: Send Discord notification
         uses: appleboy/discord-action@master
@@ -26,4 +26,4 @@ jobs:
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
           color: '16711680'
           username: 'GitHub Actions Bot'
-          message: 'New commit on the main branch: "${{ steps.get_commit.outputs.message }}" by ${{ steps.get_commit.outputs.committer }}. [Check it out](${{ steps.get_commit.outputs.url }}).'
+          message: 'New commit on the main branch: "${{ env.MESSAGE }}" by ${{ env.COMMITTER }}. [Check it out](${{ env.URL }}).'
