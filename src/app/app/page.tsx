@@ -220,6 +220,10 @@ export default function Home() {
   }
 
   useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+    }
     window.addEventListener("resize", handleResize)
     handleResize();
     const perf = getPerformance(app);

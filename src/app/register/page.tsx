@@ -63,6 +63,10 @@ export default function Register() {
     },[])
 
     useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+              .register('/sw.js')
+          }
         const loadScript = (callback: any) => {
             const script = document.createElement('script');
                 script.src = '/xpopup.js';
