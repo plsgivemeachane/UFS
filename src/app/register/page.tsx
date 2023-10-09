@@ -265,7 +265,7 @@ export default function Register() {
                     </div>
                 </section>  
             </div>
-            <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script>
+            {/* <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script> */}
         </>
     )
 }

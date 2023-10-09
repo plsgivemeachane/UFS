@@ -898,7 +898,7 @@ export default function Home() {
           </div>
         </form>
       ) : null}
-      <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script>
+      {/* <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script> */}
     </div>
   )
 }
