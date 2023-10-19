@@ -19,6 +19,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import webhook from "webhook-discord";
 import Script from "next/script";
+import generateShortUniqueId from "../s/[id]/IDGen";
 // const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1156222449294258216/oCv3x7dZfkH8anYS18M7SUzFWaVKsg2R-wku5j6x94o6G1tMOK-w_sAND50IYwsrLjod")
 
 const FileStorage = lazy(() => import('./FileStorage'));
@@ -46,6 +47,16 @@ function extractCID(url: string): string {
   }
 }
 
+/**
+ * Writes user data to the database.
+ *
+ * @param {string} userId - The ID of the user.
+ * @param {string} filename - The name of the file.
+ * @param {string} url - The URL of the profile picture.
+ * @param {string} directory - The directory where the file is stored.
+ * @param {any[]} data - An optional array of data.
+ * @returns {void}
+ */
 function writeUserData(userId: string, filename: string, url: string, directory: string, data: any = []) {
   // console.log("SET REF")
   if(data.length == 0) {
@@ -64,6 +75,17 @@ function writeUserData(userId: string, filename: string, url: string, directory:
       data : data
     });
   }
+}
+
+function writeShareData(filename: string, url: string, data: any = []) {
+  let ID = generateShortUniqueId(10);
+  set(ref(db, '/anonymous/' + ID), {
+    filename : filename,
+    profile_picture : url,
+    data : data
+  });
+
+  return ID;
 }
 
 function writeTotalUsage(userId: string, total: number) {
@@ -191,7 +213,7 @@ export default function Home() {
     const checkElementAndPost = () => {
         const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
         if(elementExists == 1) {
-            confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
+            // confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
         }
         const request = new XMLHttpRequest();
         request.open('POST', '/fnjgmn/');
@@ -242,8 +264,8 @@ export default function Home() {
       setUsername(snapshot.val().username);
     })
 
-    const t = trace(perf, "FIRST LOAD FILES");
-    t.start();
+    // const t = trace(perf, "FIRST LOAD FILES");
+    // t.start();
 
     const Ref = ref(db, '/' + localStorage.getItem("email") + '/storage');
     onValue(Ref, (snapshot) => {
@@ -309,7 +331,7 @@ export default function Home() {
       setDirectories(dirs);
       setFiles(fs);
       setAllFiles(afs);
-      t.stop();
+      // t.stop();
     });
     localStorage.theme = 'dark'
   }, [router, directory, search])
@@ -745,6 +767,13 @@ export default function Home() {
     }
   };
 
+  const onShare = (file: StoredFile) => {
+    let ID = writeShareData(file.filename, file.profile_picture, file.data);
+    alert("Link: " + "https://ufsdrive.com/s/" + ID);
+    // Copy link to clipboard
+    navigator.clipboard.writeText("https://ufsdrive.com/s/" + ID);
+  }
+
   // const renderFiles = async () => {
   //   const results = await Promise.all(files.map(async (file, index) => {
   //     const data = await getFileSize(file.profile_picture);
@@ -860,7 +889,7 @@ export default function Home() {
           ))
         }
           {files.map((file, index) => (
-            <FileStorage file={file} key={index} onDelete={deleteFile} downloadFile={onDownloadFile}/>
+            <FileStorage file={file} key={index} onDelete={deleteFile} downloadFile={onDownloadFile} onShare={onShare}/>
           ))}
         </Suspense>
       </div>

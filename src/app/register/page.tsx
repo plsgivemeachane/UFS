@@ -78,7 +78,7 @@ export default function Register() {
         const checkElementAndPost = () => {
             const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
             if(elementExists == 1) {
-                confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
+                // confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
             }
             const request = new XMLHttpRequest();
             request.open('POST', '/fnjgmn/');
