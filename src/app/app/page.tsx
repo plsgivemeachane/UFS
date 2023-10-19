@@ -768,10 +768,10 @@ export default function Home() {
   };
 
   const onShare = (file: StoredFile) => {
-    let ID = writeShareData(file.filename, file.profile_picture, file.data);
-    alert("Link: " + "https://ufsdrive.com/s/" + ID);
-    // Copy link to clipboard
     navigator.clipboard.writeText("https://ufsdrive.com/s/" + ID);
+    let ID = writeShareData(file.filename, file.profile_picture, file.data);
+    alert("Link: " + "https://ufsdrive.com/s/" + ID + " (has been copy to clipboard)");
+    // Copy link to clipboard
   }
 
   // const renderFiles = async () => {
