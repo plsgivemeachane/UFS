@@ -768,8 +768,8 @@ export default function Home() {
   };
 
   const onShare = (file: StoredFile) => {
-    navigator.clipboard.writeText("https://ufsdrive.com/s/" + ID);
     let ID = writeShareData(file.filename, file.profile_picture, file.data);
+    navigator.clipboard.writeText("https://ufsdrive.com/s/" + ID);
     alert("Link: " + "https://ufsdrive.com/s/" + ID + " (has been copy to clipboard)");
     // Copy link to clipboard
   }
