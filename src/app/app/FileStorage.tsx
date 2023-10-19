@@ -192,6 +192,7 @@ export default function FileStorage (probs: any) {
                         <div className="flex flex-col justify-end items-center h-fit gap-4 mb-8">
                             <p className="text-xl text-center">{formatBytes(data)}</p>
                             <button className="bg-transparent hover:bg-green-500 text-green-200 font-semibold hover:text-white py-2 px-8 border border-green-500 hover:border-transparent rounded" onClick={() => {setModel(false);probs.onShare(file);}}>Share</button>
+                            <button className="bg-transparent hover:bg-yellow-500 text-yellow-200 font-semibold hover:text-white py-2 px-8 border border-yellow-500 hover:border-transparent rounded" onClick={() => {setModel(false);probs.onDownloadFile(file);}}>Download</button>
                             <button className="bg-transparent hover:bg-red-500 text-red-200 font-semibold hover:text-white py-2 px-8 border border-red-500 hover:border-transparent rounded" onClick={() => {setModel(false);probs.onDelete(file)}}>Remove</button>
                         </div>
                     </div>
