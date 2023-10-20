@@ -194,7 +194,7 @@ export default function FileStorage (probs: any) {
                         }
 
                         {/* {file.filename.indexOf(".docx") !== -1 && ( */}
-                            <DocumentRenderer cid={extractCID(file.profile_picture)} filename={file.filename}/>
+                            {/* <DocumentRenderer cid={extractCID(file.profile_picture)} filename={file.filename}/> */}
                         {/* // )} */}
                         <div className="flex flex-col justify-end items-center h-fit gap-4 mb-8">
                             <p className="text-xl text-center">{formatBytes(data)}</p>
