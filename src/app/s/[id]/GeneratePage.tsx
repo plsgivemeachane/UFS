@@ -175,6 +175,9 @@ export default function Share({ params }: { params: { id: string } }) {
         onValue(ref(db, `/anonymous/${params.id}`), (snapshot) => {
           console.log(snapshot.val())
           // onDownloadFile(snapshot.val())
+          if(!snapshot.val()) {
+            alert("File not found")
+          }
           setFile(snapshot.val())
         })
       }, [  params.id ]);
@@ -220,7 +223,7 @@ export default function Share({ params }: { params: { id: string } }) {
 
               </div>  
               ) : (
-                <p> Oops look like the link is broken. Just wait a min first for the file to loaded</p>
+                <p> Wait a min while we loading your file</p>
               )
             }
         </>

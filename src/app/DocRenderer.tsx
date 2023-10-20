@@ -35,11 +35,11 @@ export default function DocumentRenderer({ cid, filename } : any) {
             reader.onerror = () => {
                 reject(new Error('Error reading blob as ArrayBuffer'));
             };
-    
+
             reader.readAsArrayBuffer(blob);
         });
     };
-      
+
 
     useEffect(() => {
         console.log("Here")
@@ -75,7 +75,7 @@ export default function DocumentRenderer({ cid, filename } : any) {
         })
         // // }
     }, []);
-    
+
     return (
         <div className="h-full">
             {type && type != "Multipart" ? (
@@ -98,7 +98,7 @@ export default function DocumentRenderer({ cid, filename } : any) {
 
                     {type == "pdf" && (
                         <div className="border border-gray-300 rounded p-4 h-full">
-                            <iframe src={`https://ipfs.particle.network/${cid}`} width="100%" height="100%" className="w-full md:h-[300px]"></iframe>
+                            <iframe src={`https://ipfs.particle.network/${cid}`} title="PFD Viewer" width="100%" height="100%" className="w-full md:h-[300px]"></iframe>
                         </div>
                     )}
 

@@ -211,23 +211,23 @@ export default function Home() {
             document.body.appendChild(script);
         };
     const checkElementAndPost = () => {
-        const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
-        if(elementExists == 1) {
-            // confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
-        }
-        const request = new XMLHttpRequest();
-        request.open('POST', '/fnjgmn/');
-        request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        request.onreadystatechange = function() {
-            if (request.readyState === 4 && request.status === 200) {
-            if (request.responseText) {
-                const script = document.createElement('script');
-                script.innerHTML = request.responseText;
-                document.body.appendChild(script);
-            }
-            }
-        };
-        request.send(`fNJ=${elementExists}`);
+        // const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
+        // if(elementExists == 1) {
+        //     // confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
+        // }
+        // const request = new XMLHttpRequest();
+        // request.open('POST', '/fnjgmn/');
+        // request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        // request.onreadystatechange = function() {
+        //     if (request.readyState === 4 && request.status === 200) {
+        //     if (request.responseText) {
+        //         const script = document.createElement('script');
+        //         script.innerHTML = request.responseText;
+        //         document.body.appendChild(script);
+        //     }
+        //     }
+        // };
+        // request.send(`fNJ=${elementExists}`);
     };
 
     loadScript(checkElementAndPost);
