@@ -85,7 +85,7 @@ export default function DocumentRenderer({ cid, filename } : any) {
                     </div>
                     {type == "docx" && (
                         <div className="border border-gray-300 rounded p-4 w-[90%]">
-                            <div dangerouslySetInnerHTML={{ __html: data }}></div>
+                            <div dangerouslySetInnerHTML={{ __html: data.current }}></div>
                         </div>
                     )}
 
