@@ -193,9 +193,9 @@ export default function FileStorage (probs: any) {
                             <Image alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} priority={false} width={256} height={256} className="rounded-xl bg-transparent m-4" />
                         }
 
-                        {file.filename.indexOf(".docx") !== -1 && (
+                        {/* {file.filename.indexOf(".docx") !== -1 && ( */}
                             <DocumentRenderer cid={extractCID(file.profile_picture)} filename={file.filename}/>
-                        )}
+                        {/* // )} */}
                         <div className="flex flex-col justify-end items-center h-fit gap-4 mb-8">
                             <p className="text-xl text-center">{formatBytes(data)}</p>
                             <button className="bg-transparent hover:bg-green-500 text-green-200 font-semibold hover:text-white py-2 px-8 border border-green-500 hover:border-transparent rounded" onClick={() => {setModel(false);probs.onShare(file);}}>Share</button>
