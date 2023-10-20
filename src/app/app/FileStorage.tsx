@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import imageFactory from "./IconManager";
 import { MuseoModerno } from "next/font/google";
 import { mode } from "crypto-js";
+import DocumentRenderer from "../DocRenderer";
 
 function formatBytes(bytes: number, decimals = 2) {
     if (!+bytes) return '0 Bytes'
@@ -32,8 +33,10 @@ function extractCID(url: string): string {
 interface StoredFile {
     username: string
     filename: string
-    profile_picture: string
-}
+    profile_picture: string,
+    directory: string,
+    data: string
+  }
 async function getFileSize(url: string, urls: any = null) : Promise<number> {
     const params = {
         method: "GET",
@@ -79,7 +82,7 @@ async function getFileSize(url: string, urls: any = null) : Promise<number> {
 }
 
 export default function FileStorage (probs: any) {
-    const file = probs.file;
+    const file = probs.file as StoredFile;
 
     if(probs.isFolder) {
         console.log(file)
@@ -154,8 +157,8 @@ export default function FileStorage (probs: any) {
                     && 
                         <Image alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4" />
                     }
-                </Link> : <Image alt={file} src="/folder.png" priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4"/>}
-                {!probs.isFolder ? <p className="truncate ml-4">{file.filename}</p> : <p className="truncate mr-auto">{file}</p>}
+                </Link> : <Image alt={file as any} src="/folder.png" priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4"/>}
+                {!probs.isFolder ? <p className="truncate ml-4">{file.filename}</p> : <p className="truncate mr-auto">{file as any}</p>}
                 {data && !probs.isFolder && <p className="truncate ml-auto">{formatBytes(data)}</p>}
                 {/* {!probs.isFolder &&
                     <div className="relative p-3 mb-2 ml-5"
@@ -189,10 +192,14 @@ export default function FileStorage (probs: any) {
                         && 
                             <Image alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} priority={false} width={256} height={256} className="rounded-xl bg-transparent m-4" />
                         }
+
+                        {file.filename.indexOf(".docx") !== -1 && (
+                            <DocumentRenderer cid={extractCID(file.profile_picture)} filename={file.filename}/>
+                        )}
                         <div className="flex flex-col justify-end items-center h-fit gap-4 mb-8">
                             <p className="text-xl text-center">{formatBytes(data)}</p>
                             <button className="bg-transparent hover:bg-green-500 text-green-200 font-semibold hover:text-white py-2 px-8 border border-green-500 hover:border-transparent rounded" onClick={() => {setModel(false);probs.onShare(file);}}>Share</button>
-                            <button className="bg-transparent hover:bg-yellow-500 text-yellow-200 font-semibold hover:text-white py-2 px-8 border border-yellow-500 hover:border-transparent rounded" onClick={() => {setModel(false);probs.onDownloadFile(file);}}>Download</button>
+                            <button className="bg-transparent hover:bg-yellow-500 text-yellow-200 font-semibold hover:text-white py-2 px-8 border border-yelloww-500 hover:border-transparent rounded" onClick={() => {setModel(false);probs.downloadFile(file);}}>Download</button>
                             <button className="bg-transparent hover:bg-red-500 text-red-200 font-semibold hover:text-white py-2 px-8 border border-red-500 hover:border-transparent rounded" onClick={() => {setModel(false);probs.onDelete(file)}}>Remove</button>
                         </div>
                     </div>

@@ -31,6 +31,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  openGraph: {
+    title: 'UFS: File Storage Solution | Free IPFS storage for anyone',
+  },
 }
 
 export default function RootLayout({

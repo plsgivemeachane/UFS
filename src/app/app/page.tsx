@@ -151,7 +151,7 @@ function formatBytes(bytes: number, decimals = 2) {
 
 interface StoredFile {
   username: string
-  filename: string
+  filename: string,
   profile_picture: string,
   directory: string,
   data: string
