@@ -21,8 +21,8 @@ export default function DocumentRenderer({ cid, filename } : any) {
 
     const [docx, setDocx] = useState<any>();
     const [type, setType] = useState<string>("");
-    // const [data, setData] = useState<any>();
-    const data = useRef<any>();
+    const [data, setData] = useState<any>();
+    // const data = useRef<any>();
 
     const blobToArrayBuffer = (blob: Blob): Promise<ArrayBuffer> => {
         return new Promise<ArrayBuffer>((resolve, reject) => {
@@ -65,7 +65,8 @@ export default function DocumentRenderer({ cid, filename } : any) {
                     })
                     .then((html) => {
                         // console.log(html)
-                        data.current = html;
+                        // data.current = html;
+                        setData(html)
                     })
                     .catch((error) => {
                         console.error(error);
@@ -78,14 +79,14 @@ export default function DocumentRenderer({ cid, filename } : any) {
 
     return (
         <div className="h-full">
-            {type && type != "Multipart" ? (
+            {type && (
                 <div className="flex flex-col justify-center m-8 h-auto">
                     <div className="text-2xl font-bold">
                         <h1>Preview</h1>
                     </div>
                     {type == "docx" && (
                         <div className="border border-gray-300 rounded p-4 w-[90%]">
-                            <div dangerouslySetInnerHTML={{ __html: data.current }}></div>
+                            <div dangerouslySetInnerHTML={{ __html: data }}></div>
                         </div>
                     )}
 
@@ -109,8 +110,6 @@ export default function DocumentRenderer({ cid, filename } : any) {
                         </div>
                     )} */}
                 </div>
-            ) : (
-                <p>Preview not available</p>
             )}
 
         </div>

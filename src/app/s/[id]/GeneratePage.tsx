@@ -221,7 +221,7 @@ export default function Share({ params }: { params: { id: string } }) {
 
                 <DocumentRenderer cid={extractCID(file.profile_picture)} filename={file.filename} />
 
-              </div>  
+              </div>
               ) : (
                 <p> Wait a min while we loading your file</p>
               )
