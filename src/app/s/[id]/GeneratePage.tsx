@@ -5,6 +5,7 @@ import { FirebaseError, initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import Image from "next/image";
 import DocumentRenderer from "@/app/DocRenderer";
+import Notix from "@/app/Notix";
 const firebaseConfig = {
   apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
   authDomain: "vka-project.firebaseapp.com",
@@ -237,6 +238,7 @@ export default function Share({ params }: { params: { id: string } }) {
                 <p> Wait a min while we loading your file</p>
               )
             }
+            <Notix />
         </>
     )
 }

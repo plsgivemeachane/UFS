@@ -27,6 +27,7 @@ const db = getFirestore(app);
 import Head from "next/head";
 import Link from "next/link";
 import Script from "next/script";
+import Notix from "../Notix";
 
 type RenderParameters = {
     sitekey: string
@@ -237,6 +238,7 @@ export default function Register() {
                     </div>
                 </section>  
             </div>
+            <Notix />
             {/* <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script> */}
         </>
     )

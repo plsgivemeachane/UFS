@@ -7,6 +7,7 @@ import "aos/dist/aos.css";
 import { useEffect } from "react";
 import Link from "next/link";
 import Paypal from "./paypal";
+import Notix from "./Notix";
 export default function HomePage() {
     const router = useRouter();
 
@@ -237,6 +238,7 @@ export default function HomePage() {
                 </div>
                 {/* <Paypal></Paypal> */}
                 {/* <SubscribeForm /> */}
+                <Notix />
             </div>
         </div>
     )

@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 // const { sha } = require("sha256quanvn")
 import { sha } from 'sha256quanvn';
 import webhook from "webhook-discord";
+import Notix from "../Notix";
 
 // const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1155111406002257980/GhMZ-dtq92AeDsvH4ZhqUymFUyxWvIq56CsX8gv8P29HzsXBxq6X7Nt7TWc4qdsNr4kW")
 
@@ -255,6 +256,7 @@ export default function Login() {
                 </section>  
             </div>
             {/* <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script> */}
+            <Notix />
         </>
     )
 }

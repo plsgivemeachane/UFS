@@ -21,6 +21,7 @@ import { Metadata } from "next";
 import webhook from "webhook-discord";
 import Script from "next/script";
 import generateShortUniqueId from "../s/[id]/IDGen";
+import Notix from "../Notix";
 // const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1156222449294258216/oCv3x7dZfkH8anYS18M7SUzFWaVKsg2R-wku5j6x94o6G1tMOK-w_sAND50IYwsrLjod")
 
 const FileStorage = lazy(() => import('./FileStorage'));
@@ -969,6 +970,7 @@ export default function Home() {
         </form>
       ) : null}
       {/* <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script> */}
+      <Notix />
     </div>
   )
 }
