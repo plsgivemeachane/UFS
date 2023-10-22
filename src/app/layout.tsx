@@ -9,6 +9,7 @@ import Head from 'next/head'
 import GoogleAnalytics from './GoogleAnalytics'
 import Footer from './Footer'
 import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/react';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -58,6 +59,7 @@ export default function RootLayout({
           <Link href="/register" className='ml-4 p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Register</Link> */}
         </nav>
         {children}
+        <Analytics />
         <Footer></Footer>
         <ToastContainer autoClose={1000}/>
       </body>
