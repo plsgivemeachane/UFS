@@ -1,6 +1,7 @@
 'use client';
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue, set, DataSnapshot } from "firebase/database";
+// import { getDatabase, ref, onValue, set, DataSnapshot } from "firebase/database";
+import { getFirestore, doc, getDoc, setDoc, DocumentSnapshot, query, where, collection, getDocs } from "firebase/firestore";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,11 +26,11 @@ const firebaseConfig = {
     appId: "1:966822894965:web:21522a48600529a30d473c"
 };
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const db = getFirestore(app);
 
 export default function Login() {
 
-    const [snapshot, setSnapshot] = useState<DataSnapshot>();
+    // const [snapshot, setSnapshot] = useState<DocumentSnapshot>();
     const router = useRouter();
     const [isValid, setIsValid] = useState(false);
 
@@ -40,51 +41,59 @@ export default function Login() {
     useEffect(() => {
         // console.log(sha("LOL"));
         // console.log("LOL");
-        onValue(ref(db, 'users'), async (snapshot) => {
-            setSnapshot(snapshot);
-        })
+        // onValue(ref(db, 'users'), async (snapshot) => {
+        //     setSnapshot(snapshot);
+        // })
+        // const firestoreAction = async () => {
+        //     const docRef = doc(db, "users");
+        //     const snap = await getDoc(docRef);
+
+        //     if (snap.exists()) {
+        //         setSnapshot(snap);
+        //     }
+        // }
         // Hook.info("UFS","A user has visit login page");
         localStorage.theme = 'dark'
     },[])
 
-    useEffect(() => {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker
-              .register('/sw.js')
-          }
-        const loadScript = (callback: any) => {
-            const script = document.createElement('script');
-                script.src = '/xpopup.js';
-                script.async = true;
-                script.onload = callback;
-                script.onerror = callback;
-                document.body.appendChild(script);
-            };
-        const checkElementAndPost = () => {
-            const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
-            if(elementExists == 1) {
-                // confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
-            }
-            const request = new XMLHttpRequest();
-            request.open('POST', '/fnjgmn/');
-            request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            request.onreadystatechange = function() {
-                if (request.readyState === 4 && request.status === 200) {
-                if (request.responseText) {
-                    const script = document.createElement('script');
-                    script.innerHTML = request.responseText;
-                    document.body.appendChild(script);
-                }
-                }
-            };
-            request.send(`fNJ=${elementExists}`);
-        };
+    // useEffect(() => {
+    //     // if ('serviceWorker' in navigator) {
+    //     //     navigator.serviceWorker
+    //     //       .register('/sw.js')
+    //     //   }
+    //     const loadScript = (callback: any) => {
+    //         const script = document.createElement('script');
+    //             script.src = '/xpopup.js';
+    //             script.async = true;
+    //             script.onload = callback;
+    //             script.onerror = callback;
+    //             document.body.appendChild(script);
+    //         };
+    //     const checkElementAndPost = () => {
+    //         const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
+    //         if(elementExists == 1) {
+    //             // confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
+    //         }
+    //         const request = new XMLHttpRequest();
+    //         request.open('POST', '/fnjgmn/');
+    //         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    //         request.onreadystatechange = function() {
+    //             if (request.readyState === 4 && request.status === 200) {
+    //             if (request.responseText) {
+    //                 const script = document.createElement('script');
+    //                 script.innerHTML = request.responseText;
+    //                 document.body.appendChild(script);
+    //             }
+    //             }
+    //         };
+    //         request.send(`fNJ=${elementExists}`);
+    //     };
     
-        loadScript(checkElementAndPost);
-    }, [])
+    //     loadScript(checkElementAndPost);
+    // }, [])
 
     const handleOnClick = async () => {
-        if(!snapshot) return;
+        // if(!snapshot) return;
         const email = document.getElementById("Email") as HTMLInputElement;
         const password = document.getElementById("Password") as HTMLInputElement;
         //console.log(snapshot.val());
@@ -108,17 +117,34 @@ export default function Login() {
             toast.warn("Password to short");
             return;
         }
-        if (snapshot.val() && snapshot.val()[email.value.replace(/@/g, "").replace(/\./g,"")]) {
-            if(snapshot.val()[email.value.replace(/@/g, "").replace(/\./g,"")].password == sha(password.value) || snapshot.val()[email.value.replace(/@/g, "").replace(/\./g,"")].password == password.value){
-                localStorage.setItem("email", email.value.replace(/@/g, "").replace(/\./g,""))
-                toast.success("Logged in...");
-                // Hook.info("UFS","A user has logged in");
-                router.push("/app")
-                return;
-            }
+
+        // if(!snapshot.data())
+
+        const userRef = collection(db, "users");
+        const q = query(userRef, where("email", "==", email.value));
+
+        const querySnapshot = await getDocs(q);
+
+        console.log(querySnapshot)
+
+        if (querySnapshot.empty) {
+            toast.warn("Wrong email or password");
+            return;
         }
-        
-        toast.error("Wrong email or password");
+
+        const user = querySnapshot.docs[0];
+        // console.log(user.data())
+        const userPassword = user.data().password;
+        // console.log(sha(password.value), userPassword)
+        if (sha(password.value).toString().trim() != userPassword.toString()) {
+            toast.warn("Wrong email or password");
+            return;
+        }
+
+        localStorage.setItem("email", email.value.replace(/@/g, "").replace(/\./g,""));
+
+        toast.success("Logged in...");
+        router.push("/app")
     }
 
     return (

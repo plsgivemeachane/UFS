@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from "react";
 import { FirebaseError, initializeApp } from "firebase/app";
-import { getDatabase, ref, update, onValue, set, remove } from "firebase/database";
+// import { getDatabase, ref, update, onValue, set, remove } from "firebase/database";
+import { getFirestore, setDoc, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import Image from "next/image";
 import DocumentRenderer from "@/app/DocRenderer";
 const firebaseConfig = {
@@ -14,7 +15,7 @@ const firebaseConfig = {
   appId: "1:966822894965:web:21522a48600529a30d473c"
 };
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const db = getFirestore(app);
 
 function formatBytes(bytes: number, decimals = 2) {
     if (!+bytes) return '0 Bytes'
@@ -172,14 +173,24 @@ export default function Share({ params }: { params: { id: string } }) {
       };
 
       useEffect(() => {
-        onValue(ref(db, `/anonymous/${params.id}`), (snapshot) => {
-          console.log(snapshot.val())
-          // onDownloadFile(snapshot.val())
-          if(!snapshot.val()) {
+        // onValue(ref(db, `/anonymous/${params.id}`), (snapshot) => {
+        //   console.log(snapshot.val())
+        //   // onDownloadFile(snapshot.val())
+        //   if(!snapshot.val()) {
+        //     alert("File not found")
+        //   }
+        //   setFile(snapshot.val())
+        // })
+
+        const subscribe = async () => {
+          const snapshot = await getDoc(doc(db, `/anonymous/${params.id}`))
+          if(!snapshot.data()) {
             alert("File not found")
           }
-          setFile(snapshot.val())
-        })
+          
+          setFile(snapshot.data())
+        }
+
       }, [  params.id ]);
 
       const onClick = () => {

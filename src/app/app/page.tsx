@@ -8,7 +8,8 @@ import Image from "next/image";
 
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from "firebase/app";
-import { getDatabase, ref, update, onValue, set, remove } from "firebase/database";
+// import { getDatabase, ref, update, onValue, set, remove } from "firebase/database";
+import { getFirestore, setDoc, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import { getPerformance, trace } from "firebase/performance";
 import { userAgent } from "next/server";
 import { toast } from "react-toastify";
@@ -33,7 +34,7 @@ const firebaseConfig = {
   appId: "1:966822894965:web:21522a48600529a30d473c"
 };
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const db = getFirestore(app);
 
 const APIKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDk3ZDZEQTk2RmNBYmY4REI2Yjg1OUFjODFmZDdFNDFkMTlCNWRlNEIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY5MjU0NDg1NzM3MCwibmFtZSI6IkZha2Vib29rIn0.rCefvOU7LmU22LioowC5xVqqqdPYdIItkJyNYgx55lg";
 
@@ -60,14 +61,14 @@ function extractCID(url: string): string {
 function writeUserData(userId: string, filename: string, url: string, directory: string, data: any = []) {
   // console.log("SET REF")
   if(data.length == 0) {
-    set(ref(db, '/' + userId +  "/storage/" + Date.now()), {
+    setDoc(doc(db, '/storage/' + userId +  "/storage/" + Date.now()), {
       username: userId,
       filename : filename,
       profile_picture : url,
       directory : directory,
     });
   } else {
-    set(ref(db, '/' + userId +  "/storage/" + Date.now()), {
+    setDoc(doc(db, '/storage' + userId +  "/storage/" + Date.now()), {
       username: userId,
       filename : filename,
       profile_picture : "Multipart",
@@ -79,7 +80,7 @@ function writeUserData(userId: string, filename: string, url: string, directory:
 
 function writeShareData(filename: string, url: string, data: any = []) {
   let ID = generateShortUniqueId(10);
-  set(ref(db, '/anonymous/' + ID), {
+  setDoc(doc(db, '/storage/anonymous/' + ID), {
     filename : filename,
     profile_picture : url,
     data : data
@@ -89,7 +90,7 @@ function writeShareData(filename: string, url: string, data: any = []) {
 }
 
 function writeTotalUsage(userId: string, total: number) {
-  update(ref(db, "users/" + userId), {
+  updateDoc(doc(db, "users/" + userId), {
     total_usage : total
   });
 }
@@ -242,10 +243,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-    }
+    // if ('serviceWorker' in navigator) {
+    //   navigator.serviceWorker
+    //     .register('/sw.js')
+    // }
     window.addEventListener("resize", handleResize)
     handleResize();
     const perf = getPerformance(app);
@@ -259,80 +260,102 @@ export default function Home() {
     setUser(localStorage.getItem("email"));
     setUsername(localStorage.getItem("email"));
 
-    onValue(ref(db, '/users/' + localStorage.getItem("email")), (snapshot) => {
-      if(!snapshot.exists() || !snapshot.val().username) return;
-      setUsername(snapshot.val().username);
-    })
+    // onValue(ref(db, '/users/' + localStorage.getItem("email")), (snapshot) => {
+    //   if(!snapshot.exists() || !snapshot.val().username) return;
+    //   setUsername(snapshot.val().username);
+    // })
+
+    // Refactor
+
+    const firestoreAction = async () => {
+      const docRef = doc(db, '/users/' + localStorage.getItem("email"));
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists() && docSnap.data().username) {
+        setUsername(docSnap.data().username);
+      }
+
+      const fileRef = doc(db, '/storage/' + localStorage.getItem("email"));
+
+      const fileSnap = await getDoc(fileRef);
+      if (fileSnap.exists()) {
+        const data = fileSnap.data().storage;
+        // console.log(fileSnap.data().storage)
+        // return;
+        // console.log(directory)
+        // console.log(data)
+        let fs = []
+        let afs = []
+        let dirs: string[] = []
+        /**
+         * 
+         *  DIR
+         * 
+         *  /
+         *  /test /test2
+         *  
+         *  /test => /test3
+         *  /test2 => /test4
+         * 
+         * / -> /<things>/... match that
+         * 
+         */
+        for(let file in data){
+          let currentFile: StoredFile = data[file];
+          afs.push(currentFile);
+          if(currentFile.directory){
+            // console.log("Examinate ",currentFile.directory)
+            if(currentFile.directory != directory){
+              // console.log("Current File directory different from directory", currentFile.directory)
+              // When / => get /test/test1 /test/test2 only take test
+              // current dirs arr = []
+              if(currentFile.directory.startsWith(directory) && directory != "/"){
+                // console.log("Examinate file directory in the folder", currentFile.directory)
+                // get only the first most directory
+                // ['', test', 'test2', 'test3']
+                //        ^       I
+                let dirArray = currentFile.directory.split("/") 
+                let curdirArray = directory.split("/").slice(-1)[0] // ['', 'test'] -> 'test'
+                // console.log("Directory array and currentDirectory" ,dirArray, curdirArray)
+                for(let i = 0;i < dirArray.length;i++){
+                  if(dirArray[i] == curdirArray && !dirs.includes(dirArray[i + 1])){ // test == 'test' []
+                    // console.log("Found directory", dirArray[i], i)
+                    dirs.push(dirArray[i+1]) // only 1 dir like test2
+                    break;
+                  }
+                }
+              } else if(currentFile.directory.startsWith(directory) && !dirs.includes(currentFile.directory.split("/")[1])){
+                // ["", "test", "test2"]
+                //   ^     ^
+                //   |     I
+                dirs.push(currentFile.directory.split("/")[1]) 
+              }
+
+              continue;
+            }
+          } else if(directory != "/")
+            continue
+
+          if(search != "" && !removeAccents(data[file].filename).toLowerCase().includes(removeAccents(search.toLowerCase()))) continue;
+          fs.push(data[file]);
+        }
+        // console.log("Final list",dirs, fs)
+        setDirectories(dirs);
+        setFiles(fs);
+        setAllFiles(afs);
+        // t.stop();
+      }
+    }
+
+    firestoreAction()
 
     // const t = trace(perf, "FIRST LOAD FILES");
     // t.start();
 
-    const Ref = ref(db, '/' + localStorage.getItem("email") + '/storage');
-    onValue(Ref, (snapshot) => {
-      const data = snapshot.val();
-      // console.log(directory)
-      // console.log(data)
-      let fs = []
-      let afs = []
-      let dirs: string[] = []
-      /**
-       * 
-       *  DIR
-       * 
-       *  /
-       *  /test /test2
-       *  
-       *  /test => /test3
-       *  /test2 => /test4
-       * 
-       * / -> /<things>/... match that
-       * 
-       */
-      for(let file in data){
-        let currentFile: StoredFile = data[file];
-        afs.push(currentFile);
-        if(currentFile.directory){
-          // console.log("Examinate ",currentFile.directory)
-          if(currentFile.directory != directory){
-            // console.log("Current File directory different from directory", currentFile.directory)
-            // When / => get /test/test1 /test/test2 only take test
-            // current dirs arr = []
-            if(currentFile.directory.startsWith(directory) && directory != "/"){
-              // console.log("Examinate file directory in the folder", currentFile.directory)
-              // get only the first most directory
-              // ['', test', 'test2', 'test3']
-              //        ^       I
-              let dirArray = currentFile.directory.split("/") 
-              let curdirArray = directory.split("/").slice(-1)[0] // ['', 'test'] -> 'test'
-              // console.log("Directory array and currentDirectory" ,dirArray, curdirArray)
-              for(let i = 0;i < dirArray.length;i++){
-                if(dirArray[i] == curdirArray && !dirs.includes(dirArray[i + 1])){ // test == 'test' []
-                  // console.log("Found directory", dirArray[i], i)
-                  dirs.push(dirArray[i+1]) // only 1 dir like test2
-                  break;
-                }
-              }
-            } else if(currentFile.directory.startsWith(directory) && !dirs.includes(currentFile.directory.split("/")[1])){
-              // ["", "test", "test2"]
-              //   ^     ^
-              //   |     I
-              dirs.push(currentFile.directory.split("/")[1]) 
-            }
-
-            continue;
-          }
-        } else if(directory != "/")
-          continue
-
-        if(search != "" && !removeAccents(data[file].filename).toLowerCase().includes(removeAccents(search.toLowerCase()))) continue;
-        fs.push(data[file]);
-      }
-      // console.log("Final list",dirs, fs)
-      setDirectories(dirs);
-      setFiles(fs);
-      setAllFiles(afs);
-      // t.stop();
-    });
+    // const Ref = ref(db, '/' + localStorage.getItem("email") + '/storage');
+    // onValue(Ref, (snapshot) => {
+    //   const data = snapshot.val();
+      
+    // });
     localStorage.theme = 'dark'
   }, [router, directory, search])
 
@@ -739,21 +762,32 @@ export default function Home() {
     if(!confirm("Are you sure?")) return;
     toast("Removing File...")
     setIsUploaded(false);
-    onValue(ref(db, '/' + localStorage.getItem("email") + '/storage'), (snapshot) => {
-      const data = snapshot.val();
-      for(let f in data){
-        if(data[f].profile_picture == file.profile_picture){
-          remove(ref(db, '/' + localStorage.getItem("email") + '/storage/' + f));
+    // onValue(ref(db, '/' + localStorage.getItem("email") + '/storage'), (snapshot) => {
+    //   const data = snapshot.val();
+    //   for(let f in data){
+    //     if(data[f].profile_picture == file.profile_picture){
+    //       remove(ref(db, '/' + localStorage.getItem("email") + '/storage/' + f));
+    //     }
+    //   }
+    // });
+    const docRef = doc(db, '/users/' + localStorage.getItem("email"));
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      for(let f in data.storage){
+        if(data.storage[f].profile_picture == file.profile_picture){
+          deleteDoc(doc(db, '/storage/' + localStorage.getItem("email") + '/storage/' + f));
         }
       }
-    });
-    const cid = file.profile_picture.split("/").pop();
-    await fetch("https://api.nft.storage/" + cid, { 
-      method: "DELETE",
-      headers: {
-        "Authorization": "Bearer " + APIKEY
-      }
-    });
+    }
+
+    // const cid = file.profile_picture.split("/").pop();
+    // await fetch("https://api.nft.storage/" + cid, { 
+    //   method: "DELETE",
+    //   headers: {
+    //     "Authorization": "Bearer " + APIKEY
+    //   }
+    // });
     setIsUploaded(true);
     setFiles(files.filter((f) => f !== file));
     toast.success("Delete Successfull");
