@@ -62,14 +62,14 @@ function extractCID(url: string): string {
 function writeUserData(userId: string, filename: string, url: string, directory: string, data: any = []) {
   // console.log("SET REF")
   if(data.length == 0) {
-    setDoc(doc(db, '/storage/' + userId +  "/storage/" + Date.now()), {
+    setDoc(doc(db, 'storage' , userId ,  "storage" , Date.now().toString()), {
       username: userId,
       filename : filename,
       profile_picture : url,
       directory : directory,
     });
   } else {
-    setDoc(doc(db, '/storage' + userId +  "/storage/" + Date.now()), {
+    setDoc(doc(db, 'storage' , userId ,  "storage" , Date.now().toString()), {
       username: userId,
       filename : filename,
       profile_picture : "Multipart",
@@ -81,7 +81,7 @@ function writeUserData(userId: string, filename: string, url: string, directory:
 
 function writeShareData(filename: string, url: string, data: any = []) {
   let ID = generateShortUniqueId(10);
-  setDoc(doc(db, '/storage/anonymous/' + ID), {
+  setDoc(doc(db, 'storage', 'anonymous' , ID), {
     filename : filename,
     profile_picture : url,
     data : data
@@ -91,7 +91,7 @@ function writeShareData(filename: string, url: string, data: any = []) {
 }
 
 function writeTotalUsage(userId: string, total: number) {
-  updateDoc(doc(db, "users/" + userId), {
+  updateDoc(doc(db, "users" , userId), {
     total_usage : total
   });
 }

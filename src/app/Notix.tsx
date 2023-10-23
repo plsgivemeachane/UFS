@@ -14,7 +14,11 @@ const Notix = () => {
         document.head.append(s);
     }, []);
 
-    return null;
+    return (
+        <div>
+            
+        </div>
+    );
 };
 
 export default Notix;
