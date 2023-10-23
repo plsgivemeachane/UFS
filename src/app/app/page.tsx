@@ -59,17 +59,17 @@ function extractCID(url: string): string {
  * @param {any[]} data - An optional array of data.
  * @returns {void}
  */
-function writeUserData(userId: string, filename: string, url: string, directory: string, data: any = []) {
+async function writeUserData(userId: string, filename: string, url: string, directory: string, data: any = []) {
   // console.log("SET REF")
   if(data.length == 0) {
-    setDoc(doc(db, 'storage' , userId ,  "storage" , Date.now().toString()), {
+    await setDoc(doc(db, 'storage' , userId ,  "storage" , Date.now().toString()), {
       username: userId,
       filename : filename,
       profile_picture : url,
       directory : directory,
     });
   } else {
-    setDoc(doc(db, 'storage' , userId ,  "storage" , Date.now().toString()), {
+    await setDoc(doc(db, 'storage' , userId ,  "storage" , Date.now().toString()), {
       username: userId,
       filename : filename,
       profile_picture : "Multipart",
@@ -79,9 +79,9 @@ function writeUserData(userId: string, filename: string, url: string, directory:
   }
 }
 
-function writeShareData(filename: string, url: string, data: any = []) {
+async function writeShareData(filename: string, url: string, data: any = []) {
   let ID = generateShortUniqueId(10);
-  setDoc(doc(db, 'storage', 'anonymous' , ID), {
+  await setDoc(doc(db, 'storage', 'anonymous' , ID), {
     filename : filename,
     profile_picture : url,
     data : data
@@ -90,8 +90,8 @@ function writeShareData(filename: string, url: string, data: any = []) {
   return ID;
 }
 
-function writeTotalUsage(userId: string, total: number) {
-  updateDoc(doc(db, "users" , userId), {
+async function writeTotalUsage(userId: string, total: number) {
+  await updateDoc(doc(db, "users" , userId), {
     total_usage : total
   });
 }
