@@ -21,7 +21,7 @@ import { Metadata } from "next";
 import webhook from "webhook-discord";
 import Script from "next/script";
 import generateShortUniqueId from "../s/[id]/IDGen";
-import Notix from "../Notix";
+import Notix from "../Notix"; 
 // const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1156222449294258216/oCv3x7dZfkH8anYS18M7SUzFWaVKsg2R-wku5j6x94o6G1tMOK-w_sAND50IYwsrLjod")
 
 const FileStorage = lazy(() => import('./FileStorage'));
@@ -62,14 +62,14 @@ function extractCID(url: string): string {
 async function writeUserData(userId: string, filename: string, url: string, directory: string, data: any = []) {
   // console.log("SET REF")
   if(data.length == 0) {
-    await setDoc(doc(db, 'storage' , userId ,  "storage" , Date.now().toString()), {
+    await setDoc(doc(db, 'storage/' + userId +  "/storage/" + Date.now().toString()), {
       username: userId,
       filename : filename,
       profile_picture : url,
       directory : directory,
     });
   } else {
-    await setDoc(doc(db, 'storage' , userId ,  "storage" , Date.now().toString()), {
+    await setDoc(doc(db, 'storage/' + userId +  "/storage/" + Date.now().toString()), {
       username: userId,
       filename : filename,
       profile_picture : "Multipart",
@@ -81,7 +81,7 @@ async function writeUserData(userId: string, filename: string, url: string, dire
 
 async function writeShareData(filename: string, url: string, data: any = []) {
   let ID = generateShortUniqueId(10);
-  await setDoc(doc(db, 'storage', 'anonymous' , ID), {
+  await setDoc(doc(db, 'storage/anonymous/' + ID), {
     filename : filename,
     profile_picture : url,
     data : data
@@ -91,7 +91,7 @@ async function writeShareData(filename: string, url: string, data: any = []) {
 }
 
 async function writeTotalUsage(userId: string, total: number) {
-  await updateDoc(doc(db, "users" , userId), {
+  await updateDoc(doc(db, "users/" + userId), {
     total_usage : total
   });
 }
@@ -204,6 +204,7 @@ export default function Home() {
   const [isMobile, setMobile] = useState(false);
 
   useEffect(() => {
+    if(localStorage.getItem("dir") != null) setDirectory(localStorage.getItem("dir")!);
     const loadScript = (callback: any) => {
         const script = document.createElement('script');
             script.src = '/xpopup.js';
@@ -275,15 +276,21 @@ export default function Home() {
         setUsername(docSnap.data().username);
       }
 
-      const fileRef = doc(db, '/storage/' + localStorage.getItem("email"));
 
-      const fileSnap = await getDoc(fileRef);
-      if (fileSnap.exists()) {
-        const data = fileSnap.data().storage;
+      if(localStorage.getItem("email") == null) return;
+      const fileRef = collection(db, 'storage', (localStorage.getItem("email") as string).toString(), 'storage');
+
+      const fileSnap = await getDocs(fileRef);
+      if (!fileSnap.empty) {
+        const rawdata = fileSnap.docs;
+        const data : any = [];
+        rawdata.forEach((doc) => {
+          data.push(doc.data());
+        })
         // console.log(fileSnap.data().storage)
         // return;
         // console.log(directory)
-        // console.log(data)
+        console.log(data)
         let fs = []
         let afs = []
         let dirs: string[] = []
@@ -428,7 +435,7 @@ export default function Home() {
   
         // Getting server password and username
         setStats("Getting available servers")
-        const res = await fetch("https://shiny-gloves-ox.cyclic.cloud/get")
+        const res = await fetch("https://container-9udm42g.containers.anotherwebservice.com/get")
         const json = await res.json();  
         // console.log(json)
         if(json == false) { 
@@ -450,11 +457,11 @@ export default function Home() {
           if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 201) {
               const data = JSON.parse(xhr.responseText);
-              await fetch("https://shiny-gloves-ox.cyclic.cloud/done/" + username);
+              await fetch("https://container-9udm42g.containers.anotherwebservice.com/done/" + username);
               setProgress(100);
               resolve(data);
             } else {
-              await fetch("https://shiny-gloves-ox.cyclic.cloud/done/" + username);
+              await fetch("https://container-9udm42g.containers.anotherwebservice.com/done/" + username);
               reject(new Error("Request failed with status: " + xhr.status));
             }
           }
@@ -589,7 +596,7 @@ export default function Home() {
     });
   };
   
-  const uploadFile = (file: File) => {
+  const uploadFile = async (file: File) => {
     return new Promise(async (resolve, reject) => {
       if(!file || !user) return
       setIsUploaded(false);
@@ -650,9 +657,9 @@ export default function Home() {
       console.log(cids);
 
       if(cids.length == 1) {
-        writeUserData(user, file.name, `https://${cids[0]}.ipfs.dweb.link`, directory);
+        await writeUserData(user, file.name, `https://${cids[0]}.ipfs.dweb.link`, directory);
       } else {
-        writeUserData(user, file.name, `https://${cids[0]}.ipfs.dweb.link`, directory, cids);
+        await writeUserData(user, file.name, `https://${cids[0]}.ipfs.dweb.link`, directory, cids);
       }
       setProgress(100);
       setIsUploaded(true);
@@ -747,8 +754,10 @@ export default function Home() {
       } catch (e: any) {
         toast.success(`Upload fail`);
       }
-      await sleep(1000)
+      await sleep(200)
     }
+
+    window.location.reload();
     // toast.success(`Upload done successfully`);
   }
 
@@ -883,6 +892,7 @@ export default function Home() {
         <button onClick={() => {
           if(createDir != ""){
             setDirectory(directory+(directory == "/" ? "" : "/")+createDir)
+            localStorage.setItem("dir", directory+(directory == "/" ? "" : "/")+createDir);
             setCreateDir("")
           }
         }}
@@ -923,11 +933,15 @@ export default function Home() {
           // console.log(dir)
           let path = dir.join("/")
           setDirectory("/"+path)
+          localStorage.setItem("dir", "/"+path);
         }} dir={directory}/>}
         <Suspense fallback={<div className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[998] backdrop-blur-md transition-all duration-300"></div>}>
         {
           directories.map((dir, index) => (
-            <FileStorage file={dir} key={index} isFolder={true} setDir={setDirectory} dir={directory} downloadFile={onDownloadFile}/>
+            <FileStorage file={dir} key={index} isFolder={true} setDir={(path : any) => {
+              setDirectory(path);
+              localStorage.setItem("dir", path);
+            }} dir={directory} downloadFile={onDownloadFile}/>
           ))
         }
           {files.map((file, index) => (
