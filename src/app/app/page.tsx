@@ -811,8 +811,8 @@ export default function Home() {
     }
   };
 
-  const onShare = (file: StoredFile) => {
-    let ID = writeShareData(file.filename, file.profile_picture, file.data);
+  const onShare = async (file: StoredFile) => {
+    let ID = await writeShareData(file.filename, file.profile_picture, file.data);
     // navigator.clipboard.writeText("https://ufsdrive.com/s/" + ID);
     let clipboardData = "https://ufsdrive.com/s/" + ID;
     const element = document.createElement("textarea");
