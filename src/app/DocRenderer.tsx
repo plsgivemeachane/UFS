@@ -98,11 +98,11 @@ export default function DocumentRenderer({ cid, filename } : any) {
                         </div>
                     )}
 
-                    {/* {type == "pdf" && (
+                    {type == "pdf" && (
                         <div className="border border-gray-300 rounded p-4 h-full">
                             <iframe src={`https://ipfs.particle.network/${cid}`} title="PFD Viewer" width="100%" height="100%" className="w-full md:h-[300px]"></iframe>
                         </div>
-                    )} */}
+                    )}
 
                     {/* video
                     {type == "mp4" && (
