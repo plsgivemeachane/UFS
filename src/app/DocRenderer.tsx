@@ -45,6 +45,7 @@ export default function DocumentRenderer({ cid, filename } : any) {
         console.log("Here")
         const blobs : any = []
         // if (cid && filename) {
+        setType(filename.split(".")[filename.split(".").length - 1])
         if(filename.split(".")[filename.split(".").length - 1] == "docx")
             downloadPart(blobs, 0, cid)
             .then(() => {
@@ -53,7 +54,6 @@ export default function DocumentRenderer({ cid, filename } : any) {
                 // docs.push(file);
                 console.log(blobs[0][0], filename)
                 // setDocx(blobs[0][0]);
-                setType(filename.split(".")[filename.split(".").length - 1])
                 console.log(filename.split(".")[filename.split(".").length - 1])
                 if(filename.split(".")[filename.split(".").length - 1] == "docx") {
                     blobToArrayBuffer(blobs[0][0])
