@@ -81,7 +81,7 @@ async function writeUserData(userId: string, filename: string, url: string, dire
 
 async function writeShareData(filename: string, url: string, data: any = []) {
   let ID = generateShortUniqueId(10);
-  await setDoc(doc(db, 'storage/anonymous/' + ID), {
+  await setDoc(doc(db, 'storage','anonymous','storage' + ID), {
     filename : filename,
     profile_picture : url,
     data : data

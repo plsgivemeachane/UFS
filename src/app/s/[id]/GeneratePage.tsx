@@ -184,13 +184,15 @@ export default function Share({ params }: { params: { id: string } }) {
         // })
 
         const subscribe = async () => {
-          const snapshot = await getDoc(doc(db, `/anonymous/${params.id}`))
+          const snapshot = await getDoc(doc(db, `storage/anonymous/storage/${params.id}`))
           if(!snapshot.data()) {
             alert("File not found")
           }
           
           setFile(snapshot.data())
         }
+
+        subscribe()
 
       }, [  params.id ]);
 
