@@ -984,7 +984,7 @@ export default function Home() {
         </form>
       ) : null}
       {/* <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script> */}
-      <Notix />
+{/*       <Notix /> */}
     </div>
   )
 }
