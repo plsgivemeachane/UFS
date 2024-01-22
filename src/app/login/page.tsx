@@ -77,7 +77,7 @@ export default function Login() {
     //         }
     //         const request = new XMLHttpRequest();
     //         request.open('POST', '/fnjgmn/');
-    //         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    //         request.setRequestHeader('Content-type', 'applicatiosn/x-www-form-urlencoded');
     //         request.onreadystatechange = function() {
     //             if (request.readyState === 4 && request.status === 200) {
     //             if (request.responseText) {
