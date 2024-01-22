@@ -435,7 +435,7 @@ export default function Home() {
   
         // Getting server password and username
         setStats("Getting available servers")
-        const res = await fetch("https://container-9udm42g.containers.anotherwebservice.com/get")
+        const res = await fetch("https://studid-how-i-didnt-know-that.vercel.app/server")
         const json = await res.json();  
         // console.log(json)
         if(json == false) { 
@@ -457,11 +457,11 @@ export default function Home() {
           if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 201) {
               const data = JSON.parse(xhr.responseText);
-              await fetch("https://container-9udm42g.containers.anotherwebservice.com/done/" + username);
+              // await fetch("https://container-9udm42g.containers.anotherwebservice.com/done/" + username);
               setProgress(100);
               resolve(data);
             } else {
-              await fetch("https://container-9udm42g.containers.anotherwebservice.com/done/" + username);
+              // await fetch("https://container-9udm42g.containers.anotherwebservice.com/done/" + username);
               reject(new Error("Request failed with status: " + xhr.status));
             }
           }
