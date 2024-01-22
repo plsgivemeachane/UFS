@@ -240,7 +240,7 @@ export default function Share({ params }: { params: { id: string } }) {
                 <p> Wait a min while we loading your file</p>
               )
             }
-            <Notix />
+{/*             <Notix /> */}
         </>
     )
 }
