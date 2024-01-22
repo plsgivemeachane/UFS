@@ -238,7 +238,7 @@ export default function HomePage() {
                 </div>
                 {/* <Paypal></Paypal> */}
                 {/* <SubscribeForm /> */}
-                <Notix />
+{/*                 <Notix /> */}
             </div>
         </div>
     )
