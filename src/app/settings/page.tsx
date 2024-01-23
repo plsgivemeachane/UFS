@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FirebaseError, initializeApp } from "firebase/app";
+import { FirebaseApp, FirebaseError, getApp, getApps, initializeApp } from "firebase/app";
 import { getDatabase, ref, update, onValue, set, remove } from "firebase/database";
 import { setConfig } from "next/config";
 import { toast } from "react-toastify";
@@ -15,7 +15,13 @@ const firebaseConfig = {
     messagingSenderId: "966822894965",
     appId: "1:966822894965:web:21522a48600529a30d473c"
 };
-const app = initializeApp(firebaseConfig);
+
+var app: FirebaseApp;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+}else {
+  app = getApp() // if already initialized, use that one
+}
 const db = getDatabase(app);
 
 export default function Settings() {
