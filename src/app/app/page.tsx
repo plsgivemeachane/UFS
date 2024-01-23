@@ -204,7 +204,7 @@ export default function Home() {
   const [isLoaded, setLoaded] = useState(false);
   const [stats, setStats] = useState("");
   const [isMobile, setMobile] = useState(false);
-  const themeElement = useRef(null);
+  const themeElement = useRef<HTMLDivElement>();
 
   useEffect(() => {
     if(localStorage.getItem("dir") != null) setDirectory(localStorage.getItem("dir")!);
