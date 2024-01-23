@@ -8,10 +8,7 @@ import { setConfig } from "next/config";
 import { toast } from "react-toastify";
 import { sha } from 'sha256quanvn';
 import { getTheme, setTheme } from "./Theme";
-
 const firebaseConfig = {
-    apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
-    authDomain: "vka-project.firebaseapp.com",
     databaseURL: "https://vka-project-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "vka-project",
     storageBucket: "vka-project.appspot.com",
