@@ -51,7 +51,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         <nav className='flex top-0 w-full left-0 bg-black text-white p-4'>
-          <Link href="/app"><Image width={64} height={64} alt="logo" src="/logo.png" /> </Link>
+          <Link href="/app"><img width={64} height={64} alt="logo" src="/logo.png" /> </Link>
           <Link href="/" className='ml-auto p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Home</Link>
           <Link href="/app" className='p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>App</Link>
           <Link href={"https://discord.gg/HNF7G2VnxR"} className='p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Discord</Link>
