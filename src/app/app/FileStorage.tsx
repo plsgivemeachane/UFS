@@ -157,7 +157,7 @@ export default function FileStorage (probs: any) {
                     && 
                         <img alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} width={32} height={32} className="rounded-xl bg-transparent m-4" />
                     }
-                </Link> : <img alt={file as any} src="/folder.png" priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4"/>}
+                </Link> : <img alt={file as any} src="/folder.png" width={32} height={32} className="rounded-xl bg-transparent m-4"/>}
                 {!probs.isFolder ? <p className="truncate ml-4">{file.filename}</p> : <p className="truncate mr-auto">{file as any}</p>}
                 {data && !probs.isFolder && <p className="truncate ml-auto">{formatBytes(data)}</p>}
                 {/* {!probs.isFolder &&
