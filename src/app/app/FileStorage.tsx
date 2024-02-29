@@ -142,11 +142,11 @@ export default function FileStorage (probs: any) {
                 {!probs.isFolder ? 
                 <Link href={"#"}>
                 {/* {!probs.isFolder ? <Link href={file.profile_picture} rel="noreferrer" target="_blank"> */}
-                    {file.filename.indexOf('.png') !== -1 && <img width={32} height={32} alt={file.filename} src={url} priority={false} className="rounded-md m-4" 
+                    {file.filename.indexOf('.png') !== -1 && <img width={32} height={32} alt={file.filename} src={url} className="rounded-md m-4" 
                         onError={onError}/>}
-                    {file.filename.indexOf('.jpg') !== -1 && <img width={32} height={32} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                    {file.filename.indexOf('.jpg') !== -1 && <img width={32} height={32} alt={file.filename} src={url} className="rounded-md m-4"
                         onError={onError}/>}
-                    {file.filename.indexOf('.jpeg') !== -1 && <img width={32} height={32} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                    {file.filename.indexOf('.jpeg') !== -1 && <img width={32} height={32} alt={file.filename} src={url} className="rounded-md m-4"
                         onError={onError}/>}
                     {(
                         file.filename.indexOf('.jpeg') == -1 &&
@@ -155,7 +155,7 @@ export default function FileStorage (probs: any) {
                         file.filename.indexOf('.png') == -1
                     )
                     && 
-                        <img alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4" />
+                        <img alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} width={32} height={32} className="rounded-xl bg-transparent m-4" />
                     }
                 </Link> : <img alt={file as any} src="/folder.png" priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4"/>}
                 {!probs.isFolder ? <p className="truncate ml-4">{file.filename}</p> : <p className="truncate mr-auto">{file as any}</p>}
@@ -177,11 +177,11 @@ export default function FileStorage (probs: any) {
                     {/* <button type="submit" className="bg-violet-900 p-4 px-[16rem] rounded-lg mt-4 mb-4 hover:bg-violet-500 w-[80%] truncate">Upload {filess?.length}</button> */}
                     <p className="text-xl text-center">{file.filename}</p>
                     <div className="flex flex-col md:flex-row justify-around items-center">
-                        {file.filename.indexOf('.png') !== -1 && <Image width={256} height={256} alt={file.filename} src={url} priority={false} className="rounded-md m-4" 
+                        {file.filename.indexOf('.png') !== -1 && <img width={256} height={256} alt={file.filename} src={url} className="rounded-md m-4" 
                             onError={onError}/>}
-                        {file.filename.indexOf('.jpg') !== -1 && <Image width={256} height={256} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                        {file.filename.indexOf('.jpg') !== -1 && <img width={256} height={256} alt={file.filename} src={url} className="rounded-md m-4"
                             onError={onError}/>}
-                        {file.filename.indexOf('.jpeg') !== -1 && <Image width={256} height={256} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                        {file.filename.indexOf('.jpeg') !== -1 && <img width={256} height={256} alt={file.filename} src={url} className="rounded-md m-4"
                             onError={onError}/>}
                         {(
                             file.filename.indexOf('.jpeg') == -1 &&
@@ -190,7 +190,7 @@ export default function FileStorage (probs: any) {
                             file.filename.indexOf('.png') == -1
                         )
                         && 
-                            <img alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} priority={false} width={256} height={256} className="rounded-xl bg-transparent m-4" />
+                            <img alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} width={256} height={256} className="rounded-xl bg-transparent m-4" />
                         }
 
                         {/* {file.filename.indexOf(".docx") !== -1 && ( */}
