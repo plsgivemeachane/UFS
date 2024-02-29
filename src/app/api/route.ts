@@ -97,6 +97,49 @@ const downloadFile = (cids: string[], filename: string) => {
     });
 };
 
+function getContentTypeByFilename(filename: string) {
+    const ext = filename.split('.').pop();
+    // every single common file extension
+    switch (ext) {
+        case 'png':
+            return 'image/png';
+        case 'jpg':
+            return 'image/jpeg';
+        case 'jpeg':
+            return 'image/jpeg';
+        case 'gif':
+            return 'image/gif';
+        case 'mp4':
+            return 'video/mp4';
+        case 'mp3':
+            return 'audio/mp3';
+        case 'pdf':
+            return 'application/pdf';
+        case 'doc':
+            return 'application/msword';
+        case 'docx':
+            return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        case 'xls':
+            return 'application/vnd.ms-excel';
+        case 'xlsx':
+            return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        case 'ppt':
+            return 'application/vnd.ms-powerpoint';
+        case 'pptx':
+            return 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+        case 'zip':
+            return 'application/zip';
+        case 'rar':
+            return 'application/x-rar-compressed';
+        case '7z':
+            return 'application/x-7z-compressed';
+        case 'txt':
+            return 'text/plain';
+        default:
+            return 'application/octet-stream';
+    }
+}
+
 
 export async function GET(request: Request, response: NextResponse) {
     const { searchParams } = new URL(request.url)
@@ -119,7 +162,7 @@ export async function GET(request: Request, response: NextResponse) {
 
     return new Response(readableStream as BodyInit, {
         headers: {
-            'Content-Type': 'application/octet-stream',
+            'Content-Type': getContentTypeByFilename(file.filename),
             'Content-Disposition': `attachment; filename="${file.filename}"`,
         },
     })
