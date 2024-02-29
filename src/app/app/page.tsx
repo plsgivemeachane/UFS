@@ -885,7 +885,7 @@ export default function Home() {
         <h2 className="text-2xl text-white text-center">Total Usage : {formatBytes(total)}</h2>
       </div> */}
       <div className="flex gap-8 md:m-4 w-auto ml-auto mr-auto md:p-4 h-full md:scale-100 md:rounded-xl items-center" ref={themeElement}>
-        <Image width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${username}`} 
+        <img width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${username}`} 
             className="md:w-12 md:h-12 w-8 h-8 rounded-full hover:scale-95 transition-all duration-300 cursor-pointer"
             onClick={() => {
               router.push("/settings")
@@ -916,7 +916,7 @@ export default function Home() {
         className="bg-white text-white hover:bg-pink-400 px-6 py-3 ml-auto md:rounded hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
         type="button"
         onClick={() => setShowModal(true)}
-      ><Image width={32} height={32} alt="upload.png" src="/upload.png"/></button>
+      ><img width={32} height={32} alt="upload.png" src="/upload.png"/></button>
 
       {/* {!isMobile && <div>
           <h2 className="lg:text-lg xl:text-2xl md:text-md text-white text-center p-4">{formatBytes(total)}</h2>
