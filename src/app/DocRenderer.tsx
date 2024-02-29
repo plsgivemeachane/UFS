@@ -94,7 +94,7 @@ export default function DocumentRenderer({ cid, filename } : any) {
                     {(type == "png" || type == "jpg") && (
                         <div className="border border-gray-300 rounded p-4">
                             {/* <div dangerouslySetInnerHTML={{ __html: data }}></div> */}
-                            <Image src={`https://ipfs.particle.network/${cid}`} alt={filename} width={200} height={200}/>
+                            <img src={`https://ipfs.particle.network/${cid}`} alt={filename} width={200} height={200}/>
                         </div>
                     )}
 
