@@ -25,6 +25,7 @@
     "ipfs-unixfs-importer": "^15.1.7",
     "lstat": "^1.0.0",
     "mammoth": "^1.6.0",
+    "mime-types": "^2.1.35",
     "next": "^13.5.4-canary.0",
     "postcss": "8.4.28",
     "react": "18.2.0",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@types/aos": "^3.0.4",
     "@types/crypto-js": "^4.1.1",
+    "@types/mime-types": "^2.1.4",
     "aos": "^2.3.4",
     "combined-stream": "^1.0.8",
     "node-loader": "^2.0.0"

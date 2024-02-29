@@ -4,7 +4,8 @@ import stream from 'stream';
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import { ReadableStream } from 'stream/web';
-import { sha } from 'sha256quanvn';
+// import { sha } from 'sha256quanvn';
+import mime from 'mime-types';
 const firebaseConfig = {
     apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
     authDomain: "vka-project.firebaseapp.com",
@@ -100,44 +101,7 @@ const downloadFile = (cids: string[], filename: string) => {
 function getContentTypeByFilename(filename: string) {
     const ext = filename.split('.').pop();
     // every single common file extension
-    switch (ext) {
-        case 'png':
-            return 'image/png';
-        case 'jpg':
-            return 'image/jpeg';
-        case 'jpeg':
-            return 'image/jpeg';
-        case 'gif':
-            return 'image/gif';
-        case 'mp4':
-            return 'video/mp4';
-        case 'mp3':
-            return 'audio/mp3';
-        case 'pdf':
-            return 'application/pdf';
-        case 'doc':
-            return 'application/msword';
-        case 'docx':
-            return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-        case 'xls':
-            return 'application/vnd.ms-excel';
-        case 'xlsx':
-            return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-        case 'ppt':
-            return 'application/vnd.ms-powerpoint';
-        case 'pptx':
-            return 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-        case 'zip':
-            return 'application/zip';
-        case 'rar':
-            return 'application/x-rar-compressed';
-        case '7z':
-            return 'application/x-7z-compressed';
-        case 'txt':
-            return 'text/plain';
-        default:
-            return 'application/octet-stream';
-    }
+    return mime.lookup(ext as string) || 'application/octet-stream';
 }
 
 
