@@ -117,7 +117,7 @@ export async function GET(request: Request, response: NextResponse) {
         readableStream = downloadFile(file.data as any, file.filename);
     }
 
-    return new Response(readableStream, {
+    return new Response(readableStream as BodyInit, {
         headers: {
             'Content-Type': 'application/octet-stream',
             'Content-Disposition': `attachment; filename="${file.filename}"`,
