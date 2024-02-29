@@ -618,7 +618,7 @@ export default function Home() {
       setStats("Preparing upload file");
       const fileArrayBuffer = await file.arrayBuffer();
 
-      const CHUNK_SIZE = 10 * 1024 * 1024;
+      const CHUNK_SIZE = 80 * 1024 * 1024;
       let start = 0;
       let end = CHUNK_SIZE;
       let cids: any = [];
