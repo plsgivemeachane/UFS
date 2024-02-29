@@ -28,7 +28,7 @@ function extractCID(url: string): string {
     } else {
         return url.split("/").pop() as string
     }
-}
+  }
 
 interface StoredFile {
     username: string
@@ -81,6 +81,11 @@ async function getFileSize(url: string, urls: any = null) : Promise<number> {
         });
 }
 
+function getNewIPFSUrl(url : string) {
+    
+    return `https://ipfs.particle.network/${extractCID(url)}`
+}
+
 export default function FileStorage (probs: any) {
     const file = probs.file as StoredFile;
 
@@ -99,13 +104,13 @@ export default function FileStorage (probs: any) {
     }
 
     const onError = () => {
-        setURL(file.profile_picture + "?reload="+count);
+        setURL(getNewIPFSUrl(file.profile_picture) + "?reload="+count);
         setCount(count + 1);
     }
 
     useEffect(() => {
         if(!probs.isFolder){
-            getFileSize(file.profile_picture, file.data).then((size) => {
+            getFileSize(getNewIPFSUrl(file.profile_picture), file.data).then((size) => {
                 setData(size);
             })
         }

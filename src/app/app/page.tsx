@@ -487,7 +487,7 @@ export default function Home() {
             // console.log("Upload progress: " + percentage + "%");
             setProgress(percentage - 1);
             if(percentage == 100) {
-              setStats("Waiting for server respond");
+              setStats("Waiting for server respone");
             }
           }
         };
@@ -618,7 +618,7 @@ export default function Home() {
       setStats("Preparing upload file");
       const fileArrayBuffer = await file.arrayBuffer();
 
-      const CHUNK_SIZE = 80 * 1024 * 1024;
+      const CHUNK_SIZE = 10 * 1024 * 1024;
       let start = 0;
       let end = CHUNK_SIZE;
       let cids: any = [];
@@ -836,7 +836,7 @@ export default function Home() {
     document.execCommand("copy");
     document.body.removeChild(element);
     alert("Link: " + "https://ufsdrive.com/s/" + ID + " (has been copy to clipboard)");
-    // Copy link to clipboard
+    alert("Or alternative direct link: " + "https://ufsdrive.com/api?shared=" + ID);
   }
 
   // const renderFiles = async () => {
