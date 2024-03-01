@@ -108,6 +108,7 @@ function getContentTypeByFilename(filename: string) {
 export async function GET(request: Request, response: NextResponse) {
     const { searchParams } = new URL(request.url)
     const shared = searchParams.get('shared')
+    const filename = searchParams.get("filename")
     // console.log(shared)
 
     const snapshot : any = await getDoc(doc(db, `storage/anonymous/storage/${shared}`))
@@ -126,8 +127,8 @@ export async function GET(request: Request, response: NextResponse) {
 
     return new Response(readableStream as BodyInit, {
         headers: {
-            'Content-Type': getContentTypeByFilename(file.filename),
-            'Content-Disposition': `attachment; filename="${file.filename}"`,
+            'Content-Type': getContentTypeByFilename(!filename ? file.filename : filename),
+            'Content-Disposition': `attachment; filename="${!filename? file.filename : filename}"`,
         },
     })
 }

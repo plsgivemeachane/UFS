@@ -308,47 +308,21 @@ export default function Home() {
         let fs = []
         let afs = []
         let dirs: string[] = []
-        /**
-         * 
-         *  DIR
-         * 
-         *  /
-         *  /test /test2
-         *  
-         *  /test => /test3
-         *  /test2 => /test4
-         * 
-         * / -> /<things>/... match that
-         * 
-         */
         for(let file in data){
           let currentFile: StoredFile = data[file];
           afs.push(currentFile);
           if(currentFile.directory){
-            // console.log("Examinate ",currentFile.directory)
             if(currentFile.directory != directory){
-              // console.log("Current File directory different from directory", currentFile.directory)
-              // When / => get /test/test1 /test/test2 only take test
-              // current dirs arr = []
               if(currentFile.directory.startsWith(directory) && directory != "/"){
-                // console.log("Examinate file directory in the folder", currentFile.directory)
-                // get only the first most directory
-                // ['', test', 'test2', 'test3']
-                //        ^       I
                 let dirArray = currentFile.directory.split("/") 
-                let curdirArray = directory.split("/").slice(-1)[0] // ['', 'test'] -> 'test'
-                // console.log("Directory array and currentDirectory" ,dirArray, curdirArray)
+                let curdirArray = directory.split("/").slice(-1)[0]
                 for(let i = 0;i < dirArray.length;i++){
                   if(dirArray[i] == curdirArray && !dirs.includes(dirArray[i + 1])){ // test == 'test' []
-                    // console.log("Found directory", dirArray[i], i)
                     dirs.push(dirArray[i+1]) // only 1 dir like test2
                     break;
                   }
                 }
               } else if(currentFile.directory.startsWith(directory) && !dirs.includes(currentFile.directory.split("/")[1])){
-                // ["", "test", "test2"]
-                //   ^     ^
-                //   |     I
                 dirs.push(currentFile.directory.split("/")[1]) 
               }
 
@@ -360,11 +334,9 @@ export default function Home() {
           if(search != "" && !removeAccents(data[file].filename).toLowerCase().includes(removeAccents(search.toLowerCase()))) continue;
           fs.push(data[file]);
         }
-        // console.log("Final list",dirs, fs)
         setDirectories(dirs);
         setFiles(fs);
         setAllFiles(afs);
-        // t.stop();
       }
     }
 
@@ -671,9 +643,9 @@ export default function Home() {
       console.log(cids);
 
       if(cids.length == 1) {
-        await writeUserData(user, file.name, `https://${cids[0]}.ipfs.dweb.link`, directory);
+        await writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory);
       } else {
-        await writeUserData(user, file.name, `https://${cids[0]}.ipfs.dweb.link`, directory, cids);
+        await writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory, cids);
       }
       setProgress(100);
       setIsUploaded(true);
