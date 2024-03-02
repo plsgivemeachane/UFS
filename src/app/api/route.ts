@@ -108,27 +108,31 @@ function getContentTypeByFilename(filename: string) {
 export async function GET(request: Request, response: NextResponse) {
     const { searchParams } = new URL(request.url)
     const shared = searchParams.get('shared')
-    const filename = searchParams.get("filename")
-    // console.log(shared)
+    // const filename = searchParams.get("filename")
+    // // console.log(shared)
 
-    const snapshot : any = await getDoc(doc(db, `storage/anonymous/storage/${shared}`))
-    if (!snapshot.data()) {
-        return new NextResponse('Not found', { status: 404 });
-    }
+    // const snapshot : any = await getDoc(doc(db, `storage/anonymous/storage/${shared}`))
+    // if (!snapshot.data()) {
+    //     return new NextResponse('Not found', { status: 404 });
+    // }
 
-    // console.log(snapshot.data())
-    const file = snapshot.data()
-    var readableStream;
-    if(file.profile_picture != "Multipart"){
-        readableStream = downloadFile([file.profile_picture], file.filename);
-    } else {
-        readableStream = downloadFile(file.data as any, file.filename);
-    }
+    // // console.log(snapshot.data())
+    // const file = snapshot.data()
+    // var readableStream;
+    // if(file.profile_picture != "Multipart"){
+    //     readableStream = downloadFile([file.profile_picture], file.filename);
+    // } else {
+    //     readableStream = downloadFile(file.data as any, file.filename);
+    // }
 
-    return new Response(readableStream as BodyInit, {
-        headers: {
-            'Content-Type': getContentTypeByFilename(!filename ? file.filename : filename),
-            'Content-Disposition': `attachment; filename="${!filename? file.filename : filename}"`,
-        },
-    })
+    // return new Response(readableStream as BodyInit, {
+    //     headers: {
+    //         'Content-Type': getContentTypeByFilename(!filename ? file.filename : filename),
+    //         'Content-Disposition': `attachment; filename="${!filename? file.filename : filename}"`,
+    //     },
+    // })
+
+    // I have a new api for this so this is useless rn:
+    // 410 gone!
+    return new NextResponse('Deprecated API. please use https://direct.ufsdrive.com/?shared=' + shared, { status: 410 });
 }

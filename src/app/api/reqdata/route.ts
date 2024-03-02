@@ -24,6 +24,9 @@ function getContentTypeByFilename(filename: string) {
 
 
 export async function GET(request: NextRequest, response: NextResponse) {
+
+
+
     const { searchParams } = new URL(request.url)
     const shared = searchParams.get('shared')
     // console.log(shared)

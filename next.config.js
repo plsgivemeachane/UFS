@@ -15,4 +15,19 @@ module.exports = {
         // Increase the timeout for the POST route
         apiTimeout: 300000, // 5 minutes
     },
+    
+    async headers() {
+        return [
+            {
+                // Apply these headers to all routes in your application.
+                source: "/api/reqdata",
+                headers: [
+                    {
+                        key: "Access-Control-Allow-Origin",
+                        value: "ufsdrive.com",
+                    },
+                ],
+            },
+        ];
+    },
 };
