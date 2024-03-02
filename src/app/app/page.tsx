@@ -432,7 +432,7 @@ export default function Home() {
         let username = json[0]
         let password = json[1]
         // if(json[2] > 5) Hook.info("UFS" ,"Serverload > 30%");
-        setStats("Using server " + username.split("-")[0] + " loads " + json[2] + "/10")
+        // setStats("Using server " + username.split("-")[0] + " loads " + json[2] + "/10")
         // toast("Using server " + username.split("-")[0])
 
         const xhr = new XMLHttpRequest();
@@ -577,7 +577,7 @@ export default function Home() {
       URL.revokeObjectURL(url);
       setIsUploaded(true);
       setProgress(100);
-      // toast.success("Downloading successfull")
+      toast.success("Downloading successfull")
       resolve("OK");
     });
   };
@@ -586,7 +586,7 @@ export default function Home() {
     return new Promise(async (resolve, reject) => {
       if(!file || !user) return
       setIsUploaded(false);
-      // toast(`Uploading ${file.name}... (Don't close browser)`);
+      toast(`Uploading ${file.name}... (Don't close browser)`);
       setStats("Preparing upload file");
       const fileArrayBuffer = await file.arrayBuffer();
 
@@ -647,6 +647,8 @@ export default function Home() {
       } else {
         await writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory, cids);
       }
+
+      toast.success("Uploaded file:" + file.name)
       setProgress(100);
       setIsUploaded(true);
       resolve("OK")
@@ -800,15 +802,15 @@ export default function Home() {
   const onShare = async (file: StoredFile) => {
     let ID = await writeShareData(file.filename, file.profile_picture, file.data);
     // navigator.clipboard.writeText("https://ufsdrive.com/s/" + ID);
-    let clipboardData = "https://ufsdrive.com/s/" + ID;
+    let clipboardData = "https://direct.ufsdrive.com/?shared=" + ID;
     const element = document.createElement("textarea");
     element.value = clipboardData;
     document.body.appendChild(element)
     element.select();
     document.execCommand("copy");
     document.body.removeChild(element);
-    alert("Link: " + "https://ufsdrive.com/s/" + ID + " (has been copy to clipboard)");
-    alert("Or alternative direct link: " + "https://ufsdrive.com/api?shared=" + ID);
+    alert("Link: " + "https://direct.ufsdrive.com/?shared=" + ID + " (has been copy to clipboard)");
+    // alert("Or alternative direct link: " + "https://ufsdrive.com/api?shared=" + ID);
   }
 
   // const renderFiles = async () => {
