@@ -802,14 +802,14 @@ export default function Home() {
   const onShare = async (file: StoredFile) => {
     let ID = await writeShareData(file.filename, file.profile_picture, file.data);
     // navigator.clipboard.writeText("https://ufsdrive.com/s/" + ID);
-    let clipboardData = "https://direct.ufsdrive.com/?shared=" + ID;
+    let clipboardData = "https://ufsdrive.com/api?shared=" + ID;
     const element = document.createElement("textarea");
     element.value = clipboardData;
     document.body.appendChild(element)
     element.select();
     document.execCommand("copy");
     document.body.removeChild(element);
-    alert("Link: " + "https://direct.ufsdrive.com/?shared=" + ID + " (has been copy to clipboard)");
+    alert("Link: " + "https://ufsdrive.com/api?shared=" + ID + " (has been copy to clipboard)");
     // alert("Or alternative direct link: " + "https://ufsdrive.com/api?shared=" + ID);
   }
 
