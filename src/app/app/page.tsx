@@ -420,7 +420,7 @@ export default function Home() {
         // console.log("Upload here")
   
         // Getting server password and username
-        setStats("Getting available servers")
+        // setStats("Getting available servers")
         const res = await fetch("https://studid-how-i-didnt-know-that.vercel.app/server")
         const json = await res.json();  
         // console.log(json)

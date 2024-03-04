@@ -312,7 +312,10 @@ export async function GET(request: Request, response: NextResponse) {
         headers['Content-Length'] = siez
     }
 
-    return new Response(readable as BodyInit, {
+    const tstream = new TransformStream();
+    readable.pipeTo(tstream.writable)
+
+    return new Response(tstream.readable, {
         headers: headers,
         status: request.headers.has('range') ? 206 : 200
     })
