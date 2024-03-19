@@ -661,7 +661,7 @@ export default function Home() {
       if(!file || !user) return
       const CHUNK_SIZE = 80 * 1024 * 1024;
       let chunkSize = 0;
-      let packedChunk = [];
+      let packedChunk: any = [];
       let cids: any = [];
       let id = 0;
       let finished = false;
