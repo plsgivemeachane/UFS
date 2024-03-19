@@ -159,6 +159,12 @@ function formatBytes(bytes: number, decimals = 2) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 }
 
+function formatTime(seconds: number) {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+  return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
+}
+
 
 interface StoredFile {
   username: string
@@ -416,50 +422,47 @@ export default function Home() {
 
   const uploadFilepls = (formData: FormData) => {
     return new Promise(async (resolve, reject) => {
-        // var xhttp = new XMLHttpRequest();
-        // console.log("Upload here")
-  
-        // Getting server password and username
-        // setStats("Getting available servers")
+        const prevstat = stats;
         const res = await fetch("https://studid-how-i-didnt-know-that.vercel.app/server")
         const json = await res.json();  
-        // console.log(json)
         if(json == false) { 
           toast.error("No available found.Please report this to admin")
-          // Hook.err("UFS", "Server OVERLOADED");
         }
 
         let username = json[0]
         let password = json[1]
-        // if(json[2] > 5) Hook.info("UFS" ,"Serverload > 30%");
-        // setStats("Using server " + username.split("-")[0] + " loads " + json[2] + "/10")
-        // toast("Using server " + username.split("-")[0])
-
         const xhr = new XMLHttpRequest();
 
         xhr.open("POST", "https://rpc.particle.network/ipfs/upload", true);
-
-        xhr.onreadystatechange = async function() {
-          if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 201) {
-              const data = JSON.parse(xhr.responseText);
-              // await fetch("https://container-9udm42g.containers.anotherwebservice.com/done/" + username);
-              setProgress(100);
-              resolve(data);
-            } else {
-              // await fetch("https://container-9udm42g.containers.anotherwebservice.com/done/" + username);
-              reject(new Error("Request failed with status: " + xhr.status));
-            }
-          }
-        };
-
+        let preeventloaded = 0;
+        let pretimer = Date.now();
         xhr.upload.onprogress = function(event) {
           if (event.lengthComputable) {
             const percentage = (event.loaded / event.total) * 100;
+            let timer = Date.now() - pretimer; // milliseconds
+            let speed = (event.loaded - preeventloaded) / timer;
+            // convert to bytes per second
+            speed = speed * 1000;
+            setStats(prevstat + " " + formatBytes(event.loaded) + "/" + formatBytes(event.total) + " speed: " + formatBytes(Math.floor(speed)) + "/s" + " estimated time: " + formatTime(Math.floor(event.total / speed)));
+            preeventloaded = event.loaded;
+            pretimer = Date.now();
             // console.log("Upload progress: " + percentage + "%");
-            setProgress(percentage - 1);
+            setProgress(percentage);
             if(percentage == 100) {
               setStats("Waiting for server respone");
+              // new Promise((resolve, reject) => {
+              //   xhr.onreadystatechange = async function() {
+              //     if (xhr.readyState === XMLHttpRequest.DONE) {
+              //       if (xhr.status === 201) {
+              //         const data = JSON.parse(xhr.responseText);
+              //         resolve(data);
+              //       } else {
+              //         reject(new Error("Request failed with status: " + xhr.status));
+              //       }
+              //     }
+              //   };
+              // })
+              resolve(xhr);
             }
           }
         };
@@ -467,22 +470,6 @@ export default function Home() {
         xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
 
         xhr.send(formData);
-  
-        // fetch("https://rpc.particle.network/ipfs/upload", {
-        //     method: "POST",
-        //     body: formData,
-        //     headers: {
-        //         "Authorization": "Basic " + btoa(username + ":" + password)
-        //     }
-        // })
-        // .then(respone => respone.json())
-        // .then(data => {
-        //     resolve(data)
-        // })
-        // .catch ((error: Error) => {
-        //     console.log(error);
-        //     reject(error)
-        // })
     });
   }
 
@@ -674,7 +661,7 @@ export default function Home() {
       const writableStream = new WritableStream({
         start(controller: WritableStreamDefaultController) { },
         async write(chunk: ArrayBuffer, controller: WritableStreamDefaultController) {
-          console.log(chunk.byteLength);
+          // console.log(chunk.byteLength);
           chunkSize += chunk.byteLength;
           packedChunk.push(chunk);
           total_read += chunk.byteLength;
@@ -682,18 +669,20 @@ export default function Home() {
             console.log("File size readched uploading...");
             let offset = 0;
             const combinedArrayBuffer = new ArrayBuffer(chunkSize);
-            for (const chunk of packedChunk) {
-              const chunkView = new Uint8Array(chunk);
-              const combinedView = new Uint8Array(combinedArrayBuffer, offset, chunk.byteLength);
+            for (const chunk2 of packedChunk) {
+              const chunkView = new Uint8Array(chunk2);
+              const combinedView = new Uint8Array(combinedArrayBuffer, offset, chunk2.byteLength);
               combinedView.set(chunkView);
-              offset += chunk.byteLength;
+              offset += chunk2.byteLength;
             }
 
-            setStats("Uploading" + (id + 1))
-            const cid = (await uploadChunk(combinedArrayBuffer, file.name)).cid;
-            cids.push(cid);
+            setStats("Uploading " + (id + 1) + "/" + part);
+            const cid_promise = await uploadChunk(combinedArrayBuffer, file.name);
+            console.log("finished")
+            cids.push([cid_promise, id]);
             id += 1;
             chunkSize = 0;
+            packedChunk = [];
             if(total_read >= expected_file_size) {
               finished = true;
             }
@@ -707,14 +696,38 @@ export default function Home() {
       // const stream = e.target.files[0].stream();
       const stream = file.stream();
       await stream.pipeTo(writableStream);
-      console.log(cids);
       while(!finished) {
         await sleep(100)
       }
-      if(cids.length == 1) {
-        writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory);
+
+      let realshit = []
+
+      // sort the cids by the id
+      cids.sort((a: any, b: any) => a[1] - b[1]);
+      console.log(cids);
+      for(const cid of cids) {
+        realshit.push(await new Promise(async (resolve, reject) => {
+          console.log(cid)
+          while (cid[0].readyState !== XMLHttpRequest.DONE) {
+            await sleep(10);
+            console.log(cid[0].readyState);  
+          }
+
+          if (cid[0].status === 201) {
+            const data = JSON.parse(cid[0].responseText);
+            resolve(data.cid);
+          } else {
+            reject(new Error("Request failed with status: " + cid[0].status));
+          }
+        }));
+      }
+      // sort the cids by the id
+
+
+      if(realshit.length == 1) {
+        writeUserData(user, file.name, `https://ipfs.particle.network/${realshit[0]}`, directory);
       } else {
-        writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory, cids);
+        writeUserData(user, file.name, `https://ipfs.particle.network/${realshit[0]}`, directory, realshit);
       }
       toast.success("Uploaded file:" + file.name)
       setProgress(100);
