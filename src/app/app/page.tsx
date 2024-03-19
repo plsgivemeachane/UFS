@@ -582,62 +582,62 @@ export default function Home() {
     });
   };
   
-  const uploadFile = async (file: File) => {
-    return new Promise(async (resolve, reject) => {
-      if(!file || !user) return
-      setIsUploaded(false);
-      toast(`Uploading ${file.name}... (Don't close browser)`);
-      setStats("Preparing upload file");
-      const fileArrayBuffer = await file.arrayBuffer();
+  // const uploadFile = async (file: File) => {
+  //   return new Promise(async (resolve, reject) => {
+  //     if(!file || !user) return
+  //     setIsUploaded(false);
+  //     toast(`Uploading ${file.name}... (Don't close browser)`);
+  //     setStats("Preparing upload file");
+  //     const fileArrayBuffer = await file.arrayBuffer();
 
-      const CHUNK_SIZE = 80 * 1024 * 1024;
-      let start = 0;
-      let end = CHUNK_SIZE;
-      let cids: any = [];
-      // let prog = 0;
-      let part = 0;
+  //     const CHUNK_SIZE = 80 * 1024 * 1024;
+  //     let start = 0;
+  //     let end = CHUNK_SIZE;
+  //     let cids: any = [];
+  //     // let prog = 0;
+  //     let part = 0;
 
-      // var promises = []
-      let id = 0;
+  //     // var promises = []
+  //     let id = 0;
 
-      part = fileArrayBuffer.byteLength / CHUNK_SIZE;
+  //     part = fileArrayBuffer.byteLength / CHUNK_SIZE;
 
-      while (start < fileArrayBuffer.byteLength) {
-        try {
-            // console.log("Uploading chunk from " + start + " to " + end);
-            // toast("Uploading part " + (id + 1) + " from " + (Math.ceil(part) + 1))
-            setStats("Uploading" + (id + 1) + "/" + (Math.ceil(part) + 1))
-            const chunk = fileArrayBuffer.slice(start, end);
-            const cid = (await uploadChunk(chunk, file.name)).cid;
-            // promises.push(work(chunk, file.name, id));
-            // console.log(cid);
-            // setProgress((id / (part + 1)) * 100)
-            cids.push(cid);
-            id += 1
-            start = end;
-            end += CHUNK_SIZE
-        } catch (e) {
-            console.log(e);
-        }
-      } 
+  //     while (start < fileArrayBuffer.byteLength) {
+  //       try {
+  //           // console.log("Uploading chunk from " + start + " to " + end);
+  //           // toast("Uploading part " + (id + 1) + " from " + (Math.ceil(part) + 1))
+  //           setStats("Uploading" + (id + 1) + "/" + (Math.ceil(part) + 1))
+  //           const chunk = fileArrayBuffer.slice(start, end);
+  //           const cid = (await uploadChunk(chunk, file.name)).cid;
+  //           // promises.push(work(chunk, file.name, id));
+  //           // console.log(cid);
+  //           // setProgress((id / (part + 1)) * 100)
+  //           cids.push(cid);
+  //           id += 1
+  //           start = end;
+  //           end += CHUNK_SIZE
+  //       } catch (e) {
+  //           console.log(e);
+  //       }
+  //     } 
 
-      // console.log("All chunks uploading..");
-      // await Promise.all(promises);
-      // console.log("All chunks uploaded");
-      console.log(cids);
+  //     // console.log("All chunks uploading..");
+  //     // await Promise.all(promises);
+  //     // console.log("All chunks uploaded");
+  //     console.log(cids);
 
-      if(cids.length == 1) {
-        await writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory);
-      } else {
-        await writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory, cids);
-      }
+  //     if(cids.length == 1) {
+  //       await writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory);
+  //     } else {
+  //       await writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory, cids);
+  //     }
 
-      toast.success("Uploaded file:" + file.name)
-      setProgress(100);
-      setIsUploaded(true);
-      resolve("OK")
-    });
-  }
+  //     toast.success("Uploaded file:" + file.name)
+  //     setProgress(100);
+  //     setIsUploaded(true);
+  //     resolve("OK")
+  //   });
+  // }
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -664,19 +664,26 @@ export default function Home() {
       let packedChunk = [];
       let cids: any = [];
       let id = 0;
+      let finished = false;
       setIsUploaded(false);
       toast(`Uploading ${file.name}... (Don't close browser)`);
       setStats("Preparing upload file");
+      let expected_file_size = file.size;
+      let total_read = 0;
+      let part = Math.ceil(expected_file_size / CHUNK_SIZE) + 1;
       const writableStream = new WritableStream({
         start(controller: WritableStreamDefaultController) { },
         async write(chunk: ArrayBuffer, controller: WritableStreamDefaultController) {
+          console.log(chunk.byteLength);
           chunkSize += chunk.byteLength;
           packedChunk.push(chunk);
-          if (chunkSize > CHUNK_SIZE) {
+          total_read += chunk.byteLength;
+          if (chunkSize > CHUNK_SIZE || total_read >= expected_file_size) {
+            console.log("File size readched uploading...");
             let offset = 0;
             const combinedArrayBuffer = new ArrayBuffer(chunkSize);
             for (const chunk of packedChunk) {
-              const chunkView = new Uint8Array(chunk);  
+              const chunkView = new Uint8Array(chunk);
               const combinedView = new Uint8Array(combinedArrayBuffer, offset, chunk.byteLength);
               combinedView.set(chunkView);
               offset += chunk.byteLength;
@@ -687,27 +694,31 @@ export default function Home() {
             cids.push(cid);
             id += 1;
             chunkSize = 0;
+            if(total_read >= expected_file_size) {
+              finished = true;
+            }
             return;
           }
         },
-        close() { 
-          console.log(cids);
-
-          if(cids.length == 1) {
-            writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory);
-          } else {
-            writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory, cids);
-          }
-          toast.success("Uploaded file:" + file.name)
-          setProgress(100);
-          setIsUploaded(true);
-        },
+        close() { },
         abort(reason: any) { },
-      });
+      }, { highWaterMark: CHUNK_SIZE });
       
       // const stream = e.target.files[0].stream();
       const stream = file.stream();
-      stream.pipeTo(writableStream);
+      await stream.pipeTo(writableStream);
+      console.log(cids);
+      while(!finished) {
+        await sleep(100)
+      }
+      if(cids.length == 1) {
+        writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory);
+      } else {
+        writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory, cids);
+      }
+      toast.success("Uploaded file:" + file.name)
+      setProgress(100);
+      setIsUploaded(true);
       
 
       //File size > 100MiB
@@ -754,9 +765,14 @@ export default function Home() {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const data = docSnap.data();
-      for(let f in data.storage){
-        if(data.storage[f].profile_picture == file.profile_picture){
-          deleteDoc(doc(db, '/storage/' + localStorage.getItem("email") + '/storage/' + f));
+      const storageref = collection(db, '/storage/' + localStorage.getItem("email") + '/storage');
+      const storage_record = await getDocs(storageref);
+      const rawdata = storage_record.docs;
+      for(let f in rawdata){
+        if(rawdata[f].data().filename == file.filename){
+          console.log(rawdata[f].data())
+          await deleteDoc(doc(db, '/storage/' + localStorage.getItem("email") + '/storage/' + rawdata[f].id));
+          break;
         }
       }
     }
