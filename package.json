@@ -11,7 +11,7 @@
   "dependencies": {
     "@cyntler/react-doc-viewer": "^1.14.0",
     "@ipld/car": "^2.1.0",
-    "@sendgrid/mail": "^7.7.0",
+    "@sendgrid/mail": "^8.1.1",
     "@types/combined-stream": "^1.0.3",
     "@types/node": "20.5.1",
     "@types/react": "18.2.20",
@@ -27,7 +27,7 @@
     "mammoth": "^1.6.0",
     "mime-types": "^2.1.35",
     "next": "^13.5.4-canary.0",
-    "postcss": "8.4.28",
+    "postcss": "^8.4.35",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-toastify": "^9.1.3",

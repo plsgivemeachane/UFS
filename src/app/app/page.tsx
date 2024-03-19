@@ -597,24 +597,8 @@ export default function Home() {
       // let prog = 0;
       let part = 0;
 
-      // var work = function ( chunk: any, filename: any, index: number){
-      //     // while(1) {
-      //     return uploadChunk(chunk, filename)
-      //         .then((data: any) => {
-      //             if(!data) work(chunk, filename, index) as any;
-      //             toast.success("Upload part " + index + " done successfully")
-      //             prog += 1
-      //             setProgress((prog / (part + 1)) * 100)
-      //             cids.push([data.cid, index]);
-      //         })
-      //         .catch((error: any) => {
-      //             work(chunk, filename, index) as any
-      //         })
-      //     // }
-      // }
-
       // var promises = []
-      let id = 0
+      let id = 0;
 
       part = fileArrayBuffer.byteLength / CHUNK_SIZE;
 
@@ -652,82 +636,80 @@ export default function Home() {
       setProgress(100);
       setIsUploaded(true);
       resolve("OK")
-
-
-      // try {
-      //   // const formData = new FormData();
-      //   // formData.append('file', file);
-
-      //   var xhttp = new XMLHttpRequest();
-
-      //   xhttp.upload.addEventListener('progress', function(e) {
-      //     // upload progress as percentage
-      //     let percent_completed = (e.loaded / e.total)*100;
-      //     // console.log(percent_completed);
-      //     setProgress(percent_completed);
-      //     setIsUploaded(false);
-      //   });
-
-      //   xhttp.onreadystatechange = function() {
-      //     if (this.readyState == 4 && (this.status == 200 || this.status == 201)) {
-      //       // Handle the response here
-      //       if(!user) return;
-      //       var data: any = JSON.parse(this.responseText);
-      //       // console.log(data.cids)
-      //       if(data.cids.length == 1) {
-      //         writeUserData(user, file.name, `https://${data.cids[0]}.ipfs.dweb.link`, directory);
-      //       } else {
-      //         writeUserData(user, file.name, `https://${data.cids[0]}.ipfs.dweb.link`, directory, data);
-      //       }
-      //       // console.log(data);
-      //       // writeUserData(user, file.name, "https://ipfs.io/ipfs/" + data.cid + "/" + file.name);
-      //       //Fallback server!
-      //       // if(this.status == 200)
-      //       //   writeUserData(user, file.name, "https://ipfs.particle.network/" + data.value.cid);
-      //       // else
-      //       //   writeUserData(user, file.name, "https://ipfs.particle.network/" + data.cid );
-      //       // writeUserData(user, file.name, `https://${data.cid}.ipfs.dweb.link`, directory);
-      //       setIsUploaded(true);
-      //       resolve(data);
-      //     }
-      //   };
-
-      //   // const formdata = new FormData();
-      //   // formdata.append('file', file);
-
-      //   xhttp.open("POST", "/v1up", true);
-      //   // xhttp.setRequestHeader("Authorization", 'Basic ' + btoa(username + ":" + password));
-      //   const formdata = new FormData();
-      //   formdata.append('file', file);
-      //   xhttp.send(formdata);
-
-      //   // const res = await fetch('https://api.nft.storage/upload', {
-      //   //   method: 'POST',
-      //   //   headers: {
-      //   //     'Accept': 'application/json',
-      //   //     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDkxMGZlYjc0NjgwM2Y1ODdDQzBERDQwMDQ1ZEZCOGRkODQ0Mjk3Y0YiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY5MjQ4ODEzODE2MSwibmFtZSI6IlRlc3QifQ.RImLY0ZoBBtgWgCHUUaNboEtSBkxV_LLiBgBCJGfLYE'
-      //   //   },
-      //   //   body: file
-      //   // })
-
-      //   // const data = await res.json();  
-      //   // console.log(data)
-      // } catch (error: any) {
-      //   console.log(error);
-      //   reject(error)
-      // }
-      // Your file upload logic here
-      // Call resolve() when the upload is successful
-      // Call reject() if there's an error
     });
   }
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowModal(false);
+    // const writableStream = new WritableStream({          
+    //   start(controller) { },
+    //   async write(chunk, controller) {
+    //     console.log(chunk);
+    //     // upload the chunks here
+    //   },
+    //   close() { },
+    //   abort(reason) { },
+    // });
+
+    // const stream = e.target.files[0].stream();
+    // stream.pipeTo(writableStream);
+
+    // File over 2gb cause error 
     for(let file of filess!){
 
-      if(!file) return;
+      if(!file || !user) return
+      const CHUNK_SIZE = 80 * 1024 * 1024;
+      let chunkSize = 0;
+      let packedChunk = [];
+      let cids: any = [];
+      let id = 0;
+      setIsUploaded(false);
+      toast(`Uploading ${file.name}... (Don't close browser)`);
+      setStats("Preparing upload file");
+      const writableStream = new WritableStream({
+        start(controller: WritableStreamDefaultController) { },
+        async write(chunk: ArrayBuffer, controller: WritableStreamDefaultController) {
+          chunkSize += chunk.byteLength;
+          packedChunk.push(chunk);
+          if (chunkSize > CHUNK_SIZE) {
+            let offset = 0;
+            const combinedArrayBuffer = new ArrayBuffer(chunkSize);
+            for (const chunk of packedChunk) {
+              const chunkView = new Uint8Array(chunk);  
+              const combinedView = new Uint8Array(combinedArrayBuffer, offset, chunk.byteLength);
+              combinedView.set(chunkView);
+              offset += chunk.byteLength;
+            }
+
+            setStats("Uploading" + (id + 1))
+            const cid = (await uploadChunk(combinedArrayBuffer, file.name)).cid;
+            cids.push(cid);
+            id += 1;
+            chunkSize = 0;
+            return;
+          }
+        },
+        close() { 
+          console.log(cids);
+
+          if(cids.length == 1) {
+            writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory);
+          } else {
+            writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory, cids);
+          }
+          toast.success("Uploaded file:" + file.name)
+          setProgress(100);
+          setIsUploaded(true);
+        },
+        abort(reason: any) { },
+      });
+      
+      // const stream = e.target.files[0].stream();
+      const stream = file.stream();
+      stream.pipeTo(writableStream);
+      
+
       //File size > 100MiB
       // if(file.size > 100000000){
       //   toast.error("File size too large!");
@@ -737,11 +719,11 @@ export default function Home() {
       // toast(`Queueing ${file.name}... (Don't close browser)`);
 
       // console.log(file)
-      try{
-        await uploadFile(file)
-      } catch (e: any) {
-        toast.success(`Upload fail`);
-      }
+      // try{
+      //   await uploadFile(file)
+      // } catch (e: any) {
+      //   toast.success(`Upload fail`);
+      // }
       await sleep(200)
     }
 
@@ -974,3 +956,26 @@ export default function Home() {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
