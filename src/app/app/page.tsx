@@ -452,7 +452,7 @@ export default function Home() {
           });
         }
 
-        return fetch(file.profile_picture, params)
+        return fetch(`https://ipfs.particle.network/${extractCID(file.profile_picture)}`, params)
           .then((response) => {
             const str = response.headers.get("Content-Range");
             if (str == null) return 0;
@@ -813,13 +813,14 @@ export default function Home() {
             console.log(cid);
             while (cid[0].readyState !== XMLHttpRequest.DONE) {
               await sleep(10);
-              // console.log(cid[0].readyState);
             }
 
             if (cid[0].status === 201) {
               const data = JSON.parse(cid[0].responseText);
+              console.log(data);
               resolve(data.cid);
             } else {
+              console.error(cid[0].status)
               reject(new Error("Request failed with status: " + cid[0].status));
             }
           })
@@ -828,14 +829,14 @@ export default function Home() {
       // sort the cids by the id
 
       if (realshit.length == 1) {
-        writeUserData(
+        await writeUserData(
           user,
           file.name,
           `https://ipfs.particle.network/${realshit[0]}`,
           directory
         );
       } else {
-        writeUserData(
+        await writeUserData(
           user,
           file.name,
           `https://ipfs.particle.network/${realshit[0]}`,
@@ -861,11 +862,13 @@ export default function Home() {
       // } catch (e: any) {
       //   toast.success(`Upload fail`);
       // }
+      //! Dying
       await sleep(200);
     }
 
+    // TODO REMEBER THIS THING
+    toast.success(`Upload done successfully`);
     window.location.reload();
-    // toast.success(`Upload done successfully`);
   };
 
   function sleep(ms: number) {
