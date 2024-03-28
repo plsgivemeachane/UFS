@@ -39,6 +39,8 @@ import generateShortUniqueId from "../s/[id]/IDGen";
 import Notix from "../Notix";
 import ProgressBar from "./ProgressBar";
 import { getTheme } from "../settings/Theme";
+import { run } from "node:test";
+import { rootCertificates } from "tls";
 // const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1156222449294258216/oCv3x7dZfkH8anYS18M7SUzFWaVKsg2R-wku5j6x94o6G1tMOK-w_sAND50IYwsrLjod")
 
 const FileStorage = lazy(() => import("./FileStorage"));
@@ -452,7 +454,10 @@ export default function Home() {
           });
         }
 
-        return fetch(`https://ipfs.particle.network/${extractCID(file.profile_picture)}`, params)
+        return fetch(
+          `https://ipfs.particle.network/${extractCID(file.profile_picture)}`,
+          params
+        )
           .then((response) => {
             const str = response.headers.get("Content-Range");
             if (str == null) return 0;
@@ -547,7 +552,11 @@ export default function Home() {
         "Authorization",
         "Basic " + btoa(username + ":" + password)
       );
-
+      xhr.timeout = 240000; // 6 minutes
+      xhr.ontimeout = function () {
+        console.log("Request timed out");
+        reject(new Error("Request timed out"));
+      }
       xhr.send(formData);
     });
   };
@@ -557,7 +566,7 @@ export default function Home() {
     const buffer = Buffer.from(chunk);
     const file = new File([buffer], filename);
     uploadFormData.append("file", file);
-    return (await uploadFilepls(uploadFormData)) as any;
+    return (await uploadFilepls(uploadFormData)) as Promise<XMLHttpRequest>;
   }
 
   const downloadPart = (
@@ -659,86 +668,27 @@ export default function Home() {
     });
   };
 
-  // const uploadFile = async (file: File) => {
-  //   return new Promise(async (resolve, reject) => {
-  //     if(!file || !user) return
-  //     setIsUploaded(false);
-  //     toast(`Uploading ${file.name}... (Don't close browser)`);
-  //     setStats("Preparing upload file");
-  //     const fileArrayBuffer = await file.arrayBuffer();
-
-  //     const CHUNK_SIZE = 80 * 1024 * 1024;
-  //     let start = 0;
-  //     let end = CHUNK_SIZE;
-  //     let cids: any = [];
-  //     // let prog = 0;
-  //     let part = 0;
-
-  //     // var promises = []
-  //     let id = 0;
-
-  //     part = fileArrayBuffer.byteLength / CHUNK_SIZE;
-
-  //     while (start < fileArrayBuffer.byteLength) {
-  //       try {
-  //           // console.log("Uploading chunk from " + start + " to " + end);
-  //           // toast("Uploading part " + (id + 1) + " from " + (Math.ceil(part) + 1))
-  //           setStats("Uploading" + (id + 1) + "/" + (Math.ceil(part) + 1))
-  //           const chunk = fileArrayBuffer.slice(start, end);
-  //           const cid = (await uploadChunk(chunk, file.name)).cid;
-  //           // promises.push(work(chunk, file.name, id));
-  //           // console.log(cid);
-  //           // setProgress((id / (part + 1)) * 100)
-  //           cids.push(cid);
-  //           id += 1
-  //           start = end;
-  //           end += CHUNK_SIZE
-  //       } catch (e) {
-  //           console.log(e);
-  //       }
-  //     }
-
-  //     // console.log("All chunks uploading..");
-  //     // await Promise.all(promises);
-  //     // console.log("All chunks uploaded");
-  //     console.log(cids);
-
-  //     if(cids.length == 1) {
-  //       await writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory);
-  //     } else {
-  //       await writeUserData(user, file.name, `https://ipfs.particle.network/${cids[0]}`, directory, cids);
-  //     }
-
-  //     toast.success("Uploaded file:" + file.name)
-  //     setProgress(100);
-  //     setIsUploaded(true);
-  //     resolve("OK")
-  //   });
-  // }
-
+  /**
+   * Generate a comment for the given function body.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - event triggered by form submission
+   * @return {Promise<void>} a Promise that resolves when the function completes
+   */
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowModal(false);
-    // const writableStream = new WritableStream({
-    //   start(controller) { },
-    //   async write(chunk, controller) {
-    //     console.log(chunk);
-    //     // upload the chunks here
-    //   },
-    //   close() { },
-    //   abort(reason) { },
-    // });
 
-    // const stream = e.target.files[0].stream();
-    // stream.pipeTo(writableStream);
-
-    // File over 2gb cause error
+    // TODO New error while handling response took too long and return 504.
     for (let file of filess!) {
       if (!file || !user) return;
       const CHUNK_SIZE = 80 * 1024 * 1024;
+      const MAX_CONCURRENT_UPLOADS = 3;
+      const MAX_RETRY = 5;
       let chunkSize = 0;
       let packedChunk: any = [];
-      let cids: any = [];
+      // let cids: any = [];
+      let total_concurrent = 0;
+      let realshit: any = [];
       let id = 0;
       let finished = false;
       setIsUploaded(false);
@@ -747,6 +697,7 @@ export default function Home() {
       let expected_file_size = file.size;
       let total_read = 0;
       let part = Math.ceil(expected_file_size / CHUNK_SIZE) + 1;
+      let upload_with_bug = false;
       const writableStream = new WritableStream(
         {
           start(controller: WritableStreamDefaultController) {},
@@ -759,7 +710,11 @@ export default function Home() {
             packedChunk.push(chunk);
             total_read += chunk.byteLength;
             if (chunkSize > CHUNK_SIZE || total_read >= expected_file_size) {
-              console.log("File size readched uploading...");
+              while(total_concurrent > MAX_CONCURRENT_UPLOADS) {
+                setStats("Max concurrent uploads reached. Waiting...");
+                await new Promise(resolve => setTimeout(resolve, 200));
+              }
+              console.log("Chunk uploading...");
               let offset = 0;
               const combinedArrayBuffer = new ArrayBuffer(chunkSize);
               for (const chunk2 of packedChunk) {
@@ -774,16 +729,59 @@ export default function Home() {
               }
 
               setStats("Uploading " + (id + 1) + "/" + part);
-              const cid_promise = await uploadChunk(
-                combinedArrayBuffer,
-                file.name
-              );
-              console.log("finished");
-              cids.push([cid_promise, id]);
+              async function upload(retries: number) {
+                return new Promise(async (resolve, reject) => { 
+                  if(retries >= MAX_RETRY) {
+                    reject();
+                    return;
+                  }
+
+                  const cid_promise = await uploadChunk(
+                    combinedArrayBuffer,
+                    file.name
+                  );
+
+                  console.log("finished");
+                  // cids.push([cid_promise, id]);
+                  cid_promise.onreadystatechange = () => {
+                    if (cid_promise.readyState === XMLHttpRequest.DONE) {
+                      const status = cid_promise.status;
+                      if (status === 201) {
+                        // Created
+                        console.log("Created");
+                        const data = JSON.parse(cid_promise.responseText);
+                        // remove the cid from the list
+                        total_concurrent--;
+                        console.log(total_concurrent);
+                        realshit.push([data.cid, id]);
+                      } else {
+                        // Failed
+                        console.log("Failed");
+                        // Retry
+                        console.log("Retrying...");
+                        return upload(retries + 1);
+                      }
+                    }
+                  }
+
+                  resolve("OK");
+                })
+              }
+
+              total_concurrent++;
+              try{
+                await upload(0)
+              } catch {
+                upload_with_bug = true;
+                console.log("Upload failed");
+              }
+              
               id += 1;
               chunkSize = 0;
               packedChunk = [];
               if (total_read >= expected_file_size) {
+                // Finished
+                console.log("Finished");
                 finished = true;
               }
               return;
@@ -798,71 +796,42 @@ export default function Home() {
       // const stream = e.target.files[0].stream();
       const stream = file.stream();
       await stream.pipeTo(writableStream);
-      while (!finished) {
+      while (!finished || total_concurrent > 0) {
+        if (upload_with_bug) {
+          toast.error("Upload failed. Please try again.");
+          return;
+        };
         await sleep(100);
       }
-
-      let realshit = [];
-
+      
       // sort the cids by the id
-      cids.sort((a: any, b: any) => a[1] - b[1]);
-      console.log(cids);
-      for (const cid of cids) {
-        realshit.push(
-          await new Promise(async (resolve, reject) => {
-            console.log(cid);
-            while (cid[0].readyState !== XMLHttpRequest.DONE) {
-              await sleep(10);
-            }
-
-            if (cid[0].status === 201) {
-              const data = JSON.parse(cid[0].responseText);
-              console.log(data);
-              resolve(data.cid);
-            } else {
-              console.error(cid[0].status)
-              reject(new Error("Request failed with status: " + cid[0].status));
-            }
-          })
-        );
-      }
+      realshit.sort((a: any, b: any) => a[1] - b[1]);
+      // TODO Testing purpose
+      console.log(realshit);
+      // return;
+      
       // sort the cids by the id
 
       if (realshit.length == 1) {
         await writeUserData(
           user,
           file.name,
-          `https://ipfs.particle.network/${realshit[0]}`,
+          `https://ipfs.particle.network/${realshit[0][0]}`,
           directory
         );
       } else {
         await writeUserData(
           user,
           file.name,
-          `https://ipfs.particle.network/${realshit[0]}`,
+          `https://ipfs.particle.network/${realshit[0][0]}`,
           directory,
-          realshit
+          realshit.map((c: any) => c[0])
         );
       }
+
       toast.success("Uploaded file:" + file.name);
       setProgress(100);
       setIsUploaded(true);
-
-      //File size > 100MiB
-      // if(file.size > 100000000){
-      //   toast.error("File size too large!");
-      //   return;
-      // }
-
-      // toast(`Queueing ${file.name}... (Don't close browser)`);
-
-      // console.log(file)
-      // try{
-      //   await uploadFile(file)
-      // } catch (e: any) {
-      //   toast.success(`Upload fail`);
-      // }
-      //! Dying
       await sleep(200);
     }
 
@@ -879,14 +848,6 @@ export default function Home() {
     if (!confirm("Are you sure?")) return;
     toast("Removing File...");
     setIsUploaded(false);
-    // onValue(ref(db, '/' + localStorage.getItem("email") + '/storage'), (snapshot) => {
-    //   const data = snapshot.val();
-    //   for(let f in data){
-    //     if(data[f].profile_picture == file.profile_picture){
-    //       remove(ref(db, '/' + localStorage.getItem("email") + '/storage/' + f));
-    //     }
-    //   }
-    // });
     const docRef = doc(db, "/users/" + localStorage.getItem("email"));
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -914,13 +875,6 @@ export default function Home() {
       }
     }
 
-    // const cid = file.profile_picture.split("/").pop();
-    // await fetch("https://api.nft.storage/" + cid, {
-    //   method: "DELETE",
-    //   headers: {
-    //     "Authorization": "Bearer " + APIKEY
-    //   }
-    // });
     setIsUploaded(true);
     setFiles(files.filter((f) => f !== file));
     toast.success("Delete Successfull");
@@ -957,15 +911,6 @@ export default function Home() {
     // alert("Or alternative direct link: " + "https://ufsdrive.com/api?shared=" + ID);
   };
 
-  // const renderFiles = async () => {
-  //   const results = await Promise.all(files.map(async (file, index) => {
-  //     const data = await getFileSize(file.profile_picture);
-
-  //   }));
-
-  // return results;
-  // };
-
   return (
     <div>
       {(!isUploaded || !isLoaded) && (
@@ -999,21 +944,6 @@ export default function Home() {
           )}
         </div>
       )}
-      {/* <div className="flbex justify-center flex-col items-center bg-slate-700 mx-auto w-auto max-w-md p-2 rounded-full my-4 text-black">
-        <div className="flex flex-row">
-          <Image width={128} height={128} alt="user" src={`https://eu.ui-avatars.com/api/?background=random&rounded=true&name=${user}`} 
-            className="ml-4 w-14 rounded-full mr-4"
-          />
-          <h1 className="text-xl text-white text-center">Wellcome back {user}</h1>
-          <Image width={128} height={128} alt="switch" src={`/switch.png`} 
-            className="ml-4 w-14 rounded-full mr-4 hover:scale-95 transition-all duration-300 cursor-pointer"
-            onClick={() => {
-              router.push("/logout")
-            }}
-          />
-        </div>
-        <h2 className="text-2xl text-white text-center">Total Usage : {formatBytes(total)}</h2>
-      </div> */}
       <div
         className="flex gap-8 md:m-4 w-auto ml-auto mr-auto md:p-4 h-full md:scale-100 md:rounded-xl items-center"
         ref={themeElement}
@@ -1065,14 +995,6 @@ export default function Home() {
         >
           <img width={32} height={32} alt="upload.png" src="/upload.png" />
         </button>
-
-        {/* {!isMobile && <div>
-          <h2 className="lg:text-lg xl:text-2xl md:text-md text-white text-center p-4">{formatBytes(total)}</h2>
-      </div>} */}
-
-        {/* {!isMobile && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="w-10 h-10 ml-auto">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-        </svg>} */}
         {!isMobile && (
           <input
             className={
@@ -1132,11 +1054,6 @@ export default function Home() {
           ))}
         </Suspense>
       </div>
-      {/* {(progress == 100) && !isUploaded &&
-        <div className="w-full rounded-full h-4 bg-gray-700 mt-4 mb-4">
-          <div className="bg-blue-600 h-4 rounded-full transition-all duration-200" style={{ width: `${progress}%` }}></div>
-        </div>
-      } */}
 
       {showModal ? (
         <form onSubmit={onSubmit}>
@@ -1147,23 +1064,20 @@ export default function Home() {
                 htmlFor="dropzone-file"
                 className="flex flex-col items-center justify-center w-[80%] h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-900 dark:hover:bg-gray-600 mt-4 mx-8 hover:border-solid"
                 onDragOver={(event) => {
-                  event.preventDefault()
+                  event.preventDefault();
                   // Add style to show the user can drop it
-                  event.currentTarget.classList.add('border-solid')
+                  event.currentTarget.classList.add("border-solid");
                 }}
-                
                 onDragEnd={(event) => {
-                  event.preventDefault()
+                  event.preventDefault();
                   // Remove the style when the drag is finished
-                  event.currentTarget.classList.remove('border-solid')
+                  event.currentTarget.classList.remove("border-solid");
                 }}
-
                 onDragLeave={(event) => {
-                  event.preventDefault()
+                  event.preventDefault();
                   // Remove the style when the drag is finished
-                  event.currentTarget.classList.remove('border-solid')
+                  event.currentTarget.classList.remove("border-solid");
                 }}
-
                 onDrop={(e) => {
                   e.preventDefault();
                   // alert("File dropped")
@@ -1203,14 +1117,14 @@ export default function Home() {
                 />
               </label>
               <div className="text-left w-[80%] pt-4 text-white">
-                {filess && filess.length > 0 ? (
-                  Array.from(filess).map((file, index) => (
-                    <div key={index} className="flex justify-between">
-                      <p>{file.name}</p>
-                      <p>{formatBytes(file.size)}</p>
-                    </div>
-                  ))
-                ): null}
+                {filess && filess.length > 0
+                  ? Array.from(filess).map((file, index) => (
+                      <div key={index} className="flex justify-between">
+                        <p>{file.name}</p>
+                        <p>{formatBytes(file.size)}</p>
+                      </div>
+                    ))
+                  : null}
               </div>
               <button
                 type="submit"
