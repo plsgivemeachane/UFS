@@ -912,6 +912,15 @@ export default function Home() {
     // alert("Or alternative direct link: " + "https://ufsdrive.com/api?shared=" + ID);
   };
 
+  function cutedText(str: string) {
+    // trim the text down and add ... if it too long
+    if (str.length > 25) {
+        return str.substring(0, 25) + '...'
+    } else {
+        return str
+    }
+  }
+
   return (
     <div>
       {(!isUploaded || !isLoaded) && (
@@ -999,7 +1008,7 @@ export default function Home() {
         {!isMobile && (
           <input
             className={
-              "p-1 px-4 w-[6rem] md:w-[8rem] lg:w-[16rem] rounded-md focus:border-0 text-md transition-all duration-300 ml-auto bg-neutral-200 text-black p-2"
+              "px-4 w-[6rem] md:w-[8rem] lg:w-[16rem] rounded-md focus:border-0 text-md transition-all duration-300 ml-auto bg-neutral-200 text-black p-2"
             }
             placeholder="Search"
             onChange={(e) => {
