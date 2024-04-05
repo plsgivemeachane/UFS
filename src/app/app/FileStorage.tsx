@@ -28,7 +28,16 @@ function extractCID(url: string): string {
     } else {
         return url.split("/").pop() as string
     }
-  }
+}
+
+function cutedText(str: string) {
+    // trim the text down and add ... if it too long
+    if (str.length > 25) {
+        return str.substring(0, 25) + '...'
+    } else {
+        return str
+    }
+}
 
 interface StoredFile {
     username: string
@@ -36,7 +45,8 @@ interface StoredFile {
     profile_picture: string,
     directory: string,
     data: string
-  }
+}
+
 async function getFileSize(url: string, urls: any = null) : Promise<number> {
     const params = {
         method: "GET",
@@ -163,7 +173,7 @@ export default function FileStorage (probs: any) {
                         <img alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} width={32} height={32} className="rounded-xl bg-transparent m-4" />
                     }
                 </Link> : <img alt={file as any} src="/folder.png" width={32} height={32} className="rounded-xl bg-transparent m-4"/>}
-                {!probs.isFolder ? <p className="truncate ml-4">{file.filename}</p> : <p className="truncate mr-auto">{file as any}</p>}
+                {!probs.isFolder ? <p className="truncate ml-4">{cutedText(file.filename)}</p> : <p className="truncate mr-auto">{file as any}</p>}
                 {data && !probs.isFolder && <p className="truncate ml-auto">{formatBytes(data)}</p>}
                 {/* {!probs.isFolder &&
                     <div className="relative p-3 mb-2 ml-5"
@@ -180,7 +190,7 @@ export default function FileStorage (probs: any) {
                     <div className="relative w-auto my-3 lg:my-6 max-w-full lg:max-w-3xl bg-gray-500 flex flex-col p-6 rounded-xl">
                     <h1 className="mt-4 text-4xl text-white text-center mb-8">File description</h1>
                     {/* <button type="submit" className="bg-violet-900 p-4 px-[16rem] rounded-lg mt-4 mb-4 hover:bg-violet-500 w-[80%] truncate">Upload {filess?.length}</button> */}
-                    <p className="text-xl text-center">{file.filename}</p>
+                    <p className="text-xl text-center">{cutedText(file.filename)}</p>
                     <div className="flex flex-col md:flex-row justify-around items-center">
                         {file.filename.indexOf('.png') !== -1 && <img width={256} height={256} alt={file.filename} src={url} className="rounded-md m-4" 
                             onError={onError}/>}

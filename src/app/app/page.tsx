@@ -729,7 +729,7 @@ export default function Home() {
               }
 
               setStats("Uploading " + (id + 1) + "/" + part);
-              async function upload(retries: number) {
+              async function upload(retries: number, combinedArrayBuffer: ArrayBuffer) {
                 return new Promise(async (resolve, reject) => { 
                   if(retries >= MAX_RETRY) {
                     reject();
@@ -754,23 +754,24 @@ export default function Home() {
                         total_concurrent--;
                         console.log(total_concurrent);
                         realshit.push([data.cid, id]);
+                        resolve("OK");
                       } else {
                         // Failed
                         console.log("Failed");
                         // Retry
                         console.log("Retrying...");
-                        return upload(retries + 1);
+                        resolve(upload(retries + 1, combinedArrayBuffer));
                       }
                     }
                   }
 
-                  resolve("OK");
+                  
                 })
               }
 
               total_concurrent++;
               try{
-                await upload(0)
+                await upload(0, combinedArrayBuffer)
               } catch {
                 upload_with_bug = true;
                 console.log("Upload failed");
@@ -837,7 +838,7 @@ export default function Home() {
 
     // TODO REMEBER THIS THING
     toast.success(`Upload done successfully`);
-    window.location.reload();
+    // window.location.reload();
   };
 
   function sleep(ms: number) {
@@ -959,7 +960,7 @@ export default function Home() {
           }}
         />
         <h1 className="md:text-4xl sm:text-sm font-bold text-white font-sans">
-          {directory}
+          {cutedText(directory)}
         </h1>
         <input
           type="string"
