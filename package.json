@@ -1,6 +1,6 @@
 {
   "name": "ultimate-file-storage",
-  "version": "1.0.5",
+  "version": "1.1",
   "private": true,
   "scripts": {
     "dev": "npx next dev",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@cyntler/react-doc-viewer": "^1.14.0",
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@ipld/car": "^2.1.0",
     "@sendgrid/mail": "^8.1.1",
     "@types/combined-stream": "^1.0.3",
