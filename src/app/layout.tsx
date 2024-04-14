@@ -76,7 +76,7 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
-        <script src="https://kit.fontawesome.com/cf13ab3206.js" crossOrigin="anonymous"></script>
+        <Script src="https://kit.fontawesome.com/cf13ab3206.js" crossOrigin="anonymous"></Script>
       </head>
       <body className={inter.className}>
         <GoogleAnalytics GA_TRACKING_ID={"G-7P8TWM1SVE"} />
