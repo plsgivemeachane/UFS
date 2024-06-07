@@ -63,7 +63,7 @@ export default function HowItWorkSection() {
             </h3>
             <p>
               Our server will launch your file into the IPFS network. Peers in
-              the network will receive your file fragments and store them. Don't
+              the network will receive your file fragments and store them. Do&apos;t
               worry, they cannot decrypt your file, and the fragments are
               isolated so they cannot be linked together. After sending the file
               into IPFS, we save its CID (Content Identifier) - an encrypted
