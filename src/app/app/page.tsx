@@ -119,12 +119,13 @@ async function writeUserData(
   }
 }
 
-async function writeShareData(filename: string, url: string, data: any = []) {
+async function writeShareData(filename: string, url: string, data: any = [], username: string) {
   let ID = generateShortUniqueId(10);
   await setDoc(doc(db, "storage", "anonymous", "storage", ID), {
     filename: filename,
     profile_picture: url,
     data: data,
+    username: username
   });
 
   return ID;
@@ -893,10 +894,11 @@ export default function Home() {
     let ID = await writeShareData(
       file.filename,
       file.profile_picture,
-      file.data
+      file.data,
+      username??"anonymous"
     );
     // navigator.clipboard.writeText("https://ufsdrive.com/s/" + ID);
-    let clipboardData = "https://ufsdrive.com/api?shared=" + ID;
+    let clipboardData = "https://ufsdrive.com/s/" + ID;
     const element = document.createElement("textarea");
     element.value = clipboardData;
     document.body.appendChild(element);
