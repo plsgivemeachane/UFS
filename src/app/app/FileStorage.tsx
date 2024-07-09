@@ -30,13 +30,23 @@ function extractCID(url: string): string {
     }
 }
 
+function cutedText(str: string) {
+    // trim the text down and add ... if it too long
+    if (str.length > 25) {
+        return str.substring(0, 25) + '...'
+    } else {
+        return str
+    }
+}
+
 interface StoredFile {
     username: string
     filename: string
     profile_picture: string,
     directory: string,
     data: string
-  }
+}
+
 async function getFileSize(url: string, urls: any = null) : Promise<number> {
     const params = {
         method: "GET",
@@ -81,12 +91,17 @@ async function getFileSize(url: string, urls: any = null) : Promise<number> {
         });
 }
 
+function getNewIPFSUrl(url : string) {
+    
+    return `https://ipfs.particle.network/${extractCID(url)}`
+}
+
 export default function FileStorage (probs: any) {
     const file = probs.file as StoredFile;
 
-    if(probs.isFolder) {
-        console.log(file)
-    }
+    // if(probs.isFolder) {
+    //     console.log(file)
+    // }
 
     const [data , setData] = useState<any>(0);
     const [url , setURL] = useState<any>("");
@@ -99,13 +114,13 @@ export default function FileStorage (probs: any) {
     }
 
     const onError = () => {
-        setURL(file.profile_picture + "?reload="+count);
+        setURL(getNewIPFSUrl(file.profile_picture) + "?reload="+count);
         setCount(count + 1);
     }
 
     useEffect(() => {
         if(!probs.isFolder){
-            getFileSize(file.profile_picture, file.data).then((size) => {
+            getFileSize(getNewIPFSUrl(file.profile_picture), file.data).then((size) => {
                 setData(size);
             })
         }
@@ -117,7 +132,7 @@ export default function FileStorage (probs: any) {
                 () => {
                     if(model) return;
                     if(!probs.isFolder){
-                        console.log(probs)
+                        // console.log(probs)
                         // probs.downloadFile(file)
                         setModel(true);
                     } else {
@@ -127,7 +142,7 @@ export default function FileStorage (probs: any) {
             }
         >
             <div className="flex items-center">
-                { data || probs.isFolder ? (
+                {/* { data || probs.isFolder ? (
                         <span className="relative flex h-3 w-3">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
@@ -138,15 +153,15 @@ export default function FileStorage (probs: any) {
                             <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                         </span>
                     )
-                }
+                } */}
                 {!probs.isFolder ? 
                 <Link href={"#"}>
                 {/* {!probs.isFolder ? <Link href={file.profile_picture} rel="noreferrer" target="_blank"> */}
-                    {file.filename.indexOf('.png') !== -1 && <Image width={32} height={32} alt={file.filename} src={url} priority={false} className="rounded-md m-4" 
+                    {file.filename.indexOf('.png') !== -1 && <img width={32} height={32} alt={file.filename} src={url} className="rounded-md m-4" 
                         onError={onError}/>}
-                    {file.filename.indexOf('.jpg') !== -1 && <Image width={32} height={32} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                    {file.filename.indexOf('.jpg') !== -1 && <img width={32} height={32} alt={file.filename} src={url} className="rounded-md m-4"
                         onError={onError}/>}
-                    {file.filename.indexOf('.jpeg') !== -1 && <Image width={32} height={32} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                    {file.filename.indexOf('.jpeg') !== -1 && <img width={32} height={32} alt={file.filename} src={url} className="rounded-md m-4"
                         onError={onError}/>}
                     {(
                         file.filename.indexOf('.jpeg') == -1 &&
@@ -155,9 +170,9 @@ export default function FileStorage (probs: any) {
                         file.filename.indexOf('.png') == -1
                     )
                     && 
-                        <Image alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4" />
+                        <img alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} width={32} height={32} className="rounded-xl bg-transparent m-4" />
                     }
-                </Link> : <Image alt={file as any} src="/folder.png" priority={false} width={32} height={32} className="rounded-xl bg-transparent m-4"/>}
+                </Link> : <img alt={file as any} src="/folder.png" width={32} height={32} className="rounded-xl bg-transparent m-4"/>}
                 {!probs.isFolder ? <p className="truncate ml-4">{file.filename}</p> : <p className="truncate mr-auto">{file as any}</p>}
                 {data && !probs.isFolder && <p className="truncate ml-auto">{formatBytes(data)}</p>}
                 {/* {!probs.isFolder &&
@@ -175,13 +190,13 @@ export default function FileStorage (probs: any) {
                     <div className="relative w-auto my-3 lg:my-6 max-w-full lg:max-w-3xl bg-gray-500 flex flex-col p-6 rounded-xl">
                     <h1 className="mt-4 text-4xl text-white text-center mb-8">File description</h1>
                     {/* <button type="submit" className="bg-violet-900 p-4 px-[16rem] rounded-lg mt-4 mb-4 hover:bg-violet-500 w-[80%] truncate">Upload {filess?.length}</button> */}
-                    <p className="text-xl text-center">{file.filename}</p>
+                    <p className="text-xl text-center truncate">{file.filename}</p>
                     <div className="flex flex-col md:flex-row justify-around items-center">
-                        {file.filename.indexOf('.png') !== -1 && <Image width={256} height={256} alt={file.filename} src={url} priority={false} className="rounded-md m-4" 
+                        {file.filename.indexOf('.png') !== -1 && <img width={256} height={256} alt={file.filename} src={url} className="rounded-md m-4" 
                             onError={onError}/>}
-                        {file.filename.indexOf('.jpg') !== -1 && <Image width={256} height={256} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                        {file.filename.indexOf('.jpg') !== -1 && <img width={256} height={256} alt={file.filename} src={url} className="rounded-md m-4"
                             onError={onError}/>}
-                        {file.filename.indexOf('.jpeg') !== -1 && <Image width={256} height={256} alt={file.filename} src={url} priority={false} className="rounded-md m-4"
+                        {file.filename.indexOf('.jpeg') !== -1 && <img width={256} height={256} alt={file.filename} src={url} className="rounded-md m-4"
                             onError={onError}/>}
                         {(
                             file.filename.indexOf('.jpeg') == -1 &&
@@ -190,7 +205,7 @@ export default function FileStorage (probs: any) {
                             file.filename.indexOf('.png') == -1
                         )
                         && 
-                            <Image alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} priority={false} width={256} height={256} className="rounded-xl bg-transparent m-4" />
+                            <img alt={file.filename} src={`${imageFactory.getImage(file.filename).src}`} width={256} height={256} className="rounded-xl bg-transparent m-4" />
                         }
 
                         {/* {file.filename.indexOf(".docx") !== -1 && ( */}

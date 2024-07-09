@@ -5,6 +5,8 @@ import { FirebaseError, initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import Image from "next/image";
 import DocumentRenderer from "@/app/DocRenderer";
+import Notix from "@/app/Notix";
+import ProgressBar from "@/app/app/ProgressBar";
 const firebaseConfig = {
   apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
   authDomain: "vka-project.firebaseapp.com",
@@ -183,13 +185,15 @@ export default function Share({ params }: { params: { id: string } }) {
         // })
 
         const subscribe = async () => {
-          const snapshot = await getDoc(doc(db, `/anonymous/${params.id}`))
+          const snapshot = await getDoc(doc(db, `storage/anonymous/storage/${params.id}`))
           if(!snapshot.data()) {
             alert("File not found")
           }
           
           setFile(snapshot.data())
         }
+
+        subscribe()
 
       }, [  params.id ]);
 
@@ -208,9 +212,7 @@ export default function Share({ params }: { params: { id: string } }) {
                 <p>Please wait a minutes...</p>
                 <p>{ stats }</p>
                 {!(progress == 100) && (
-                <div className="w-full rounded-full h-6 bg-gray-700 mt-4 mb-4">
-                    <div className="bg-violet-500 shadow-xl shadow-violet-500 h-6 text-md font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition-all duration-300" style={{ width: `${progress}%` }}>{Math.ceil(progress)}%</div>
-                </div>
+                  <ProgressBar progress={progress} />
                 )}
                 {!isUploaded && (
                 <div className="text-center">
@@ -237,6 +239,7 @@ export default function Share({ params }: { params: { id: string } }) {
                 <p> Wait a min while we loading your file</p>
               )
             }
+{/*             <Notix /> */}
         </>
     )
 }
