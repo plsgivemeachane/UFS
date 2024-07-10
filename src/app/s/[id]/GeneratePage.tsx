@@ -1,11 +1,8 @@
 'use client';
 import { useEffect, useState } from "react";
-import { FirebaseError, initializeApp } from "firebase/app";
-// import { getDatabase, ref, update, onValue, set, remove } from "firebase/database";
-import { getFirestore, setDoc, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import Image from "next/image";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 import DocumentRenderer from "@/app/DocRenderer";
-import Notix from "@/app/Notix";
 import ProgressBar from "@/app/app/ProgressBar";
 const firebaseConfig = {
   apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
@@ -89,19 +86,12 @@ export default function Share({ params }: { params: { id: string } }) {
     }
 
     const downloadFile = (cids: string[], filename: string) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
           const blobs : any = [];
-          // console.log(cids)
-          // toast("Downloading...")
+
           setStats("Preparing downloading...")
           setProgress(0);
           setIsUploaded(false);
-        
-          // Fetch the files with the corresponding cids
-          // const fetchPromises = cids.map(cid => fetch(`/api?cid=${cid}&filename=${filename}`)
-          //   .then(response => response.blob())
-          //   .then(blob => blobs.push(blob))
-          // );
       
           let proms = []
           let index = 0
@@ -136,18 +126,6 @@ export default function Share({ params }: { params: { id: string } }) {
       
           const mergedBlob = mergedBlobBuilder.getBlob();
       
-          // Convert the downloaded blobs into ArrayBuffer objects
-          // const arrayBufferPromises = blobs.map(blob => blob.arrayBuffer());
-          // var arrayBuffers: ArrayBuffer[] = []
-          // console.log(blobs)
-          // for(var blob of blobs) {
-          //   var arrayBuffer = await blob.arrayBuffer()
-          //   arrayBuffers.push(arrayBuffer);
-          // }
-      
-          // const mergedArrayBuffer = ;
-          // Create a Blob from the merged ArrayBuffer
-          // const mergedBlob = new Blob([mergedArrayBuffer], { type: 'application/zip' });
           // Create a download link for the merged Blob
           const file = new File([mergedBlob], filename);
           const url = URL.createObjectURL(file);
@@ -160,7 +138,6 @@ export default function Share({ params }: { params: { id: string } }) {
           URL.revokeObjectURL(url);
           setIsUploaded(true);
           setProgress(100);
-          // toast.success("Downloading successfull")
           resolve("OK");
           window.close()
         });
@@ -175,14 +152,6 @@ export default function Share({ params }: { params: { id: string } }) {
       };
 
       useEffect(() => {
-        // onValue(ref(db, `/anonymous/${params.id}`), (snapshot) => {
-        //   console.log(snapshot.val())
-        //   // onDownloadFile(snapshot.val())
-        //   if(!snapshot.val()) {
-        //     alert("File not found")
-        //   }
-        //   setFile(snapshot.val())
-        // })
 
         const subscribe = async () => {
           const snapshot = await getDoc(doc(db, `storage/anonymous/storage/${params.id}`))

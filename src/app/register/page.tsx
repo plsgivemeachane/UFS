@@ -1,13 +1,10 @@
 'use client';
 import { initializeApp } from "firebase/app";
-// import { getDatabase, ref, onValue, set, DataSnapshot } from "firebase/database";
-import { getFirestore, doc, getDoc, setDoc, DocumentSnapshot, query, where, collection, getDocs } from "firebase/firestore";
+import { getFirestore, doc, setDoc, query, where, collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { sha } from 'sha256quanvn';
-import webhook from "webhook-discord";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
@@ -21,13 +18,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1155111406002257980/GhMZ-dtq92AeDsvH4ZhqUymFUyxWvIq56CsX8gv8P29HzsXBxq6X7Nt7TWc4qdsNr4kW")
-
-
-import Head from "next/head";
 import Link from "next/link";
 import Script from "next/script";
-import Notix from "../Notix";
 
 type RenderParameters = {
     sitekey: string
@@ -78,18 +70,6 @@ export default function Register() {
             return;
         }
 
-        // Check if user exists
-        // if (snapshot.val() && snapshot.val()[email.value.replace(/@/g, "").replace(/\./g,"")]) {
-        //     toast.warn("User already exists");
-        //     password.value = ""
-        //     return;
-        // }
-        
-        // await set(ref(db, 'users/' + email.value.replace(/@/g, "").replace(/\./g,"")), {
-        //     email: email.value,
-        //     password: sha(password.value)
-        // })
-
         const userRef = collection(db, "users");
         const q = query(userRef, where("email", "==", email.value));
         
@@ -108,9 +88,6 @@ export default function Register() {
 
         localStorage.setItem("email", email.value.replace(/@/g, "").replace(/\./g,""))
         toast.success("Logged in...");
-        // Send webhook messasge... 
-        // Hook.success("UFS","A user has registered");
-
 
         router.push("/app")
     }
@@ -238,8 +215,6 @@ export default function Register() {
                     </div>
                 </section>  
             </div>
-{/*             <Notix /> */}
-            {/* <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script> */}
         </>
     )
 }

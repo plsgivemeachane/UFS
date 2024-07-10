@@ -32,26 +32,6 @@ const Footer = () => {
           <h1 className="font-bold text-blue-500 text-xs md:text-base">
             <Link href={"/about"}>About</Link>
           </h1>
-          {/* <div className="flex space-x-4">
-                    <Link
-                        href="/about"
-                        className="text-blue-500 hover:underline transition duration-300"
-                    >
-                        About Us
-                    </Link>
-                    <Link
-                        href="/privacy-policy"
-                        className="text-blue-500 hover:underline transition duration-300"
-                    >
-                        Privacy Policy
-                    </Link>
-                    <Link
-                        href="/terms-of-service"
-                        className="text-blue-500 hover:underline transition duration-300"
-                    >
-                        Terms of Service
-                    </Link>
-                </div> */}
         </div>
         <div>
           <h1 className="font-bold text-xs md:text-base">Location</h1>

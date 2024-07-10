@@ -15,7 +15,6 @@ import NavigationBar from "./navigationBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// <meta name="monetag" content="94130c9ed76730d47116c3e4f05c1e34">
 export const metadata: Metadata = {
   title: "UFS: File Storage Solution | Free IPFS storage for anyone",
   description:

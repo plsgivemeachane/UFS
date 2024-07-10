@@ -1,21 +1,12 @@
 'use client';
 import { initializeApp } from "firebase/app";
-// import { getDatabase, ref, onValue, set, DataSnapshot } from "firebase/database";
-import { getFirestore, doc, getDoc, setDoc, DocumentSnapshot, query, where, collection, getDocs } from "firebase/firestore";
-import Head from "next/head";
+import { getFirestore, query, where, collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Script from "next/script";
 import { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-// const { sha } = require("sha256quanvn")
 import { sha } from 'sha256quanvn';
-import webhook from "webhook-discord";
-import Notix from "../Notix";
-
-// const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1155111406002257980/GhMZ-dtq92AeDsvH4ZhqUymFUyxWvIq56CsX8gv8P29HzsXBxq6X7Nt7TWc4qdsNr4kW")
-
 
 const firebaseConfig = {
     apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
@@ -31,7 +22,6 @@ const db = getFirestore(app);
 
 export default function Login() {
 
-    // const [snapshot, setSnapshot] = useState<DocumentSnapshot>();
     const router = useRouter();
     const [isValid, setIsValid] = useState(false);
 
@@ -40,65 +30,13 @@ export default function Login() {
     }
 
     useEffect(() => {
-        // console.log(sha("LOL"));
-        // console.log("LOL");
-        // onValue(ref(db, 'users'), async (snapshot) => {
-        //     setSnapshot(snapshot);
-        // })
-        // const firestoreAction = async () => {
-        //     const docRef = doc(db, "users");
-        //     const snap = await getDoc(docRef);
-
-        //     if (snap.exists()) {
-        //         setSnapshot(snap);
-        //     }
-        // }
-        // Hook.info("UFS","A user has visit login page");
         localStorage.theme = 'dark'
     },[])
 
-    // useEffect(() => {
-    //     // if ('serviceWorker' in navigator) {
-    //     //     navigator.serviceWorker
-    //     //       .register('/sw.js')
-    //     //   }
-    //     const loadScript = (callback: any) => {
-    //         const script = document.createElement('script');
-    //             script.src = '/xpopup.js';
-    //             script.async = true;
-    //             script.onload = callback;
-    //             script.onerror = callback;
-    //             document.body.appendChild(script);
-    //         };
-    //     const checkElementAndPost = () => {
-    //         const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
-    //         if(elementExists == 1) {
-    //             // confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
-    //         }
-    //         const request = new XMLHttpRequest();
-    //         request.open('POST', '/fnjgmn/');
-    //         request.setRequestHeader('Content-type', 'applicatiosn/x-www-form-urlencoded');
-    //         request.onreadystatechange = function() {
-    //             if (request.readyState === 4 && request.status === 200) {
-    //             if (request.responseText) {
-    //                 const script = document.createElement('script');
-    //                 script.innerHTML = request.responseText;
-    //                 document.body.appendChild(script);
-    //             }
-    //             }
-    //         };
-    //         request.send(`fNJ=${elementExists}`);
-    //     };
-    
-    //     loadScript(checkElementAndPost);
-    // }, [])
-
     const handleOnClick = async () => {
-        // if(!snapshot) return;
         const email = document.getElementById("Email") as HTMLInputElement;
         const password = document.getElementById("Password") as HTMLInputElement;
-        //console.log(snapshot.val());
-        // Check if user exists
+
         if(!email.value || !password.value) 
         {
             toast.warn("No email or password was found");
@@ -119,8 +57,6 @@ export default function Login() {
             return;
         }
 
-        // if(!snapshot.data())
-
         const userRef = collection(db, "users");
         const q = query(userRef, where("email", "==", email.value));
 
@@ -134,9 +70,7 @@ export default function Login() {
         }
 
         const user = querySnapshot.docs[0];
-        // console.log(user.data())
         const userPassword = user.data().password;
-        // console.log(sha(password.value), userPassword)
         if (sha(password.value).toString().trim() != userPassword.toString()) {
             toast.warn("Wrong email or password");
             return;
@@ -255,8 +189,6 @@ export default function Login() {
                     </div>
                 </section>  
             </div>
-            {/* <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script> */}
-{/*             <Notix /> */}
         </>
     )
 }
