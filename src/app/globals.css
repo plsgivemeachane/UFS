@@ -107,18 +107,3 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf9d;
 }
-
-/* .custom_scroll {
-  animation: rotate 1s linear infinite;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */

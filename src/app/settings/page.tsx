@@ -2,9 +2,8 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FirebaseApp, FirebaseError, getApp, getApps, initializeApp } from "firebase/app";
-import { getDatabase, ref, update, onValue, set, remove } from "firebase/database";
-import { setConfig } from "next/config";
+import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
+import { getDatabase, ref, update, onValue } from "firebase/database";
 import { toast } from "react-toastify";
 import { sha } from 'sha256quanvn';
 import { getTheme, setTheme } from "./Theme";
