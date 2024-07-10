@@ -1,5 +1,5 @@
 
-# UFS - Refactor V1 Branch by NLPV2011(Its Work very gud!), Below is the original readme
+# UFS
 
 ## This is an Open source project of UFS Website (Checkout it at here [UFSDRIVE](https://ufsdrive.com))
 
