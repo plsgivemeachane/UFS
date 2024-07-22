@@ -452,6 +452,8 @@ export default function Home() {
       let password = json[1];
       const xhr = new XMLHttpRequest();
 
+      console.log(username, password)
+
       xhr.open("POST", "https://rpc.particle.network/ipfs/upload", true);
       let preeventloaded = 0;
       let pretimer = Date.now();
@@ -541,7 +543,7 @@ export default function Home() {
       let prg = 0;
 
       for (var cid of cids) {
-        // console.log(cid)
+        console.log(cid)
         setStats("preparing cids");
         if (cid.includes("https://")) {
           cid = extractCID(cid);
@@ -667,6 +669,7 @@ export default function Home() {
                         // Created
                         console.log("Created");
                         const data = JSON.parse(cid_promise.responseText);
+                        console.log(cid_promise)
                         // remove the cid from the list
                         total_concurrent--;
                         console.log(total_concurrent);
@@ -987,8 +990,10 @@ export default function Home() {
         <form onSubmit={onSubmit}>
           <div className="fixed flex items-center justify-center w-full flex-col z-50 inset-0 backdrop-blur-sm animate-fade">
             <div className="relative w-auto my-3 lg:my-6 mx-auto max-w-full lg:max-w-3xl bg-slate-500 flex flex-col justify-center items-center rounded-xl">
-              <h1 className="mt-4 text-4xl text-white">Upload File</h1>
-              <label
+              <h1 className="mt-4 text-4xl text-red">Upload File Has been shutdown⚠️ </h1>
+              <h1 className="mt-4 text-4xl text-red">Due to Maintenance : <a href="https://status.nft.storage/incidents/4xrg32k8kx72" target="_blank" rel="noreferrer">Reports here</a> </h1>
+              {/* Due to maintance */}
+              {/* <label
                 htmlFor="dropzone-file"
                 className="flex flex-col items-center justify-center w-[80%] h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-900 dark:hover:bg-gray-600 mt-4 mx-8 hover:border-solid"
                 onDragOver={(event) => {
@@ -1032,7 +1037,6 @@ export default function Home() {
                     <span className="font-semibold">Click to upload</span> or
                     drag and drop
                   </p>
-                  {/* <p className="text-xs text-gray-500 dark:text-gray-400">(MAX. 100MB)</p> */}
                 </div>
                 <input
                   id="dropzone-file"
@@ -1059,7 +1063,7 @@ export default function Home() {
                 className="bg-violet-900 p-4 px-4 rounded-lg mt-4 mb-4 hover:bg-violet-500 w-[80%] truncate text-center"
               >
                 Upload
-              </button>
+              </button> */}
               <button
                 className="bg-red-900 p-4 px-4 rounded-lg mb-8 hover:bg-red-500 w-[80%]"
                 onClick={() => {
