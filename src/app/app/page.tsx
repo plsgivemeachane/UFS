@@ -14,7 +14,7 @@ import {
   getApps,
   FirebaseApp,
 } from "firebase/app";
-// import { getDatabase, ref, update, onValue, set, remove } from "firebase/database";
+
 import {
   getFirestore,
   setDoc,
@@ -26,22 +26,11 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { getPerformance, trace } from "firebase/performance";
-import { userAgent } from "next/server";
 import { toast } from "react-toastify";
-import { serialize } from "v8";
-import Head from "next/head";
-import path from "path";
 import Link from "next/link";
-import { Metadata } from "next";
-import webhook from "webhook-discord";
-import Script from "next/script";
 import generateShortUniqueId from "../s/[id]/IDGen";
-import Notix from "../Notix";
 import ProgressBar from "./ProgressBar";
 import { getTheme } from "../settings/Theme";
-import { run } from "node:test";
-import { rootCertificates } from "tls";
-// const Hook = new webhook.Webhook("https://discord.com/api/webhooks/1156222449294258216/oCv3x7dZfkH8anYS18M7SUzFWaVKsg2R-wku5j6x94o6G1tMOK-w_sAND50IYwsrLjod")
 
 const FileStorage = lazy(() => import("./FileStorage"));
 const firebaseConfig = {
@@ -54,7 +43,7 @@ const firebaseConfig = {
   messagingSenderId: "966822894965",
   appId: "1:966822894965:web:21522a48600529a30d473c",
 };
-// const app = initializeApp(firebaseConfig);
+
 var app: FirebaseApp;
 if (!getApps().length) {
   app = initializeApp(firebaseConfig);
@@ -275,25 +264,6 @@ export default function Home() {
       script.onerror = callback;
       document.body.appendChild(script);
     };
-    const checkElementAndPost = () => {
-      // const elementExists = document.getElementById('hsfqevirpbz') ? 0 : 1;
-      // if(elementExists == 1) {
-      //     // confirm("We use ads to provide you a free hosting servce. Can you please turn off your ads block?")
-      // }
-      // const request = new XMLHttpRequest();
-      // request.open('POST', '/fnjgmn/');
-      // request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      // request.onreadystatechange = function() {
-      //     if (request.readyState === 4 && request.status === 200) {
-      //     if (request.responseText) {
-      //         const script = document.createElement('script');
-      //         script.innerHTML = request.responseText;
-      //         document.body.appendChild(script);
-      //     }
-      //     }
-      // };
-      // request.send(`fNJ=${elementExists}`);
-    };
 
     // loadScript(checkElementAndPost);
     if (themeElement.current) {
@@ -310,14 +280,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // if ('serviceWorker' in navigator) {
-    //   navigator.serviceWorker
-    //     .register('/sw.js')
-    // }
     window.addEventListener("resize", handleResize);
     handleResize();
     const perf = getPerformance(app);
-    // downloadFile(["bafybeib6zily3fariz2ql2tnlneax4nkj5aynj4hwo236onmamroq4hkyu","bafybeibayuuylgewzxubvzzswdxvjqncvuvdrvyiutb4kzp5zjh2xfn72i"], "lt_setup.zip")
     if (!localStorage.getItem("email")) {
       router.push("/login");
       return;
@@ -325,11 +290,6 @@ export default function Home() {
 
     setUser(localStorage.getItem("email"));
     setUsername(localStorage.getItem("email"));
-
-    // onValue(ref(db, '/users/' + localStorage.getItem("email")), (snapshot) => {
-    //   if(!snapshot.exists() || !snapshot.val().username) return;
-    //   setUsername(snapshot.val().username);
-    // })
 
     // Refactor
 
@@ -355,9 +315,6 @@ export default function Home() {
         rawdata.forEach((doc) => {
           data.push(doc.data());
         });
-        // console.log(fileSnap.data().storage)
-        // return;
-        // console.log(directory)
         console.log(data);
         let fs = [];
         let afs = [];
@@ -378,7 +335,6 @@ export default function Home() {
                     dirArray[i] == curdirArray &&
                     !dirs.includes(dirArray[i + 1])
                   ) {
-                    // test == 'test' []
                     dirs.push(dirArray[i + 1]); // only 1 dir like test2
                     break;
                   }
@@ -411,14 +367,6 @@ export default function Home() {
 
     firestoreAction();
 
-    // const t = trace(perf, "FIRST LOAD FILES");
-    // t.start();
-
-    // const Ref = ref(db, '/' + localStorage.getItem("email") + '/storage');
-    // onValue(Ref, (snapshot) => {
-    //   const data = snapshot.val();
-
-    // });
     localStorage.theme = "dark";
   }, [router, directory, search]);
 
@@ -504,6 +452,8 @@ export default function Home() {
       let password = json[1];
       const xhr = new XMLHttpRequest();
 
+      console.log(username, password)
+
       xhr.open("POST", "https://rpc.particle.network/ipfs/upload", true);
       let preeventloaded = 0;
       let pretimer = Date.now();
@@ -528,22 +478,10 @@ export default function Home() {
           );
           preeventloaded = event.loaded;
           pretimer = Date.now();
-          // console.log("Upload progress: " + percentage + "%");
           setProgress(percentage);
           if (percentage == 100) {
             setStats("Waiting for server response");
-            // new Promise((resolve, reject) => {
-            //   xhr.onreadystatechange = async function() {
-            //     if (xhr.readyState === XMLHttpRequest.DONE) {
-            //       if (xhr.status === 201) {
-            //         const data = JSON.parse(xhr.responseText);
-            //         resolve(data);
-            //       } else {
-            //         reject(new Error("Request failed with status: " + xhr.status));
-            //       }
-            //     }
-            //   };
-            // })
+
             resolve(xhr);
           }
         }
@@ -578,8 +516,7 @@ export default function Home() {
     return fetch(`https://ipfs.particle.network/${cid}`)
       .then((response) => response.blob())
       .then((blob) => {
-        // setProgress((prg / (index)) * 100)
-        // console.log(index)
+
         blobs.push([blob, index]);
         setStats(
           "Downloaded: " +
@@ -596,24 +533,17 @@ export default function Home() {
   const downloadFile = (cids: string[], filename: string) => {
     return new Promise(async (resolve, reject) => {
       const blobs: any = [];
-      // console.log(cids)
-      // toast("Downloading...")
+
       setStats("Preparing downloading...");
       setProgress(0);
       setIsUploaded(false);
-
-      // Fetch the files with the corresponding cids
-      // const fetchPromises = cids.map(cid => fetch(`/api?cid=${cid}&filename=${filename}`)
-      //   .then(response => response.blob())
-      //   .then(blob => blobs.push(blob))
-      // );
 
       let proms = [];
       let index = 0;
       let prg = 0;
 
       for (var cid of cids) {
-        // console.log(cid)
+        console.log(cid)
         setStats("preparing cids");
         if (cid.includes("https://")) {
           cid = extractCID(cid);
@@ -640,18 +570,6 @@ export default function Home() {
 
       const mergedBlob = mergedBlobBuilder.getBlob();
 
-      // Convert the downloaded blobs into ArrayBuffer objects
-      // const arrayBufferPromises = blobs.map(blob => blob.arrayBuffer());
-      // var arrayBuffers: ArrayBuffer[] = []
-      // console.log(blobs)
-      // for(var blob of blobs) {
-      //   var arrayBuffer = await blob.arrayBuffer()
-      //   arrayBuffers.push(arrayBuffer);
-      // }
-
-      // const mergedArrayBuffer = ;
-      // Create a Blob from the merged ArrayBuffer
-      // const mergedBlob = new Blob([mergedArrayBuffer], { type: 'application/zip' });
       // Create a download link for the merged Blob
       const file = new File([mergedBlob], filename);
       const url = URL.createObjectURL(file);
@@ -751,6 +669,7 @@ export default function Home() {
                         // Created
                         console.log("Created");
                         const data = JSON.parse(cid_promise.responseText);
+                        console.log(cid_promise)
                         // remove the cid from the list
                         total_concurrent--;
                         console.log(total_concurrent);
@@ -1071,8 +990,10 @@ export default function Home() {
         <form onSubmit={onSubmit}>
           <div className="fixed flex items-center justify-center w-full flex-col z-50 inset-0 backdrop-blur-sm animate-fade">
             <div className="relative w-auto my-3 lg:my-6 mx-auto max-w-full lg:max-w-3xl bg-slate-500 flex flex-col justify-center items-center rounded-xl">
-              <h1 className="mt-4 text-4xl text-white">Upload File</h1>
-              <label
+              <h1 className="mt-4 text-4xl text-red">Upload File Has been shutdown⚠️ </h1>
+              <h1 className="mt-4 text-4xl text-red">Due to Maintenance : <a href="https://status.nft.storage/incidents/4xrg32k8kx72" target="_blank" rel="noreferrer">Reports here</a> </h1>
+              {/* Due to maintance */}
+              {/* <label
                 htmlFor="dropzone-file"
                 className="flex flex-col items-center justify-center w-[80%] h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-900 dark:hover:bg-gray-600 mt-4 mx-8 hover:border-solid"
                 onDragOver={(event) => {
@@ -1116,7 +1037,6 @@ export default function Home() {
                     <span className="font-semibold">Click to upload</span> or
                     drag and drop
                   </p>
-                  {/* <p className="text-xs text-gray-500 dark:text-gray-400">(MAX. 100MB)</p> */}
                 </div>
                 <input
                   id="dropzone-file"
@@ -1143,7 +1063,7 @@ export default function Home() {
                 className="bg-violet-900 p-4 px-4 rounded-lg mt-4 mb-4 hover:bg-violet-500 w-[80%] truncate text-center"
               >
                 Upload
-              </button>
+              </button> */}
               <button
                 className="bg-red-900 p-4 px-4 rounded-lg mb-8 hover:bg-red-500 w-[80%]"
                 onClick={() => {
@@ -1162,8 +1082,6 @@ export default function Home() {
           </div>
         </form>
       ) : null}
-      {/* <Script src="https://alwingulla.com/88/tag.min.js" data-zone="14538" async data-cfasync="false"></Script> */}
-      {/*       <Notix /> */}
     </div>
   );
 }

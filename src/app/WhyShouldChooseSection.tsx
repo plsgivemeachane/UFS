@@ -28,17 +28,11 @@ export default function WhyShouldChooseSection() {
                   accessibility.
                 </p>
               </div>
-              {/* <div className="px-6 pt-4 pb-2">
-                                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-                                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-                                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-                            </div> */}
             </div>
           </div>
           <div className="relative mt-8">
             <div className="absolute inset-0 bg-yellow-500 rounded-xl blur-xl opacity-70"></div>
             <div className="relative max-w-sm rounded overflow-hidden shadow-lg bg-dark_gray border-2 border-yellow-500 h-full">
-              {/* <h1 className="text-center mt-4 text-xl font-bold text-white">Decentralized Advantage</h1> */}
               <img
                 className="w-full mt-24"
                 src="/storage.png"
@@ -56,17 +50,11 @@ export default function WhyShouldChooseSection() {
                   whenever you need with free IPFS upload capabilities.
                 </p>
               </div>
-              {/* <div className="px-6 pt-4 pb-2">
-                                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-                                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-                                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-                            </div> */}
             </div>
           </div>
           <div className="relative mt-8">
             <div className="absolute inset-0 bg-blue-500 rounded-xl blur-xl opacity-70"></div>
             <div className="relative max-w-sm rounded overflow-hidden shadow-lg bg-dark_gray border-2 border-blue-500 h-full">
-              {/* <h1 className="text-center mt-4 text-xl font-bold text-white">Decentralized Advantage</h1> */}
               <img
                 className="w-full mt-32"
                 src="/securiti.png"

@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 const uploadFile = (formData: FormData) => {
     return new Promise((resolve, reject) => {
-        // var xhttp = new XMLHttpRequest();
-        // console.log("Upload here")
 
         let username = "4189cf8e-a925-4a73-9051-88b4798ec5df"
         let password = "s5MZ8h57Od6mhQbs0sstuyRMGumQrMEB4FaMNnZY"
@@ -74,24 +72,17 @@ export async function POST(req: NextRequest) {
 
     while (start < fileArrayBuffer.byteLength) {
         try {
-            // console.log("Uploading chunk from " + start + " to " + end);
             const chunk = fileArrayBuffer.slice(start, end);
-            // const cid = (await uploadChunk(chunk, file.name)).cid;
             promises.push(work(chunk, file.name, start));
-            // console.log(cid);
-            // cids.push(cid);
             start = end;
             end += CHUNK_SIZE
         } catch (e) {
-            // console.log(e);
+            console.log(e);
         }
     }
 
-    // console.log("All chunks uploading..");
     await Promise.all(promises);
-    // console.log("All chunks uploaded");
     cids.sort(compareSecondColumn);
-    // console.log(cids);
 
     let res = []
     for(var cidandid of cids) {

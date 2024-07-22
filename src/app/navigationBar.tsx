@@ -33,17 +33,14 @@ export default function NavigationBar() {
             >
                 Discord
             </Link>
-            {/* <Link href="/login" className='ml-4 p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Login</Link>
-            <Link href="/register" className='ml-4 p-4 rounded-full hover:bg-violet-600 transition-all duration-300'>Register</Link> */}
+
             </nav>
             <nav className="flex md:hidden sticky z-20 top-0 w-full left-0 bg-dark_gray text-white items-center">
             <Link href="/" className="m-4">
                 <img width={32} height={32} alt="logo" src="/logo.png" />{" "}
             </Link>
             <button className="ml-auto p-4" onClick={() => {
-                // console.log(open);
                 if(!open && modelRef.current) {
-                    // console.log(modelRef.current);
                     modelRef.current.style.display = 'flex';
                 }
 
@@ -57,9 +54,7 @@ export default function NavigationBar() {
                 className={`hidden fixed w-full h-full z-10 bg-dark_gray flex-col justify-center items-center transition-all duration-300 ${open ? 'fade-in' : 'fade-out'}`}
                 
                 onAnimationEnd={(e) => {
-                    // console.log(e.animationName);
                     if (e.animationName === 'fade-o') {
-                        // console.log("HERE");
                         e.currentTarget.style.display = 'none';
                     }
                 }}

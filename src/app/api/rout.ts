@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server'
-import { promisify } from 'util';
-import stream from 'stream';
-import { FirebaseError, initializeApp } from "firebase/app";
-import { getFirestore, setDoc, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { ReadableStream } from 'stream/web';
-// import { sha } from 'sha256quanvn';
+
 import mime from 'mime-types';
 const firebaseConfig = {
     apiKey: "AIzaSyC7WrPl2-syCOzG45_PPL-xXwJ69hoUdT0",
@@ -197,19 +195,9 @@ export async function GET(request: Request, response: NextResponse) {
             // 	send the whole content
             if (request.headers.has('range')) {
                 // send only requested.
-                // await log("Have range query")
                 if (file.profile_picture != 'Multipart') {
-                    // await log("One File Query")
-                    // const res = await fetch(`https://ipfs.particle.network/${extractCID(file.profile_picture)}`, {
-                    // 	headers: {
-                    // 		'Range': request.headers.get('range')
-                    // 	}
-                    // });
-                    // const blob = new Uint8Array(await res.arrayBuffer());
                     await customFetch(`https://ipfs.particle.network/${extractCID(file.profile_picture)}`, controller, start, end);
-                    // controller.enqueue(blob);
                 } else {
-                    // await log("Multiple Query")
                     // it get complicated here
                     var content_range_start = start;
                     var content_range_end = end;
@@ -223,14 +211,6 @@ export async function GET(request: Request, response: NextResponse) {
                         if (cid.includes('https://')) {
                             cid = extractCID(cid);
                         }
-                        // if the requested part is not in the first range
-
-                        // if(current_range + eachfilesize[cid] < content_range_start) {
-                        // 	current_range += eachfilesize[cid];
-                        // 	content_range_start -= eachfilesize[cid];
-                        // 	content_range_start = Math.max(0, content_range_start);
-                        // 	continue;
-                        // }
 
                         // Skip chunks completely outside the range
                         if (current_range + eachfilesize[cid] < content_range_start) {
@@ -245,14 +225,7 @@ export async function GET(request: Request, response: NextResponse) {
 
                         console.log("Current range", formatBytes(current_range), "Content range start", formatBytes(content_range_start), "Content range end", formatBytes(content_range_end))
                         console.log(`bytes=${formatBytes(start_byte)}-${formatBytes(start_byte + bytes_to_fetch)}`)
-                        // const res = await fetch(`https://ipfs.particle.network/${cid}`, {
-                        // 	headers: {
-                        // 		'Range': `bytes=${content_range_start}-${Math.min(eachfilesize[cid], content_range_end - current_range)}`
-                        // 	}
-                        // });
-                        // controller.enqueue(new Uint8Array(await res.arrayBuffer()));
 
-                        // await customFetch(`https://ipfs.particle.network/${cid}`, controller, content_range_start, Math.min(eachfilesize[cid], content_range_end - current_range))
                         await customFetch(`https://ipfs.particle.network/${cid}`, controller, start_byte, start_byte + bytes_to_fetch);
 
 
@@ -268,22 +241,13 @@ export async function GET(request: Request, response: NextResponse) {
             } else {
                 // await log("No range query")
                 if (file.profile_picture != 'Multipart') {
-                    // siez = await getFileSize([file.profile_picture]);
-                    // log("Comsume data")
-                    // const res = await fetch(`https://ipfs.particle.network/${extractCID(file.profile_picture)}`);
-                    // const blob = new Uint8Array(await res.arrayBuffer());
-                    // controller.enqueue(blob);
                     await customFetch(`https://ipfs.particle.network/${extractCID(file.profile_picture)}`, controller, 0, siez);
                 } else {
-                    // siez = await getFileSize(file.data);
                     for (var cid of file.data) {
                         if (cid.includes('https://')) {
                             cid = extractCID(cid);
                         }
-                        // const res = await fetch(`https://ipfs.particle.network/${cid}`);
-                        // const blob = new Uint8Array(await res.arrayBuffer());
                         await customFetch(`https://ipfs.particle.network/${cid}`, controller, 0, eachfilesize[cid]);
-                        // controller.enqueue(blob);
                     }
                 }
             }
