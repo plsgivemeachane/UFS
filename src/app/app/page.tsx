@@ -990,8 +990,9 @@ export default function Home() {
         <form onSubmit={onSubmit}>
           <div className="fixed flex items-center justify-center w-full flex-col z-50 inset-0 backdrop-blur-sm animate-fade">
             <div className="relative w-auto my-3 lg:my-6 mx-auto max-w-full lg:max-w-3xl bg-slate-500 flex flex-col justify-center items-center rounded-xl">
-              <h1 className="mt-4 text-4xl text-red">Upload File Has been shutdown⚠️ </h1>
+              <h1 className="mt-4 text-4xl text-red">Upload File Has been shutdown forever ⚠️ </h1>
               <h1 className="mt-4 text-4xl text-red">Due to Maintenance : <a href="https://status.nft.storage/incidents/4xrg32k8kx72" target="_blank" rel="noreferrer">Reports here</a> </h1>
+              <h1 className="mt-4 text-4xl text-green">Please move to our new website at: <a href="https://bee3hive.vip">Bee3Hive</a>. You still get a unlimited storage as a sorry for now.</h1>
               {/* Due to maintance */}
               {/* <label
                 htmlFor="dropzone-file"
