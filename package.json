@@ -23,7 +23,7 @@
     "browser-readablestream-to-it": "^2.0.4",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
-    "firebase": "^10.2.0",
+    "firebase": "^10.14.1",
     "ipfs-unixfs-importer": "^15.1.7",
     "lstat": "^1.0.0",
     "mammoth": "^1.6.0",
